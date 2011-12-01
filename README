@@ -1,0 +1,10 @@
+New technical features:
++Moving camera along Bezier curve
++Collision detection with Sweep and Prune
++Spotlights?
+
+Old technical features:
+-Particle effects from explosions?
+-Simple antialiasing (blurring edges)
+(What are pulse shaders?)
+-Texture mapping

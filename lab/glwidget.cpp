@@ -119,12 +119,12 @@ void GLWidget::initializeResources()
 void GLWidget::loadCubeMap()
 {
     QList<QFile *> fileList;
-    fileList.append(new QFile("../lab09/textures/astra/posx.jpg"));
-    fileList.append(new QFile("../lab09/textures/astra/negx.jpg"));
-    fileList.append(new QFile("../lab09/textures/astra/posy.jpg"));
-    fileList.append(new QFile("../lab09/textures/astra/negy.jpg"));
-    fileList.append(new QFile("../lab09/textures/astra/posz.jpg"));
-    fileList.append(new QFile("../lab09/textures/astra/negz.jpg"));
+    fileList.append(new QFile("textures/astra/posx.jpg"));
+    fileList.append(new QFile("textures/astra/negx.jpg"));
+    fileList.append(new QFile("textures/astra/posy.jpg"));
+    fileList.append(new QFile("textures/astra/negy.jpg"));
+    fileList.append(new QFile("textures/astra/posz.jpg"));
+    fileList.append(new QFile("textures/astra/negz.jpg"));
     m_cubeMap = ResourceLoader::loadCubeMap(fileList);
 }
 

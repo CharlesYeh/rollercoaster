@@ -1,41 +1,44 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2011-12-01T15:39:20
-#
-#-------------------------------------------------
+QT += core gui opengl
 
-QT       += core gui opengl
-
-TARGET = rollercoaster
+TARGET = bloom_lab
 TEMPLATE = app
 
+INCLUDEPATH += lab \
+    lib \
+    math \
+    support
+DEPENDPATH += lab \
+    lib \
+    math \
+    support
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    ui/Canvas3D.cpp \
-    ui/SupportCanvas3D.cpp \
-    camera/CamtransCamera.cpp \
-    ui/Settings.cpp \
-    scenegraph/Scene.cpp \
-    scenegraph/OpenGLScene.cpp \
-    math/CS123Vector.inl \
-    math/CS123Matrix.inl \
-    math/CS123Matrix.cpp \
-    scenegraph/GameScene.cpp
+HEADERS += lab/glwidget.h \
+    lib/targa.h \
+    lib/glm.h \
+    math/vector.h \
+    support/resourceloader.h \
+    support/mainwindow.h \
+    support/camera.h \
+    lib/targa.h
 
-HEADERS  += mainwindow.h \
-    ui/Canvas3D.h \
-    ui/SupportCanvas3D.h \
-    camera/CamtransCamera.h \
-    camera/Camera.h \
-    ui/Settings.h \
-    scenegraph/Scene.h \
-    scenegraph/OpenGLScene.h \
-    math/CS123Vector.h \
-    math/CS123Matrix.h \
-    math/CS123Algebra.h \
-    scenegraph/GameScene.h
+SOURCES += \
+    lab/glwidget.cpp \
+    lib/targa.cpp \
+    lib/glm.cpp \
+    support/resourceloader.cpp \
+    support/mainwindow.cpp \
+    support/main.cpp \
+    support/camera.cpp
 
-INCLUDEPATH += lib math camera scenegraph ui
+FORMS += mainwindow.ui \
+    support/mainwindow.ui
 
-FORMS    += mainwindow.ui
+OTHER_FILES += \
+    shaders/refract.vert \
+    shaders/refract.frag \
+    shaders/reflect.vert \
+    shaders/reflect.frag \
+    shaders/brightpass.frag \
+    shaders/blur.frag
+
+RESOURCES +=

@@ -14,6 +14,7 @@
 class QGLShaderProgram;
 class QGLFramebufferObject;
 
+class GameEngine;
 
 class GLWidget : public QGLWidget
 {
@@ -60,13 +61,11 @@ private:
     QHash<QString, QGLShaderProgram *> m_shaderPrograms; // hash map of all shader programs
     QHash<QString, QGLFramebufferObject *> m_framebufferObjects; // hash map of all framebuffer objects
 
-    //Model m_dragon; // dragon model
-    Model m_bear;
-
     GLuint m_skybox; // skybox call list ID
     GLuint m_cubeMap; // cubeMap texture ID
     QFont m_font; // font for rendering text
 
+    GameEngine *m_gameEngine;
 };
 
 #endif // GLWIDGET_H

@@ -10,8 +10,9 @@
 #include <QWheelEvent>
 #include "glm.h"
 
-using std::cout;
-using std::endl;
+#include "game/gameengine.h"
+
+using namespace std;
 
 extern "C"
 {
@@ -53,6 +54,9 @@ GLWidget::~GLWidget()
     //glmDelete(m_dragon.model);
 
     //----------------------------CLEAN----------------------------
+
+    m_gameEngine->terminate();
+    delete m_gameEngine;
 }
 
 /**
@@ -102,7 +106,7 @@ void GLWidget::initializeResources()
     cout << "Loaded cube map..." << endl;
 
     //-----------------------------LOAD OBJECTS-----------------------------
-    m_bear = ResourceLoader::loadObjModel("models/xyzrgb_dragon.obj");
+    //m_bear = ResourceLoader::loadObjModel("models/xyzrgb_dragon.obj");
 
     /*createShaderPrograms();
     cout << "Loaded shader programs..." << endl;*/
@@ -111,6 +115,9 @@ void GLWidget::initializeResources()
     cout << "Loaded framebuffer objects..." << endl;*/
 
     cout << " --- Finish Loading Resources ---" << endl;
+
+    m_gameEngine = new GameEngine();
+    m_gameEngine->start();
 }
 
 /**
@@ -310,11 +317,25 @@ void GLWidget::renderScene() {
 
 
     glShadeModel(GL_SMOOTH);
-    glPushMatrix();
-    glColor3f(1, 0, 0);
 
-    glCallList(m_bear.idx);
-    glPopMatrix();
+    vector<GameObject*> *objs = m_gameEngine->getGameObjects();
+    vector<GameObject*>::iterator iter;
+    for (iter = objs->begin(); iter != objs->end(); iter++)
+    {
+        GameObject *gobj = (*iter);
+
+        Model model = gobj->getModel();
+        Vector3 pos = gobj->getPosition();
+        Vector3 rot = gobj->getRotation();
+
+        glPushMatrix();
+        glColor3f(1, 0, 0);
+        glTranslatef(pos.x, pos.y, pos.z);
+        glRotatef(rot.x, 0, 0, 0);
+
+        glCallList(model.idx);
+        glPopMatrix();
+    }
 
     // Disable culling, depth testing and cube maps
     glDisable(GL_CULL_FACE);

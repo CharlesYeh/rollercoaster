@@ -387,11 +387,12 @@ void GLWidget::renderBlur(int width, int height)
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
     Vector2 pos(event->x(), event->y());
-    if (event->buttons() & Qt::LeftButton || event->buttons() & Qt::RightButton)
+
+    if (event->buttons() & Qt::RightButton)
     {
         m_camera->mouseMove(pos - m_prevMousePos);
+        m_prevMousePos = pos;
     }
-    m_prevMousePos = pos;
 }
 
 /**
@@ -399,6 +400,12 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
  **/
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
+    if (event->buttons() & Qt::LeftButton) {
+        Vector3 dir(-Vector3::fromAngles(m_camera->theta, m_camera->phi));
+        dir = dir / 1000000.0;
+        m_gameEngine->spawnProjectile(dir);
+    }
+
     m_prevMousePos.x = event->x();
     m_prevMousePos.y = event->y();
 }

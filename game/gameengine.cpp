@@ -25,9 +25,10 @@ GameEngine::~GameEngine()
 void GameEngine::start()
 {
     GameObject *obj = new GameObject("models/xyzrgb_dragon.obj");
+    obj->getPosition().y -= 1;
     m_gobjects->push_back(obj);
     GameObject *obj2 = new GameObject("models/xyzrgb_dragon.obj");
-    obj->getPosition().y -= 1;
+    obj2->setActDir(Vector3(.0000002, 0, 0));
     m_gobjects->push_back(obj2);
 
     // create main track
@@ -39,6 +40,7 @@ void GameEngine::start()
     m_curve->addSmoothHandlePoint(0, 1, 0);
     m_curve->addSmoothHandlePoint(1, 2, 0);
 
+    // placing camera on track
     CurveMount cameraMount;
     cameraMount.curve = m_curve;
     cameraMount.gameObj = NULL;
@@ -75,7 +77,7 @@ void GameEngine::run()
 
             //first item in m_curveMounts is for the camera.
             if (iter2 == m_curveMounts->begin()) {
-               m_camera->center = m_curve->cubicSample(m.t);
+               //m_camera->center = m_curve->cubicSample(m.t);
             } else {
                m.gameObj->setPosition(m.curve->cubicSample(m.t));
             }
@@ -85,3 +87,12 @@ void GameEngine::run()
     }
 }
 
+void GameEngine::spawnProjectile(Vector3 dir) {
+    GameObject *obj = new GameObject("models/xyzrgb_dragon.obj");
+    obj->getPosition().x = m_camera->center.x;
+    obj->getPosition().y = m_camera->center.y;
+    obj->getPosition().z = m_camera->center.z;
+    obj->setActDir(dir);
+    m_gobjects->push_back(obj);
+
+}

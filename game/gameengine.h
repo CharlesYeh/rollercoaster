@@ -25,6 +25,7 @@ public:
 
     void start();
     void run();
+    void spawnProjectile(Vector3 dir);
     void setCamera(OrbitCamera* cam) {m_camera = cam;}
 
     std::vector<GameObject*> *getGameObjects() { return m_gobjects; };

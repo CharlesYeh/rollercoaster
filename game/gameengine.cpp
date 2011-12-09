@@ -29,10 +29,12 @@ void GameEngine::start()
 
     // create main track
     m_curve = new BezierCurve();
-    m_curve->addPoint(-2, -1, 0);
-    m_curve->addPoint(-1, 0, 0);
-    m_curve->addPoint(0, 1, 0);
-    m_curve->addPoint(1, 2, 0);
+    m_curve->addSmoothHandlePoint(-2, -1, 0);
+    m_curve->addSmoothHandlePoint(-1, 0, 0);
+    m_curve->addSmoothHandlePoint(0, 1, 0);
+    m_curve->addSmoothHandlePoint(1, 2, 0);
+    m_curve->addSmoothHandlePoint(0, 1, 0);
+    m_curve->addSmoothHandlePoint(1, 2, 0);
 
     CurveMount mount;
     mount.curve = m_curve;
@@ -62,7 +64,7 @@ void GameEngine::run()
             CurveMount &m = *iter2;
 
             m.t += .000001;
-            m.gameObj->setPosition(m.curve->quadraticSample(m.t));
+            m.gameObj->setPosition(m.curve->cubicSample(m.t));
         }
 
         sleep(FRAME_RATE);

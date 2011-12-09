@@ -7,5 +7,7 @@ GameObject::GameObject(QString str)
 
 void GameObject::act()
 {
-    m_position.x += .0000002;
+    m_position.x += m_actDir.x;
+    m_position.y += m_actDir.y;
+    m_position.z += m_actDir.z;
 }

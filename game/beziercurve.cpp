@@ -33,5 +33,18 @@ Vector3 BezierCurve::quadraticSample(float t)
 
 Vector3 BezierCurve::cubicSample(float t)
 {
-    return Vector3();
+    int pt = (int) t;
+    if (t < 0 || t >= m_points->size() - 3) {
+        return Vector3();
+    }
+
+    Vector3 p0 = m_points->at(pt);
+    Vector3 p1 = m_points->at(pt+1);
+    Vector3 p2 = m_points->at(pt+2);
+    Vector3 p3 = m_points->at(pt+3);
+
+    float ts = t - pt;
+    float tf = 1 - ts;
+
+    return (pow(tf, 3)*p0) + (3*tf*tf*ts*p1) + (3*tf*ts*ts*p2) + (pow(ts,3)*p3);
 }

@@ -5,6 +5,7 @@ GameEngine::GameEngine(QObject *parent)
 {
     m_gobjects = new vector<GameObject*>();
     m_curveMounts = new vector<CurveMount>();
+    m_camera = NULL;
 }
 
 GameEngine::~GameEngine()
@@ -17,6 +18,8 @@ GameEngine::~GameEngine()
 
     delete m_gobjects;
     delete m_curveMounts;
+
+    //NOTE: NOT DELETING M_CAMERA BECAUSE OWNED BY GLWIDGET
 }
 
 void GameEngine::start()
@@ -35,6 +38,12 @@ void GameEngine::start()
     m_curve->addSmoothHandlePoint(1, 2, 0);
     m_curve->addSmoothHandlePoint(0, 1, 0);
     m_curve->addSmoothHandlePoint(1, 2, 0);
+
+    CurveMount cameraMount;
+    cameraMount.curve = m_curve;
+    cameraMount.gameObj = NULL;
+    cameraMount.t = 0;
+    m_curveMounts->push_back(cameraMount);
 
     CurveMount mount;
     mount.curve = m_curve;
@@ -62,9 +71,14 @@ void GameEngine::run()
         for (iter2 = m_curveMounts->begin(); iter2 != m_curveMounts->end(); iter2++)
         {
             CurveMount &m = *iter2;
-
             m.t += .000001;
-            m.gameObj->setPosition(m.curve->cubicSample(m.t));
+
+            //first item in m_curveMounts is for the camera.
+            if (iter2 == m_curveMounts->begin()) {
+               m_camera->center = m_curve->cubicSample(m.t);
+            } else {
+               m.gameObj->setPosition(m.curve->cubicSample(m.t));
+            }
         }
 
         sleep(FRAME_RATE);

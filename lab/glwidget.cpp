@@ -31,11 +31,12 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent),
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
 
-    m_camera.center = Vector3(0.f, 0.f, 0.f);
-    m_camera.up = Vector3(0.f, 1.f, 0.f);
-    m_camera.zoom = 3.5f;
-    m_camera.theta = M_PI * 1.5f, m_camera.phi = 0.2f;
-    m_camera.fovy = 60.f;
+    m_camera = new OrbitCamera();
+    m_camera->center = Vector3(0.f, 0.f, 0.f);
+    m_camera->up = Vector3(0.f, 1.f, 0.f);
+    m_camera->zoom = 3.5f;
+    m_camera->theta = M_PI * 1.5f, m_camera->phi = 0.2f;
+    m_camera->fovy = 60.f;
 
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(update()));
 }
@@ -45,6 +46,8 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent),
  **/
 GLWidget::~GLWidget()
 {
+    delete m_camera;
+
     foreach (QGLShaderProgram *sp, m_shaderPrograms)
         delete sp;
     foreach (QGLFramebufferObject *fbo, m_framebufferObjects)
@@ -117,6 +120,7 @@ void GLWidget::initializeResources()
     cout << " --- Finish Loading Resources ---" << endl;
 
     m_gameEngine = new GameEngine();
+    m_gameEngine->setCamera(this->m_camera);
     m_gameEngine->start();
 }
 
@@ -196,14 +200,14 @@ void GLWidget::applyOrthogonalCamera(float width, float height)
 void GLWidget::applyPerspectiveCamera(float width, float height)
 {
     float ratio = ((float) width) / height;
-    Vector3 dir(-Vector3::fromAngles(m_camera.theta, m_camera.phi));
-    Vector3 eye(m_camera.center - dir * m_camera.zoom);
+    Vector3 dir(-Vector3::fromAngles(m_camera->theta, m_camera->phi));
+    Vector3 eye(m_camera->center - dir * m_camera->zoom);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(m_camera.fovy, ratio, 0.1f, 1000.f);
+    gluPerspective(m_camera->fovy, ratio, 0.1f, 1000.f);
     gluLookAt(eye.x, eye.y, eye.z, eye.x + dir.x, eye.y + dir.y, eye.z + dir.z,
-              m_camera.up.x, m_camera.up.y, m_camera.up.z);
+              m_camera->up.x, m_camera->up.y, m_camera->up.z);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
@@ -385,7 +389,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
     Vector2 pos(event->x(), event->y());
     if (event->buttons() & Qt::LeftButton || event->buttons() & Qt::RightButton)
     {
-        m_camera.mouseMove(pos - m_prevMousePos);
+        m_camera->mouseMove(pos - m_prevMousePos);
     }
     m_prevMousePos = pos;
 }
@@ -406,7 +410,7 @@ void GLWidget::wheelEvent(QWheelEvent *event)
 {
     if (event->orientation() == Qt::Vertical)
     {
-        m_camera.mouseWheel(event->delta());
+        m_camera->mouseWheel(event->delta());
     }
 }
 

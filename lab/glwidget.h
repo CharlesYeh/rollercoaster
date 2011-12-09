@@ -55,7 +55,7 @@ private:
     int m_prevTime;
     float m_prevFps, m_fps;
     Vector2 m_prevMousePos;
-    OrbitCamera m_camera;
+    OrbitCamera *m_camera;
 
     // Resources
     QHash<QString, QGLShaderProgram *> m_shaderPrograms; // hash map of all shader programs

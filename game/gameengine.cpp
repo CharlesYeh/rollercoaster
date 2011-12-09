@@ -19,7 +19,7 @@ GameEngine::~GameEngine()
     delete m_gobjects;
     delete m_curveMounts;
 
-    delete m_camera;
+    //NOTE: NOT DELETING M_CAMERA BECAUSE OWNED BY GLWIDGET
 }
 
 void GameEngine::start()

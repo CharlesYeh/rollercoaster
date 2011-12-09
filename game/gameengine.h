@@ -6,6 +6,7 @@
 #include <vector>
 #include "gameobject.h"
 #include "beziercurve.h"
+#include "camera.h"
 
 struct CurveMount
 {
@@ -24,11 +25,13 @@ public:
 
     void start();
     void run();
+    void setCamera(OrbitCamera* cam) {m_camera = cam;}
 
     std::vector<GameObject*> *getGameObjects() { return m_gobjects; };
 
 private:
     BezierCurve *m_curve;
+    OrbitCamera *m_camera;
 
     std::vector<GameObject*> *m_gobjects;
     std::vector<CurveMount> *m_curveMounts;

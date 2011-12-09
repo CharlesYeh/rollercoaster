@@ -120,6 +120,7 @@ void GLWidget::initializeResources()
     cout << " --- Finish Loading Resources ---" << endl;
 
     m_gameEngine = new GameEngine();
+    m_gameEngine->setCamera(this->m_camera);
     m_gameEngine->start();
 }
 

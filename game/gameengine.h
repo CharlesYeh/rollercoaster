@@ -5,6 +5,14 @@
 #include <QThread>
 #include <vector>
 #include "gameobject.h"
+#include "beziercurve.h"
+
+struct CurveMount
+{
+    GameObject *gameObj;
+    BezierCurve *curve;
+    float t;
+};
 
 class GameEngine : public QThread
 {
@@ -19,9 +27,11 @@ public:
 
     std::vector<GameObject*> *getGameObjects() { return m_gobjects; };
 
-
 private:
+    BezierCurve *m_curve;
+
     std::vector<GameObject*> *m_gobjects;
+    std::vector<CurveMount> *m_curveMounts;
 };
 
 #endif // GAMEENGINE_H

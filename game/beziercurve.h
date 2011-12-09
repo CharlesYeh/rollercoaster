@@ -10,6 +10,9 @@ public:
     BezierCurve();
     virtual ~BezierCurve();
 
+    void addPoint(float x, float y, float z);
+    void addPoint(Vector3 v);
+
     Vector3 quadraticSample(float t);
     Vector3 cubicSample(float t);
 

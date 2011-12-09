@@ -23,7 +23,8 @@ HEADERS += lab/glwidget.h \
     sweepprune/CollisionPair.h \
     sweepprune/BoundingBox.h \
     game/gameengine.h \
-    game/gameobject.h
+    game/gameobject.h \
+    game/beziercurve.h
 SOURCES += lab/glwidget.cpp \
     lib/targa.cpp \
     lib/glm.cpp \
@@ -35,7 +36,8 @@ SOURCES += lab/glwidget.cpp \
     sweepprune/CollisionPair.cpp \
     sweepprune/BoundingBox.cpp \
     game/gameengine.cpp \
-    game/gameobject.cpp
+    game/gameobject.cpp \
+    game/beziercurve.cpp
 FORMS += mainwindow.ui \
     support/mainwindow.ui
 OTHER_FILES += shaders/refract.vert \

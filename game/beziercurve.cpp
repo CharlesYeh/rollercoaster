@@ -12,6 +12,16 @@ BezierCurve::~BezierCurve()
     delete m_points;
 }
 
+void BezierCurve::addPoint(Vector3 v)
+{
+    m_points->push_back(v);
+}
+
+void BezierCurve::addPoint(float x, float y, float z)
+{
+    m_points->push_back(Vector3(x, y, z));
+}
+
 Vector3 BezierCurve::quadraticSample(float t)
 {
     int pt = (int) t;

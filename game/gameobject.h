@@ -14,6 +14,8 @@ public:
     Vector3 &getPosition() { return m_position; };
     Vector3 &getRotation() { return m_rotation; };
 
+    void setPosition(Vector3 pos) { m_position = pos; };
+
     void act();
 
 

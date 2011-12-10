@@ -3,9 +3,7 @@
 
 #include "sweepprune/SweepPruner.h"
 #include "math/vector.h"
-
-class SweepPruner;
-struct DimensionPoint;
+#include "dimensionpoint.h"
 
 /*
  * m_position is the center point of the object.
@@ -25,7 +23,7 @@ public:
     DimensionPoint *getDimensionPointZEnd() { return &m_zend; };
 
     Vector3 getPosition() { return m_position; };
-    void setPosition(Vector3 &pos);
+    void setPosition(Vector3 pos);
     void setDimension(float x, float y, float z);
 
 private:

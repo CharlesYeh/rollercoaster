@@ -5,18 +5,9 @@
 #include <set>
 #include "BoundingBox.h"
 #include "CollisionPair.h"
+#include "dimensionpoint.h"
 
-enum PointType
-{
-    START, END
-};
-
-struct DimensionPoint
-{
-    BoundingBox *object;
-    PointType type;
-    float value;
-};
+class CollisionPair;
 
 class SweepPruner
 {

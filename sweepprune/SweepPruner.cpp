@@ -57,13 +57,13 @@ void SweepPruner::getCollisions(list<DimensionPoint*> *coords, set<CollisionPair
 void SweepPruner::addObject(BoundingBox *obj)
 {    
     // add object
-    DimensionPoint *sx = getDimensionPointXStart();
-    DimensionPoint *sy = getDimensionPointYStart();
-    DimensionPoint *sz = getDimensionPointZStart();
+    DimensionPoint *sx = obj->getDimensionPointXStart();
+    DimensionPoint *sy = obj->getDimensionPointYStart();
+    DimensionPoint *sz = obj->getDimensionPointZStart();
 
-    DimensionPoint *ex = getDimensionPointXEnd();
-    DimensionPoint *ey = getDimensionPointYEnd();
-    DimensionPoint *ez = getDimensionPointZEnd();
+    DimensionPoint *ex = obj->getDimensionPointXEnd();
+    DimensionPoint *ey = obj->getDimensionPointYEnd();
+    DimensionPoint *ez = obj->getDimensionPointZEnd();
 
     /*list<DimensionPoint*>::iterator iter;
     for (iter = m_x->begin(); iter != m_x->end(); iter++) {

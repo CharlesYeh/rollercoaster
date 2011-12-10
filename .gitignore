@@ -1,3 +1,5 @@
+moc_glwidget.cpp
+moc_mainwindow.cpp
 rollercoaster
 *.user
 *.o

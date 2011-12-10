@@ -6,11 +6,15 @@ TEMPLATE = app
 INCLUDEPATH += lab \
     lib \
     math \
-    support
+    support \
+    game \
+    sweepprune
 DEPENDPATH += lab \
     lib \
     math \
-    support
+    support \
+    game \
+    sweepprune
 HEADERS += lab/glwidget.h \
     lib/targa.h \
     lib/glm.h \
@@ -24,7 +28,8 @@ HEADERS += lab/glwidget.h \
     sweepprune/BoundingBox.h \
     game/gameengine.h \
     game/gameobject.h \
-    game/beziercurve.h
+    game/beziercurve.h \
+    sweepprune/dimensionpoint.h
 SOURCES += lab/glwidget.cpp \
     lib/targa.cpp \
     lib/glm.cpp \

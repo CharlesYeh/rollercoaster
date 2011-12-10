@@ -36,7 +36,7 @@ void GameEngine::start()
     obj->getPosition().y -= 1;
     m_gobjects->push_back(obj);
     GameObject *obj2 = new GameObject(m_models["models/xyzrgb_dragon.obj"]);
-    obj2->setActDir(Vector3(.0000002, 0, 0));
+    obj2->setVelocity(Vector3(.0000002, 0, 0));
     m_gobjects->push_back(obj2);
 
     // create main track
@@ -106,7 +106,7 @@ void GameEngine::spawnProjectile(Vector3 dir) {
     obj->getPosition().x = m_camera->center.x;
     obj->getPosition().y = m_camera->center.y;
     obj->getPosition().z = m_camera->center.z;
-    obj->setActDir(dir);
+    obj->setVelocity(dir);
     m_gobjects->push_back(obj);
 
 }

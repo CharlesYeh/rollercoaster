@@ -1,4 +1,5 @@
 #include "CollisionPair.h"
+
 CollisionPair::CollisionPair(BoundingBox *g1, BoundingBox *g2)
 {
     if (g1 < g2) {

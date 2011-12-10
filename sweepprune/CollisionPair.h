@@ -1,6 +1,8 @@
 #ifndef __COLLISIONPAIR_H__
 #define __COLLISIONPAIR_H__
 
+#include "BoundingBox.h"
+
 class BoundingBox;
 
 class CollisionPair

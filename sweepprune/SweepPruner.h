@@ -14,6 +14,7 @@ class SweepPruner
 public:
     void sweepAndPrune(std::set<CollisionPair> &pairs);
     void addObject(BoundingBox *obj);
+    void removeObject(BoundingBox *obj);
 
 private:
     void getCollisions(std::list<DimensionPoint*> *coords, std::set<CollisionPair> &pairs);

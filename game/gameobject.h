@@ -7,16 +7,17 @@
 class GameObject
 {
 public:
+    GameObject(Model model);
     GameObject(QString str);
-    virtual ~GameObject() {};
+    virtual ~GameObject();
 
-    Model &getModel() { return m_model; };
-    Vector3 &getPosition() { return m_position; };
-    Vector3 &getActDir() { return m_actDir; };
-    Vector3 &getRotation() { return m_rotation; };
+    Model &getModel() { return m_model; }
+    Vector3 &getPosition() { return m_position; }
+    Vector3 &getActDir() { return m_actDir; }
+    Vector3 &getRotation() { return m_rotation; }
 
-    void setPosition(Vector3 pos) { m_position = pos; };
-    void setActDir(Vector3 dir) { m_actDir = dir; };
+    void setPosition(Vector3 pos) { m_position = pos; }
+    void setActDir(Vector3 dir) { m_actDir = dir; }
 
     void act();
 

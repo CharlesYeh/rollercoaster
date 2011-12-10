@@ -27,15 +27,20 @@ public:
     void run();
     void spawnProjectile(Vector3 dir);
     void setCamera(OrbitCamera* cam) {m_camera = cam;}
+    void setCanFire() {m_canFire = true;}
 
     std::vector<GameObject*> *getGameObjects() { return m_gobjects; };
 
 private:
+    bool m_canFire;
+
+
     BezierCurve *m_curve;
     OrbitCamera *m_camera;
 
     std::vector<GameObject*> *m_gobjects;
     std::vector<CurveMount> *m_curveMounts;
+    std::map<std::string, Model> m_models; //map of models, mapped by filename
 };
 
 #endif // GAMEENGINE_H

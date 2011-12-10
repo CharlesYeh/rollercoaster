@@ -6,6 +6,12 @@ GameEngine::GameEngine(QObject *parent)
     m_gobjects = new vector<GameObject*>();
     m_curveMounts = new vector<CurveMount>();
     m_camera = NULL;
+
+    string objModel = "models/xyzrgb_dragon.obj";
+    m_models.insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str())));
+
+    objModel = "models/sphere.obj";
+    m_models.insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str())));
 }
 
 GameEngine::~GameEngine()
@@ -24,10 +30,12 @@ GameEngine::~GameEngine()
 
 void GameEngine::start()
 {
-    GameObject *obj = new GameObject("models/xyzrgb_dragon.obj");
+
+    //GameObject *obj = new GameObject("models/xyzrgb_dragon.obj");
+    GameObject *obj = new GameObject(m_models["models/xyzrgb_dragon.obj"]);
     obj->getPosition().y -= 1;
     m_gobjects->push_back(obj);
-    GameObject *obj2 = new GameObject("models/xyzrgb_dragon.obj");
+    GameObject *obj2 = new GameObject(m_models["models/xyzrgb_dragon.obj"]);
     obj2->setActDir(Vector3(.0000002, 0, 0));
     m_gobjects->push_back(obj2);
 
@@ -61,6 +69,13 @@ void GameEngine::run()
 {
     while (true)
     {
+        //canFire = false;
+        if (m_canFire)  {
+            Vector3 dir(-Vector3::fromAngles(m_camera->theta, m_camera->phi));
+            dir = dir / 100000.0;
+            spawnProjectile(dir);
+            m_canFire = false;
+        }
         //--------------------act--------------------
         vector<GameObject*>::iterator iter;
         for (iter = m_gobjects->begin(); iter != m_gobjects->end(); iter++)
@@ -77,18 +92,17 @@ void GameEngine::run()
 
             //first item in m_curveMounts is for the camera.
             if (iter2 == m_curveMounts->begin()) {
-               //m_camera->center = m_curve->cubicSample(m.t);
+               m_camera->center = m_curve->cubicSample(m.t);
             } else {
                m.gameObj->setPosition(m.curve->cubicSample(m.t));
             }
         }
-
         sleep(FRAME_RATE);
     }
 }
 
 void GameEngine::spawnProjectile(Vector3 dir) {
-    GameObject *obj = new GameObject("models/xyzrgb_dragon.obj");
+    GameObject *obj = new GameObject(m_models["models/sphere.obj"]);
     obj->getPosition().x = m_camera->center.x;
     obj->getPosition().y = m_camera->center.y;
     obj->getPosition().z = m_camera->center.z;

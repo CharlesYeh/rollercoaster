@@ -400,11 +400,9 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
  **/
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
-    if (event->buttons() & Qt::LeftButton) {
-        Vector3 dir(-Vector3::fromAngles(m_camera->theta, m_camera->phi));
-        dir = dir / 1000000.0;
-        m_gameEngine->spawnProjectile(dir);
-    }
+    //on left click, fire
+    if (event->buttons() & Qt::LeftButton)
+        m_gameEngine->setCanFire();
 
     m_prevMousePos.x = event->x();
     m_prevMousePos.y = event->y();

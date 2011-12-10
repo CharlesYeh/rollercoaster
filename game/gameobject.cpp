@@ -1,8 +1,16 @@
 #include "gameobject.h"
 
+GameObject::GameObject(Model model)
+{
+   m_model = model;
+}
+
 GameObject::GameObject(QString str)
 {
-    m_model = ResourceLoader::loadObjModel(str);
+    //m_model = ResourceLoader::loadObjModel(str);
+}
+
+GameObject::~GameObject() {
 }
 
 void GameObject::act()

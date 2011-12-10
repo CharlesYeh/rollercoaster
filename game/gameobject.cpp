@@ -15,7 +15,5 @@ GameObject::~GameObject() {
 
 void GameObject::act()
 {
-    m_position.x += m_actDir.x;
-    m_position.y += m_actDir.y;
-    m_position.z += m_actDir.z;
+    setPosition(getPosition() + m_velocity);
 }

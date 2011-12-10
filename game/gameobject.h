@@ -3,8 +3,9 @@
 
 #include "resourceloader.h"
 #include "math/vector.h"
+#include "sweepprune/BoundingBox.h"
 
-class GameObject
+class GameObject : public BoundingBox
 {
 public:
     GameObject(Model model);
@@ -12,12 +13,10 @@ public:
     virtual ~GameObject();
 
     Model &getModel() { return m_model; }
-    Vector3 &getPosition() { return m_position; }
-    Vector3 &getActDir() { return m_actDir; }
+    Vector3 &getVelocity() { return m_velocity; }
     Vector3 &getRotation() { return m_rotation; }
 
-    void setPosition(Vector3 pos) { m_position = pos; }
-    void setActDir(Vector3 dir) { m_actDir = dir; }
+    void setVelocity(Vector3 dir) { m_velocity = dir; }
 
     void act();
 
@@ -25,9 +24,8 @@ public:
 private:
     Model m_model;
 
-    Vector3 m_position;
     Vector3 m_rotation;
-    Vector3 m_actDir;
+    Vector3 m_velocity;
 };
 
 #endif // GAMEOBJECT_H

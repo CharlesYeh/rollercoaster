@@ -2,8 +2,9 @@
 #define __SWEEPPRUNER_H__
 
 #include <list>
-
-class GameObject;
+#include <set>
+#include "BoundingBox.h"
+#include "CollisionPair.h"
 
 enum PointType
 {
@@ -12,7 +13,7 @@ enum PointType
 
 struct DimensionPoint
 {
-    GameObject *object;
+    BoundingBox *object;
     PointType type;
     float value;
 };
@@ -20,13 +21,15 @@ struct DimensionPoint
 class SweepPruner
 {
 public:
-    void sweepAndPrune();
-    void addObject();
+    void sweepAndPrune(std::set<CollisionPair> &pairs);
+    void addObject(BoundingBox *obj);
 
 private:
-    std::list<DimensionPoint> *m_x;
-    std::list<DimensionPoint> *m_y;
-    std::list<DimensionPoint> *m_z;
+    void getCollisions(std::list<DimensionPoint*> *coords, std::set<CollisionPair> &pairs);
+
+    std::list<DimensionPoint*> *m_x;
+    std::list<DimensionPoint*> *m_y;
+    std::list<DimensionPoint*> *m_z;
 
 };
 

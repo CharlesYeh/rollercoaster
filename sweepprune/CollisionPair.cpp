@@ -1,5 +1,5 @@
 #include "CollisionPair.h"
-CollisionPair::CollisionPair(GameObject *g1, GameObject *g2)
+CollisionPair::CollisionPair(BoundingBox *g1, BoundingBox *g2)
 {
     if (g1 < g2) {
         m_obj1 = g1;

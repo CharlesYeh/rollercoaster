@@ -9,7 +9,6 @@ class GameObject : public BoundingBox
 {
 public:
     GameObject(Model model);
-    GameObject(QString str);
     virtual ~GameObject();
 
     Model &getModel() { return m_model; }
@@ -17,12 +16,14 @@ public:
     Vector3 &getRotation() { return m_rotation; }
 
     void setVelocity(Vector3 dir) { m_velocity = dir; }
+    void setIsProjectile() { m_isProjectile = true;}
 
     void act();
 
 
 private:
     Model m_model;
+    bool m_isProjectile;
 
     Vector3 m_rotation;
     Vector3 m_velocity;

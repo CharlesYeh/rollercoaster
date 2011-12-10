@@ -9,17 +9,10 @@ GameEngine::GameEngine(QObject *parent)
     m_camera = NULL;
 
     string objModel = "models/xyzrgb_dragon.obj";
-    m_models.insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str())));
+    m_models.insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str(), 1.0)));
 
     objModel = "models/sphere.obj";
-    Model sphereModel = ResourceLoader::loadObjModel(objModel.c_str());
-    GLMmodel *gModel = sphereModel.model;
-
-    cout << gModel->vertices[0] << endl;
-    glmScale(gModel, 0.1);
-    cout << gModel->vertices[0] << endl;
-
-    m_models.insert(pair<std::string,Model>(objModel, sphereModel));
+    m_models.insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str(), 0.25)));
 }
 
 GameEngine::~GameEngine()
@@ -116,6 +109,7 @@ void GameEngine::spawnProjectile(Vector3 dir) {
     obj->getPosition().y = m_camera->center.y;
     obj->getPosition().z = m_camera->center.z;
     obj->setVelocity(dir);
+    obj->setIsProjectile();
     m_gobjects->push_back(obj);
 
 }

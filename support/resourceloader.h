@@ -22,7 +22,7 @@ struct Model
 namespace ResourceLoader
 {
     // Returns the model
-    Model loadObjModel(QString filePath);
+    Model loadObjModel(QString filePath, GLfloat scaleFactor);
 
     // Returns the skybox ID
     GLuint loadSkybox();

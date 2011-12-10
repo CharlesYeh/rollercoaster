@@ -3,6 +3,7 @@
 using namespace std;
 GameEngine::GameEngine(QObject *parent)
 {
+    m_canFire = false;
     m_gobjects = new vector<GameObject*>();
     m_curveMounts = new vector<CurveMount>();
     m_camera = NULL;
@@ -11,7 +12,9 @@ GameEngine::GameEngine(QObject *parent)
     m_models.insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str())));
 
     objModel = "models/sphere.obj";
-    m_models.insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str())));
+    Model sphereModel = ResourceLoader::loadObjModel(objModel.c_str());
+    glmScale(sphereModel.model, 0.1);
+    m_models.insert(pair<std::string,Model>(objModel, sphereModel));
 }
 
 GameEngine::~GameEngine()

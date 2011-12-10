@@ -13,7 +13,12 @@ GameEngine::GameEngine(QObject *parent)
 
     objModel = "models/sphere.obj";
     Model sphereModel = ResourceLoader::loadObjModel(objModel.c_str());
-    glmScale(sphereModel.model, 0.1);
+    GLMmodel *gModel = sphereModel.model;
+
+    cout << gModel->vertices[0] << endl;
+    glmScale(gModel, 0.1);
+    cout << gModel->vertices[0] << endl;
+
     m_models.insert(pair<std::string,Model>(objModel, sphereModel));
 }
 

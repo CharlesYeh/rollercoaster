@@ -5,7 +5,7 @@ GameObject::GameObject(Model model)
    m_model = model;
 
    GLfloat dims[3];
-   glmDimensions(model, dims);
+   glmDimensions(model.model, dims);
    setDimension(dims[0], dims[1], dims[2]);
 }
 

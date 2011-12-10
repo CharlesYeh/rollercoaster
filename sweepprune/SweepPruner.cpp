@@ -8,9 +8,9 @@ using namespace std;
 void SweepPruner::sweepAndPrune(set<CollisionPair> &final_pairs)
 {
     // adjust list sortedness
-    m_x->sort();
-    m_y->sort();
-    m_z->sort();
+    sortList(m_x);
+    sortList(m_y);
+    sortList(m_z);
 
     // traverse lists
     set<CollisionPair> pair_x;
@@ -54,8 +54,33 @@ void SweepPruner::getCollisions(list<DimensionPoint*> *coords, set<CollisionPair
     }
 }
 
+void SweepPruner::sortList(list<DimensionPoint*> pt)
+{
+    /*list<DimensionPoint*>::iterator iter;
+
+    // start at second index
+    iter = pt.begin();
+    float prevValue = (*iter)->value;
+    iter++;
+
+    while (iter != pt.end()) {
+        DimensionPoint *dp = (*iter);
+        float curValue = dp->value;
+
+        if (prevValue > cur) {
+            // go left to find swap point!!
+            list<DimensionPoint*>::riter = iter;
+
+            riter--;
+            while (riter != pt.start() && (*riter)->value > curValue) {
+                riter--;
+            }
+        }
+    }*/
+}
+
 void SweepPruner::addObject(BoundingBox *obj)
-{    
+{
     // add object
     DimensionPoint *sx = obj->getDimensionPointXStart();
     DimensionPoint *sy = obj->getDimensionPointYStart();

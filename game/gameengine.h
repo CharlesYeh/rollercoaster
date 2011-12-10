@@ -34,7 +34,6 @@ public:
 private:
     bool m_canFire;
 
-
     BezierCurve *m_curve;
     OrbitCamera *m_camera;
 

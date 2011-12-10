@@ -50,11 +50,12 @@ GLuint ResourceLoader::loadCubeMap(QList<QFile *> files)
 /**
     Loads an OBJ models from a file
   **/
-Model ResourceLoader::loadObjModel(QString filePath)
+Model ResourceLoader::loadObjModel(QString filePath, GLfloat scaleFactor)
 {
     Model m;
     m.model = glmReadOBJ(filePath.toStdString().c_str());
     glmUnitize(m.model);
+    glmScale(m.model, scaleFactor);
     m.idx = glmList(m.model, GLM_SMOOTH);
     return m;
 }

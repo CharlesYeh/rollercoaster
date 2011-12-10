@@ -7,11 +7,8 @@ GameObject::GameObject(Model model)
    GLfloat dims[3];
    glmDimensions(model.model, dims);
    setDimension(dims[0], dims[1], dims[2]);
-}
 
-GameObject::GameObject(QString str)
-{
-    //m_model = ResourceLoader::loadObjModel(str);
+   m_isProjectile = false;
 }
 
 GameObject::~GameObject() {

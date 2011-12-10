@@ -90,8 +90,23 @@ void SweepPruner::addObject(BoundingBox *obj)
     DimensionPoint *ey = obj->getDimensionPointYEnd();
     DimensionPoint *ez = obj->getDimensionPointZEnd();
 
-    /*list<DimensionPoint*>::iterator iter;
-    for (iter = m_x->begin(); iter != m_x->end(); iter++) {
-        if (*iter 
-    }*/
+    sortedInsert(m_x, sx);
+    sortedInsert(m_y, sy);
+    sortedInsert(m_z, sz);
+    sortedInsert(m_x, ex);
+    sortedInsert(m_y, ey);
+    sortedInsert(m_z, ez);
+}
+
+void SweepPruner::sortedInsert(list<DimensionPoint*> *l, DimensionPoint *p)
+{
+    float val = p->value;
+
+    list<DimensionPoint*>::iterator iter;
+    for (iter = l->begin(); iter != l->end(); iter++) {
+        DimensionPoint *dp = *iter;
+        if (dp->value > val) {
+            l->insert(iter, p);
+        }
+    }
 }

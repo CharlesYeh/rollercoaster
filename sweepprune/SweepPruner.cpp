@@ -54,7 +54,7 @@ void SweepPruner::getCollisions(list<DimensionPoint*> *coords, set<CollisionPair
     }
 }
 
-void SweepPruner::sortList(list<DimensionPoint*> pt)
+void SweepPruner::sortList(list<DimensionPoint*> *pt)
 {
     /*list<DimensionPoint*>::iterator iter;
 

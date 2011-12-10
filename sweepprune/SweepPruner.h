@@ -17,7 +17,7 @@ public:
 
 private:
     void getCollisions(std::list<DimensionPoint*> *coords, std::set<CollisionPair> &pairs);
-    void sortList(list<DimensionPoint*> pt);
+    void sortList(std::list<DimensionPoint*> *pt);
 
     std::list<DimensionPoint*> *m_x;
     std::list<DimensionPoint*> *m_y;

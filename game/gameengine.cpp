@@ -11,7 +11,7 @@ GameEngine::GameEngine(QObject *parent)
     m_camera = NULL;
 
     string objModel = "models/xyzrgb_dragon.obj";
-    m_models.insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str(), 1.0)));
+    m_models.insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str(), 2.0)));
 
     objModel = "models/sphere.obj";
     m_models.insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str(), 0.25)));
@@ -78,10 +78,12 @@ void GameEngine::run()
     {
         if (m_canFire)  {
             Vector3 dir(-Vector3::fromAngles(m_camera->theta, m_camera->phi));
-            dir = dir / 100000.0;
+            dir = dir / 10000.0;
             spawnProjectile(dir);
             m_canFire = false;
-            m_shake = true;
+
+            //m_shake = true;
+            //m_curNumShakes = 0;
         }
         //--------------------act--------------------
         vector<GameObject*>::iterator iter;
@@ -109,8 +111,8 @@ void GameEngine::run()
         m_emitter->updateParticles();
 
         //---shaking camera if necessary---
-        if (m_shake && m_curNumShakes < 300000) {
-            m_camera->jitterCamera();
+        if (m_shake && m_curNumShakes < 50000) {
+            m_camera->jitterCamera(2000);
             m_curNumShakes++;
         } else {
             m_curNumShakes = 0;
@@ -123,9 +125,7 @@ void GameEngine::run()
 
 void GameEngine::spawnProjectile(Vector3 dir) {
     GameObject *obj = new GameObject(m_models["models/sphere.obj"]);
-    obj->getPosition().x = m_camera->center.x;
-    obj->getPosition().y = m_camera->center.y;
-    obj->getPosition().z = m_camera->center.z;
+    obj->setPosition(m_camera->center);
     obj->setVelocity(dir);
     obj->setIsProjectile();
     m_gobjects->push_back(obj);

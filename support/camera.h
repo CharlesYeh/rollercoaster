@@ -18,7 +18,7 @@ struct OrbitCamera
 
     void mouseMove(const Vector2 &delta);
     void mouseWheel(float delta);
-    void jitterCamera();
+    void jitterCamera(float perturb);
 };
 
 #endif // CAMERA_H

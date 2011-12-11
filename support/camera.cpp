@@ -1,5 +1,7 @@
 #include "camera.h"
 #include <qgl.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 void OrbitCamera::mouseMove(const Vector2 &delta)
 {
@@ -15,4 +17,16 @@ void OrbitCamera::mouseMove(const Vector2 &delta)
 void OrbitCamera::mouseWheel(float delta)
 {
     zoom *= powf(0.999f, delta);
+}
+
+void OrbitCamera::jitterCamera() {
+    //mildly perturbs the camera's position
+    float randX, randY, randZ;
+    randX = (rand() % 100 - 50) / 5000.0;
+    randY = (rand() % 100 - 50) / 5000.0;
+    randZ = (rand() % 100 - 50) / 5000.0;
+    center.x += randX;
+    center.y += randY;
+    center.z += randZ;
+
 }

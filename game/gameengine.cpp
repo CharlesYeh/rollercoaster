@@ -64,6 +64,9 @@ void GameEngine::start()
 
     m_curveMounts->push_back(mount);
 
+    // add emitter
+    m_emitter = new ParticleEmitter();
+
     QThread::start();
 }
 
@@ -99,6 +102,10 @@ void GameEngine::run()
                m.gameObj->setPosition(m.curve->cubicSample(m.t));
             }
         }
+
+        //------------------particles------------------
+        m_emitter->updateParticles();
+
         sleep(FRAME_RATE);
     }
 }

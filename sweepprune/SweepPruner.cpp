@@ -43,6 +43,7 @@ void SweepPruner::getCollisions(list<DimensionPoint*> *coords, set<CollisionPair
         if (p->type == START) {
             // if starts isn't empty, then collision!
             std::set<BoundingBox*>::iterator iterc;
+
             for (iterc = starts.begin(); iterc != starts.end(); iterc++) {
                 pairs.insert(CollisionPair(p->object, *iterc));
             }
@@ -100,6 +101,7 @@ void SweepPruner::addObject(BoundingBox *obj)
     sortedInsert(m_x, sx);
     sortedInsert(m_y, sy);
     sortedInsert(m_z, sz);
+
     sortedInsert(m_x, ex);
     sortedInsert(m_y, ey);
     sortedInsert(m_z, ez);
@@ -118,6 +120,7 @@ void SweepPruner::removeObject(BoundingBox *obj)
     m_x->remove(sx);
     m_y->remove(sy);
     m_z->remove(sz);
+
     m_x->remove(ex);
     m_y->remove(ey);
     m_z->remove(ez);

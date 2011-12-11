@@ -7,6 +7,7 @@
 #include "gameobject.h"
 #include "beziercurve.h"
 #include "camera.h"
+#include "particleemitter.h"
 
 struct CurveMount
 {
@@ -33,6 +34,8 @@ public:
 
 private:
     bool m_canFire;
+
+    ParticleEmitter *m_emitter;
 
     BezierCurve *m_curve;
     OrbitCamera *m_camera;

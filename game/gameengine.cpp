@@ -4,6 +4,8 @@ using namespace std;
 GameEngine::GameEngine(QObject *parent)
 {
     m_canFire = false;
+    m_shake = false;
+    m_curNumShakes = 0;
     m_gobjects = new vector<GameObject*>();
     m_curveMounts = new vector<CurveMount>();
     m_camera = NULL;
@@ -74,12 +76,12 @@ void GameEngine::run()
 {
     while (true)
     {
-        //canFire = false;
         if (m_canFire)  {
             Vector3 dir(-Vector3::fromAngles(m_camera->theta, m_camera->phi));
             dir = dir / 100000.0;
             spawnProjectile(dir);
             m_canFire = false;
+            m_shake = true;
         }
         //--------------------act--------------------
         vector<GameObject*>::iterator iter;
@@ -105,6 +107,15 @@ void GameEngine::run()
 
         //------------------particles------------------
         m_emitter->updateParticles();
+
+        //---shaking camera if necessary---
+        if (m_shake && m_curNumShakes < 300000) {
+            m_camera->jitterCamera();
+            m_curNumShakes++;
+        } else {
+            m_curNumShakes = 0;
+            m_shake = false;
+        }
 
         sleep(FRAME_RATE);
     }

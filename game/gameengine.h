@@ -33,6 +33,8 @@ public:
     std::vector<GameObject*> *getGameObjects() { return m_gobjects; };
 
 private:
+    bool m_shake; //alert to shake camera
+    int m_curNumShakes;
     bool m_canFire;
 
     ParticleEmitter *m_emitter;

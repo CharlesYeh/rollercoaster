@@ -76,8 +76,16 @@ void GLWidget::initializeGL()
 
     glDisable(GL_DITHER);
 
-    glDisable(GL_LIGHTING);
-    glShadeModel(GL_FLAT);
+    //glDisable(GL_LIGHTING);
+    //--------------------lighting--------------------
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    float lightpos[] = {1, 1, 1, 0};
+    glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
+    //------------------end lighting------------------
+
+    glShadeModel(GL_SMOOTH);
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -130,12 +138,34 @@ void GLWidget::initializeResources()
 void GLWidget::loadCubeMap()
 {
     QList<QFile *> fileList;
-    fileList.append(new QFile("textures/astra/posx.jpg"));
+    /*fileList.append(new QFile("textures/astra/posx.jpg"));
     fileList.append(new QFile("textures/astra/negx.jpg"));
     fileList.append(new QFile("textures/astra/posy.jpg"));
     fileList.append(new QFile("textures/astra/negy.jpg"));
     fileList.append(new QFile("textures/astra/posz.jpg"));
-    fileList.append(new QFile("textures/astra/negz.jpg"));
+    fileList.append(new QFile("textures/astra/negz.jpg"));*/
+
+    /*fileList.append(new QFile("textures/stars/stars_right.jpg"));
+    fileList.append(new QFile("textures/stars/stars_left.jpg"));
+    fileList.append(new QFile("textures/stars/stars_top.jpg"));
+    fileList.append(new QFile("textures/stars/stars_top.jpg"));
+    fileList.append(new QFile("textures/stars/stars_front.jpg"));
+    fileList.append(new QFile("textures/stars/stars_back.jpg"));*/
+
+    fileList.append(new QFile("textures/stratosphere/stratosphere_right.jpg"));
+    fileList.append(new QFile("textures/stratosphere/stratosphere_left.jpg"));
+    fileList.append(new QFile("textures/stratosphere/stratosphere_top.jpg"));
+    fileList.append(new QFile("textures/stratosphere/stratosphere_top.jpg"));
+    fileList.append(new QFile("textures/stratosphere/stratosphere_front.jpg"));
+    fileList.append(new QFile("textures/stratosphere/stratosphere_back.jpg"));
+
+    /*fileList.append(new QFile("textures/starfield/starfield_right.jpg"));
+    fileList.append(new QFile("textures/starfield/starfield_left.jpg"));
+    fileList.append(new QFile("textures/starfield/starfield_top.jpg"));
+    fileList.append(new QFile("textures/starfield/starfield_top.jpg"));
+    fileList.append(new QFile("textures/starfield/starfield_front.jpg"));
+    fileList.append(new QFile("textures/starfield/starfield_back.jpg"));*/
+
     m_cubeMap = ResourceLoader::loadCubeMap(fileList);
 }
 
@@ -319,7 +349,7 @@ void GLWidget::renderScene() {
     */
     //-----------------------------RENDER-----------------------------
 
-    /*glShadeModel(GL_SMOOTH);
+    glShadeModel(GL_SMOOTH);
 
     vector<GameObject*> *objs = m_gameEngine->getGameObjects();
     vector<GameObject*>::iterator iter;
@@ -338,7 +368,7 @@ void GLWidget::renderScene() {
 
         glCallList(model.idx);
         glPopMatrix();
-    }*/
+    }
 
     // Disable culling, depth testing and cube maps
     glDisable(GL_CULL_FACE);
@@ -348,7 +378,7 @@ void GLWidget::renderScene() {
 
     //-----------------particles-----------------
     ParticleEmitter *em = m_gameEngine->getEmitter();
-    em->drawParticles();
+    //em->drawParticles();
 }
 
 /**

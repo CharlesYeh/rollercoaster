@@ -13,8 +13,10 @@ GameEngine::GameEngine(QObject *parent)
     string objModel = "models/xyzrgb_dragon.obj";
     m_models.insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str(), 2.0)));
 
-    objModel = "models/sphere.obj";
-    m_models.insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str(), 0.25)));
+    //------constants--------
+    ROCKET_MODEL = "models/missile/missile.obj";
+
+    m_models.insert(pair<std::string,Model>(ROCKET_MODEL, ResourceLoader::loadObjModel(ROCKET_MODEL.c_str(), 1)));
 }
 
 GameEngine::~GameEngine()
@@ -125,7 +127,7 @@ void GameEngine::run()
 }
 
 void GameEngine::spawnProjectile(Vector3 dir) {
-    GameObject *obj = new GameObject(m_models["models/sphere.obj"]);
+    GameObject *obj = new GameObject(m_models[ROCKET_MODEL]);
     obj->setPosition(m_camera->center);
     obj->setVelocity(dir);
     obj->setIsProjectile();

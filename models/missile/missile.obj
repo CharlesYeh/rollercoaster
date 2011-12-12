@@ -1,6 +1,6 @@
 # Blender v2.59 (sub 0) OBJ File: 'missile.blend'
 # www.blender.org
-mtllib missile.mtl
+#mtllib missile.mtl
 o Missile_side_Ext_Cube
 v 1.930244 0.388661 -0.101839
 v 1.930244 0.388661 0.075212

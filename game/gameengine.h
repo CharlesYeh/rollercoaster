@@ -8,6 +8,7 @@
 #include "beziercurve.h"
 #include "camera.h"
 #include "particleemitter.h"
+#include <string>
 
 struct CurveMount
 {
@@ -35,6 +36,8 @@ public:
     ParticleEmitter *getEmitter() { return m_emitter; };
 
 private:
+    std::string ROCKET_MODEL;
+
     bool m_shake; //alert to shake camera
     int m_curNumShakes;
     bool m_canFire;

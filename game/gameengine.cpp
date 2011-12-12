@@ -109,8 +109,9 @@ void GameEngine::run()
         m_emitter->updateParticles();
 
         //---shaking camera if necessary---
-        if (m_shake && m_curNumShakes < 300000) {
-            m_camera->jitterCamera();
+        if (m_shake && m_curNumShakes < MAX_SHAKES) {
+            float mag = (MAX_SHAKES - m_curNumShakes) / ((float) MAX_SHAKES);
+            m_camera->jitterCamera(mag);
             m_curNumShakes++;
         } else {
             m_curNumShakes = 0;

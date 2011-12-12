@@ -19,6 +19,7 @@ struct CurveMount
 class GameEngine : public QThread
 {
 public:
+    static const int   MAX_SHAKES = 50000;
     static const float FRAME_RATE = 1 / 40.f;
 
     explicit GameEngine(QObject *parent = 0);
@@ -31,6 +32,7 @@ public:
     void setCanFire() {m_canFire = true;}
 
     std::vector<GameObject*> *getGameObjects() { return m_gobjects; };
+    ParticleEmitter *getEmitter() { return m_emitter; };
 
 private:
     bool m_shake; //alert to shake camera

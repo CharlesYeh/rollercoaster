@@ -19,14 +19,17 @@ void OrbitCamera::mouseWheel(float delta)
     zoom *= powf(0.999f, delta);
 }
 
-void OrbitCamera::jitterCamera() {
+void OrbitCamera::jitterCamera(float magnifier) {
     //mildly perturbs the camera's position
+    float ROUNDER = 1000;
+    int JITTER_STR = .35 * ROUNDER;
+
     float randX, randY, randZ;
-    randX = (rand() % 100 - 50) / 5000.0;
-    randY = (rand() % 100 - 50) / 5000.0;
-    randZ = (rand() % 100 - 50) / 5000.0;
-    center.x += randX;
-    center.y += randY;
-    center.z += randZ;
+    randX = (rand() % JITTER_STR - JITTER_STR/2) / ROUNDER;
+    randY = (rand() % JITTER_STR - JITTER_STR/2) / ROUNDER;
+    randZ = (rand() % JITTER_STR - JITTER_STR/2) / ROUNDER;
+    center.x = magnifier * randX;
+    center.y = magnifier * randY;
+    center.z = magnifier * randZ;
 
 }

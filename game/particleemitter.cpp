@@ -1,5 +1,8 @@
 #include "particleemitter.h"
 
+#include <iostream>
+using namespace std;
+
 ParticleEmitter::ParticleEmitter()
 {
     // init particles
@@ -21,35 +24,41 @@ void ParticleEmitter::drawParticles()
 {
     //glBindTexture(GL_TEXTURE_2D, m_texture);
 
-    glDisable(GL_CULL_FACE);
+    //glDisable(GL_CULL_FACE);
     glBegin(GL_QUADS);
+
+    cout << m_particles[0]->pos << endl;
 
     for (int i = 0; i < NUM_PARTICLES; i++) {
         Particle *p = m_particles[i];
         if (p->lifetime <= 0)
             continue;
 
+        cout << "HI" << endl;
+
         // draw particles
-        glColor3f(p->r, p->g, p->b);
+        //glColor3f(p->r, p->g, p->b);
 
         // DO SOMETHING FOR PARTICLE RADIUSSSSSS##################
-        float r = 10;
+        float r = 1;
 
         float x = p->pos.x;
         float y = p->pos.y;
         float z = p->pos.z;
 
-        glTexCoord2d(0, 0);
-        glVertex3f(x - r, y - r, z);
-        glTexCoord2d(1, 0);
-        glVertex3f(x + r, y - r, z);
-        glTexCoord2d(1, 1);
-        glVertex3f(x + r, y + r, z);
-        glTexCoord2d(0, 1);
+        glColor3f(1, 0, 0);
+        //glTexCoord2d(0, 0);
+        glVertex3f(x - r, y - r, z + 1);
+        //glTexCoord2d(0, 1);
         glVertex3f(x - r, y + r, z);
+        //glTexCoord2d(1, 0);
+        glVertex3f(x + r, y - r, z + 1);
+        //glTexCoord2d(1, 1);
+        glVertex3f(x + r, y + r, z);
     }
 
-    glEnable(GL_CULL_FACE);
+    glEnd();
+    //glEnable(GL_CULL_FACE);
 }
 
 void ParticleEmitter::updateParticles()

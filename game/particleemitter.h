@@ -19,7 +19,7 @@ public:
     void updateParticles();
     void drawParticles();
 
-    static const int NUM_PARTICLES = 200;
+    static const int NUM_PARTICLES = 10;
 
 private:
     GLuint m_texture;

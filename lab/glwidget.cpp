@@ -319,8 +319,7 @@ void GLWidget::renderScene() {
     */
     //-----------------------------RENDER-----------------------------
 
-
-    glShadeModel(GL_SMOOTH);
+    /*glShadeModel(GL_SMOOTH);
 
     vector<GameObject*> *objs = m_gameEngine->getGameObjects();
     vector<GameObject*>::iterator iter;
@@ -339,13 +338,17 @@ void GLWidget::renderScene() {
 
         glCallList(model.idx);
         glPopMatrix();
-    }
+    }*/
 
     // Disable culling, depth testing and cube maps
     glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
     glBindTexture(GL_TEXTURE_CUBE_MAP,0);
     glDisable(GL_TEXTURE_CUBE_MAP);
+
+    //-----------------particles-----------------
+    ParticleEmitter *em = m_gameEngine->getEmitter();
+    em->drawParticles();
 }
 
 /**

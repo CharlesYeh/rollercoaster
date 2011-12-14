@@ -6,6 +6,7 @@ using namespace std;
 ParticleEmitter::ParticleEmitter(int num_particles)
 {
     m_numparticles = num_particles;
+    m_particles = new Particle[num_particles];
 
     // init particles
     for (int i = 0; i < m_numparticles; i++) {

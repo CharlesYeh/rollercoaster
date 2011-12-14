@@ -386,8 +386,18 @@ void GLWidget::renderScene() {
     glDisable(GL_TEXTURE_CUBE_MAP);
 
     //-----------------particles-----------------
-    ParticleEmitter *em = m_gameEngine->getEmitter();
-    em->drawParticles();
+    ParticleEmitter *em;
+    std::vector<GameObject*> *objects = m_gameEngine->getGameObjects();
+    for (int i = 0; i < objects->size(); i++) {
+        GameObject* obj = objects->at(i);
+        if (obj->getIsProjectile()) {
+            em = ((Projectile*)obj)->getEmitter();
+            em->updateParticles();
+            em->drawParticles();
+        }
+    }
+    //ParticleEmitter *em = m_gameEngine->getEmitter();
+    //em->drawParticles();
 }
 
 /**

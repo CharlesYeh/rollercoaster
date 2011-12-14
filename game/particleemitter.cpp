@@ -16,7 +16,7 @@ ParticleEmitter::ParticleEmitter()
 
         // reset pos and vel?
         p->pos = getPosition();
-        p->vel = Vector3(rand() % 1000 / 100000000.f, rand() % 1000 / 100000000.f, rand() % 1000 / 100000000.f);
+        p->vel = Vector3(rand() % 1000 / 100000.f, rand() % 1000 / 100000.f, rand() % 1000 / 100000.f);
 
         m_particles[i] = p;
     }
@@ -31,15 +31,11 @@ void ParticleEmitter::drawParticles()
     //glEnable(GL_TEXTURE_2D);
 
 
-    //cout << m_particles[0]->pos << endl;
 
     for (int i = 0; i < NUM_PARTICLES; i++) {
         Particle *p = m_particles[i];
         if (p->lifetime <= 0)
             continue;
-
-        //cout << "HI" << endl;
-
         // draw particles
         //glColor3f(p->r, p->g, p->b);
 
@@ -71,6 +67,7 @@ void ParticleEmitter::updateParticles()
     for (int i = 0; i < NUM_PARTICLES; i++) {
         Particle *p = m_particles[i];
         p->pos += p->vel;
+        //cout << p->pos << endl;
         p->lifetime += p->decay;
 
         if (p->lifetime <= 0) {

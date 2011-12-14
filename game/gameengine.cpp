@@ -116,8 +116,7 @@ void GameEngine::run()
         }
 
         //------------------particles------------------
-        m_emitter->updateParticles();
-        //m_emitter->drawParticles();
+        //m_emitter->updateParticles();
 
         //---shaking camera if necessary---
         if (m_shake && m_curNumShakes < MAX_SHAKES) {
@@ -134,12 +133,11 @@ void GameEngine::run()
 }
 
 void GameEngine::spawnProjectile(Vector3 dir) {
-    GameObject *obj = new GameObject(m_models[ROCKET_MODEL]);
+    Projectile *obj = new Projectile(m_models[ROCKET_MODEL]);
     obj->setPosition(m_camera->center);
     obj->setVelocity(dir);
     obj->setIsProjectile();
     m_gobjects->push_back(obj);
-
 }
 
 void GameEngine::stop()

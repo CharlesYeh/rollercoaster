@@ -5,6 +5,7 @@
 #include <QThread>
 #include <vector>
 #include "gameobject.h"
+#include "projectile.h"
 #include "beziercurve.h"
 #include "camera.h"
 #include "particleemitter.h"

@@ -142,15 +142,16 @@ void GameEngine::run()
 }
 
 void GameEngine::spawnProjectile(Vector3 dir) {
-    Projectile *obj = new Projectile(m_models[ROCKET_MODEL]);
+   ParticleEmitter *pe = new ProjectileTrail(m_camera->center);
+    m_emitters->push_back(pe);
+
+    Projectile *obj = new Projectile(m_models[ROCKET_MODEL], pe);
 
     obj->setPosition(m_camera->center);
     obj->setVelocity(dir);
     obj->setIsProjectile();
     m_gobjects->push_back(obj);
 
-    ParticleEmitter *pe = new ProjectileTrail(obj);
-    m_emitters->push_back(pe);
 }
 
 void GameEngine::stop()

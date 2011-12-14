@@ -7,12 +7,11 @@
 class ProjectileTrail : public ParticleEmitter
 {
 public:
-    ProjectileTrail(GameObject* objectTrailing);
+    ProjectileTrail(Vector3 initPos);
     void updateParticles();
     void initParticles();
 
 private:
-        GameObject* m_object;
 
 };
 

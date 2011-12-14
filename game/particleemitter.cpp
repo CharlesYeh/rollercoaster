@@ -15,11 +15,15 @@ ParticleEmitter::ParticleEmitter()
         //p->vel = Vector3(0.00001,0,0);
 
         // reset pos and vel?
-        p->pos = getPosition();
-        p->vel = Vector3(rand() % 1000 / 100000.f, rand() % 1000 / 100000.f, rand() % 1000 / 100000.f);
+        initParticle(p);
 
         m_particles[i] = p;
     }
+}
+
+void ParticleEmitter::initParticle(Particle *p)
+{
+
 }
 
 void ParticleEmitter::drawParticles()
@@ -30,8 +34,6 @@ void ParticleEmitter::drawParticles()
     //glEnable(GL_BLEND);
     //glEnable(GL_TEXTURE_2D);
 
-
-
     for (int i = 0; i < NUM_PARTICLES; i++) {
         Particle *p = m_particles[i];
         if (p->lifetime <= 0)
@@ -40,26 +42,29 @@ void ParticleEmitter::drawParticles()
         //glColor3f(p->r, p->g, p->b);
 
         // DO SOMETHING FOR PARTICLE RADIUSSSSSS##################
-        float r = 0.2;
 
         float x = p->pos.x;
         float y = p->pos.y;
         float z = p->pos.z;
-
-        glBegin(GL_QUADS);
-        glColor3f(1, 0, 0);
-        glTexCoord2d(0, 1);
-        glVertex3f(x - r, y + r, z);
-        glTexCoord2d(0, 0);
-        glVertex3f(x - r, y - r, z);
-        glTexCoord2d(1, 0);
-        glVertex3f(x + r, y - r, z);
-        glTexCoord2d(1, 1);
-        glVertex3f(x + r, y + r, z);
-        glEnd();
+        drawParticle(x, y, z, .2);
     }
 
     //glEnable(GL_CULL_FACE);
+}
+
+void ParticleEmitter::drawParticle(float x, float y, float z, float r)
+{
+    glBegin(GL_QUADS);
+    glColor3f(1, 0, 0);
+    glTexCoord2d(0, 1);
+    glVertex3f(x - r, y + r, z);
+    glTexCoord2d(0, 0);
+    glVertex3f(x - r, y - r, z);
+    glTexCoord2d(1, 0);
+    glVertex3f(x + r, y - r, z);
+    glTexCoord2d(1, 1);
+    glVertex3f(x + r, y + r, z);
+    glEnd();
 }
 
 void ParticleEmitter::updateParticles()

@@ -16,8 +16,10 @@ public:
     };
 
     ParticleEmitter();
-    void updateParticles();
-    void drawParticles();
+    virtual void initParticle(Particle *p);
+    virtual void updateParticles();
+    virtual void drawParticles();
+    virtual void drawParticle(float x, float y, float z, float r);
 
     static const int NUM_PARTICLES = 10;
 

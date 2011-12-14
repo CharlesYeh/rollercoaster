@@ -9,6 +9,7 @@
 #include "beziercurve.h"
 #include "camera.h"
 #include "particleemitter.h"
+#include "projectiletrail.h"
 #include <string>
 
 struct CurveMount
@@ -34,7 +35,7 @@ public:
     void setCanFire() {m_canFire = true;}
 
     std::vector<GameObject*> *getGameObjects() { return m_gobjects; };
-    ParticleEmitter *getEmitter() { return m_emitter; };
+    std::vector<ParticleEmitter*> *getEmitters() { return m_emitters; };
 
     void stop();
     bool running();
@@ -48,12 +49,11 @@ private:
     int m_curNumShakes;
     bool m_canFire;
 
-    ParticleEmitter *m_emitter;
-
     BezierCurve *m_curve;
     OrbitCamera *m_camera;
 
     std::vector<GameObject*> *m_gobjects;
+    std::vector<ParticleEmitter*> *m_emitters;
     std::vector<CurveMount> *m_curveMounts;
     std::map<std::string, Model> m_models; //map of models, mapped by filename
 };

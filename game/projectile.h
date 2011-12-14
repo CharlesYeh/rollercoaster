@@ -1,20 +1,19 @@
 #ifndef PROJECTILE_H
 #define PROJECTILE_H
-\
+
 #include "gameobject.h"
 #include "resourceloader.h"
-#include "particleemitter.h"
+#include "game/particleemitter.h"
 
 class Projectile : public GameObject
 {
 public:
-    Projectile(Model model) : GameObject(model) {
-        m_emitter = new ParticleEmitter();
-    }
-
+    Projectile(Model model, ParticleEmitter *pe);
     virtual ~Projectile();
 
-    ParticleEmitter* getEmitter();
+    ParticleEmitter *getEmitter() { return m_emitter; };
+
+    void act();
 
 private:
     ParticleEmitter *m_emitter;

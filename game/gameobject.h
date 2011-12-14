@@ -19,8 +19,7 @@ public:
     void setIsProjectile() { m_isProjectile = true;}
     bool getIsProjectile() { return m_isProjectile; }
 
-    void act();
-
+    virtual void act();
 
 private:
     Model m_model;

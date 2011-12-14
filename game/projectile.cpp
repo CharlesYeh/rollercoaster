@@ -1,9 +1,16 @@
 #include "projectile.h"
 
-Projectile::~Projectile() {
-    delete m_emitter;
+Projectile::Projectile(Model model, ParticleEmitter *pe) : GameObject(model)
+{
+    m_emitter = pe;
 }
 
-ParticleEmitter* Projectile::getEmitter() {
-    return m_emitter;
+Projectile::~Projectile()
+{
+}
+
+void Projectile::act()
+{
+    GameObject::act();
+    m_emitter->setPosition(getPosition());
 }

@@ -15,17 +15,18 @@ public:
         Vector3 vel;
     };
 
-    ParticleEmitter();
-    virtual void initParticle(Particle *p);
+    ParticleEmitter(int num_particles = 300);
+
+    virtual void initParticle(Particle &p);
     virtual void updateParticles();
     virtual void drawParticles();
     virtual void drawParticle(float x, float y, float z, float r);
 
-    static const int NUM_PARTICLES = 10;
-
 private:
+    int m_numparticles;
+
     GLuint m_texture;
-    Particle *m_particles[NUM_PARTICLES];
+    Particle *m_particles;
 };
 
 #endif // PARTICLEEMITTER_H

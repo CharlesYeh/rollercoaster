@@ -6,8 +6,11 @@ GameEngine::GameEngine(QObject *parent)
     m_canFire = false;
     m_shake = false;
     m_curNumShakes = 0;
+
     m_gobjects = new vector<GameObject*>();
+    m_emitters = new vector<ParticleEmitter*>();
     m_curveMounts = new vector<CurveMount>();
+
     m_camera = NULL;
 
     string objModel = "models/xyzrgb_dragon.obj";
@@ -28,6 +31,7 @@ GameEngine::~GameEngine()
     }
 
     delete m_gobjects;
+    delete m_emitters;
     delete m_curveMounts;
 
     //NOTE: NOT DELETING M_CAMERA BECAUSE OWNED BY GLWIDGET
@@ -67,9 +71,6 @@ void GameEngine::start()
     mount.t = 0;
 
     //m_curveMounts->push_back(mount);
-
-    // add emitter
-    m_emitter = new ParticleEmitter();
 
     m_running = true;
     m_stop = false;
@@ -133,10 +134,15 @@ void GameEngine::run()
 }
 
 void GameEngine::spawnProjectile(Vector3 dir) {
-    Projectile *obj = new Projectile(m_models[ROCKET_MODEL]);
+    ParticleEmitter *pe = new ProjectileTrail();
+    m_emitters->push_back(pe);
+
+    Projectile *obj = new Projectile(m_models[ROCKET_MODEL], pe);
+
     obj->setPosition(m_camera->center);
     obj->setVelocity(dir);
     obj->setIsProjectile();
+
     m_gobjects->push_back(obj);
 }
 

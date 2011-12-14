@@ -58,7 +58,12 @@ GLWidget::~GLWidget()
 
     //----------------------------CLEAN----------------------------
 
-    m_gameEngine->terminate();
+    m_gameEngine->stop();
+
+    while (m_gameEngine->running()) {
+        // wait
+    }
+
     delete m_gameEngine;
 }
 
@@ -76,7 +81,8 @@ void GLWidget::initializeGL()
 
     glDisable(GL_DITHER);
 
-    //glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHTING);
+    /*
     //--------------------lighting--------------------
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
@@ -84,6 +90,7 @@ void GLWidget::initializeGL()
     float lightpos[] = {1, 1, 1, 0};
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
     //------------------end lighting------------------
+    */
 
     glShadeModel(GL_SMOOTH);
 
@@ -138,12 +145,12 @@ void GLWidget::initializeResources()
 void GLWidget::loadCubeMap()
 {
     QList<QFile *> fileList;
-    /*fileList.append(new QFile("textures/astra/posx.jpg"));
+    fileList.append(new QFile("textures/astra/posx.jpg"));
     fileList.append(new QFile("textures/astra/negx.jpg"));
     fileList.append(new QFile("textures/astra/posy.jpg"));
     fileList.append(new QFile("textures/astra/negy.jpg"));
     fileList.append(new QFile("textures/astra/posz.jpg"));
-    fileList.append(new QFile("textures/astra/negz.jpg"));*/
+    fileList.append(new QFile("textures/astra/negz.jpg"));
 
     /*fileList.append(new QFile("textures/stars/stars_right.jpg"));
     fileList.append(new QFile("textures/stars/stars_left.jpg"));
@@ -152,12 +159,14 @@ void GLWidget::loadCubeMap()
     fileList.append(new QFile("textures/stars/stars_front.jpg"));
     fileList.append(new QFile("textures/stars/stars_back.jpg"));*/
 
+    /*
     fileList.append(new QFile("textures/stratosphere/stratosphere_right.jpg"));
     fileList.append(new QFile("textures/stratosphere/stratosphere_left.jpg"));
     fileList.append(new QFile("textures/stratosphere/stratosphere_top.jpg"));
     fileList.append(new QFile("textures/stratosphere/stratosphere_top.jpg"));
     fileList.append(new QFile("textures/stratosphere/stratosphere_front.jpg"));
     fileList.append(new QFile("textures/stratosphere/stratosphere_back.jpg"));
+    */
 
     /*fileList.append(new QFile("textures/starfield/starfield_right.jpg"));
     fileList.append(new QFile("textures/starfield/starfield_left.jpg"));
@@ -378,7 +387,7 @@ void GLWidget::renderScene() {
 
     //-----------------particles-----------------
     ParticleEmitter *em = m_gameEngine->getEmitter();
-    //em->drawParticles();
+    em->drawParticles();
 }
 
 /**

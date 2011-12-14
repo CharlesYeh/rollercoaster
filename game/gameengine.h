@@ -21,7 +21,7 @@ class GameEngine : public QThread
 {
 public:
     static const int   MAX_SHAKES = 50000;
-    static const float FRAME_RATE = 1 / 40.f;
+    static const float FRAME_RATE = 1  / 40.f;
 
     explicit GameEngine(QObject *parent = 0);
     virtual ~GameEngine();
@@ -35,7 +35,12 @@ public:
     std::vector<GameObject*> *getGameObjects() { return m_gobjects; };
     ParticleEmitter *getEmitter() { return m_emitter; };
 
+    void stop();
+    bool running();
+
 private:
+    bool m_stop;
+    bool m_running;
     std::string ROCKET_MODEL;
 
     bool m_shake; //alert to shake camera

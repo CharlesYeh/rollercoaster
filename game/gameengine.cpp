@@ -39,11 +39,11 @@ void GameEngine::start()
     //GameObject *obj = new GameObject("models/xyzrgb_dragon.obj");
     GameObject *obj = new GameObject(m_models["models/xyzrgb_dragon.obj"]);
     obj->getPosition().y -= 1;
-    m_gobjects->push_back(obj);
+    //m_gobjects->push_back(obj);
 
     GameObject *obj2 = new GameObject(m_models["models/xyzrgb_dragon.obj"]);
     obj2->setVelocity(Vector3(.0000002, 0, 0));
-    m_gobjects->push_back(obj2);
+    //m_gobjects->push_back(obj2);
 
     // create main track
     m_curve = new BezierCurve();
@@ -66,11 +66,13 @@ void GameEngine::start()
     mount.gameObj = obj;
     mount.t = 0;
 
-    m_curveMounts->push_back(mount);
+    //m_curveMounts->push_back(mount);
 
     // add emitter
     m_emitter = new ParticleEmitter();
 
+    m_running = true;
+    m_stop = false;
     QThread::start();
 }
 
@@ -78,6 +80,10 @@ void GameEngine::run()
 {
     while (true)
     {
+        if (m_stop) {
+            m_running = false;
+            return;
+        }
         if (m_canFire)  {
             Vector3 dir(-Vector3::fromAngles(m_camera->theta, m_camera->phi));
             dir = dir / 10000.0;
@@ -111,6 +117,7 @@ void GameEngine::run()
 
         //------------------particles------------------
         m_emitter->updateParticles();
+        //m_emitter->drawParticles();
 
         //---shaking camera if necessary---
         if (m_shake && m_curNumShakes < MAX_SHAKES) {
@@ -133,4 +140,14 @@ void GameEngine::spawnProjectile(Vector3 dir) {
     obj->setIsProjectile();
     m_gobjects->push_back(obj);
 
+}
+
+void GameEngine::stop()
+{
+    m_stop = true;
+}
+
+bool GameEngine::running()
+{
+    return m_running;
 }

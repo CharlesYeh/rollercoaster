@@ -49,7 +49,9 @@ protected:
     void renderScene();
     void paintText();
 
+
 private:
+
     QTimer m_timer;
     QTime m_clock;
     int m_prevTime;

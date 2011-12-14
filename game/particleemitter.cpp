@@ -30,12 +30,9 @@ void ParticleEmitter::initParticles()
 
 void ParticleEmitter::drawParticles()
 {
-    //glBindTexture(GL_TEXTURE_2D, m_texture);
-
-    //glDisable(GL_CULL_FACE);
-    //glEnable(GL_BLEND);
-    //glEnable(GL_TEXTURE_2D);
-
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glDepthMask(false);
     for (int i = 0; i < m_numparticles; i++) {
         Particle &p = m_particles[i];
         if (p.lifetime <= 0)
@@ -51,7 +48,12 @@ void ParticleEmitter::drawParticles()
         drawParticle(x, y, z, .1);
     }
 
-    //glEnable(GL_CULL_FACE);
+    //glAccum for particle trails
+    glAccum(GL_MULT, 0.8);
+    glAccum(GL_ACCUM, 0.2);
+    glAccum(GL_RETURN, 1);
+    glDepthMask(true);
+    glDisable(GL_BLEND);
 }
 
 void ParticleEmitter::drawParticle(float x, float y, float z, float r)

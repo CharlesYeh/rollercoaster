@@ -41,6 +41,8 @@ protected:
     void createFramebufferObjects(int width, int height);
     void createBlurKernel(int radius, int width, int height, GLfloat* kernel, GLfloat* offsets);
 
+    GLuint loadTexture(const QString &path);
+
     // Drawing code
     void applyOrthogonalCamera(float width, float height);
     void applyPerspectiveCamera(float width, float height);
@@ -51,6 +53,8 @@ protected:
 
 
 private:
+    int m_numTextures; //number of textures (loaded in from loadTexture);
+    GLuint m_particleTextureID;
 
     QTimer m_timer;
     QTime m_clock;

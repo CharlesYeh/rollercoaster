@@ -37,6 +37,8 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent),
     m_camera->theta = M_PI * 1.5f, m_camera->phi = 0.2f;
     m_camera->fovy = 60.f;
 
+    m_numTextures = 0;
+
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(update()));
 }
 
@@ -54,6 +56,7 @@ GLWidget::~GLWidget()
     glDeleteLists(m_skybox, 1);
     const_cast<QGLContext *>(context())->deleteTexture(m_cubeMap);
     //glmDelete(m_dragon.model);
+   // glDeleteTextures(1, &m_particleTextureID);
 
     //----------------------------CLEAN----------------------------
 
@@ -94,6 +97,7 @@ void GLWidget::initializeGL()
     glShadeModel(GL_SMOOTH);
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_ACCUM_BUFFER_BIT);
 
     // Load resources, including creating shader programs and framebuffer objects
     initializeResources();
@@ -132,6 +136,8 @@ void GLWidget::initializeResources()
     cout << "Loaded framebuffer objects..." << endl;*/
 
     cout << " --- Finish Loading Resources ---" << endl;
+
+    m_particleTextureID = loadTexture("textures/particle1.bmp"); //textureid 1
 
     m_gameEngine = new GameEngine();
     m_gameEngine->setCamera(this->m_camera);
@@ -175,6 +181,24 @@ void GLWidget::loadCubeMap()
     fileList.append(new QFile("textures/starfield/starfield_back.jpg"));*/
 
     m_cubeMap = ResourceLoader::loadCubeMap(fileList);
+}
+
+GLuint GLWidget::loadTexture(const QString &path) {
+   QFile file(path);
+   QImage image, texture;
+   if (!file.exists()) return -1;
+   image.load(file.fileName());
+   texture = QGLWidget::convertToGLFormat(image);
+
+   m_numTextures++;
+   GLuint id = m_numTextures;
+   glGenTextures(1, &id);
+   glBindTexture(GL_TEXTURE_2D, id);
+   glTexImage2D(GL_TEXTURE_2D, 0, 3, image.width(), image.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits());
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+   return id;
 }
 
 /**
@@ -386,12 +410,15 @@ void GLWidget::renderScene() {
 
     //-----------------particles-----------------
     std::vector<ParticleEmitter*> *emitters = m_gameEngine->getEmitters();
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, m_particleTextureID);
     for (unsigned int i = 0; i < emitters->size(); i++) {
         ParticleEmitter* em = emitters->at(i);
         em->drawParticles();
     }
-    //ParticleEmitter *em = m_gameEngine->getEmitter();
-    //em->drawParticles();
+    glDisable(GL_TEXTURE_2D);
+    //glFlush();
+    //swapBuffers();
 }
 
 /**

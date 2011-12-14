@@ -9,8 +9,8 @@ ParticleEmitter::ParticleEmitter()
     for (int i = 0; i < NUM_PARTICLES; i++) {
         Particle *p = new Particle();
 
-        p->lifetime = 1000.0;
-        p->decay = -.0001;
+        p->lifetime = 1.0;
+        p->decay = -.001;
         p->r = p->g = p->b = .3;
         //p->vel = Vector3(0.00001,0,0);
 

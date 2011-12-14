@@ -17,13 +17,14 @@ public:
 
     ParticleEmitter(int num_particles = 300);
 
-    virtual void initParticle(Particle &p);
+    virtual void initParticles();
     virtual void updateParticles();
     virtual void drawParticles();
     virtual void drawParticle(float x, float y, float z, float r);
 
-private:
+protected:
     int m_numparticles;
+    int m_type;
 
     GLuint m_texture;
     Particle *m_particles;

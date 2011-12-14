@@ -8,15 +8,16 @@
 class Projectile : public GameObject
 {
 public:
-    Projectile(Model model, ParticleEmitter *pe);
+    Projectile(Model model);
     virtual ~Projectile();
 
-    ParticleEmitter *getEmitter() { return m_emitter; };
+    //ParticleEmitter *getEmitter() { return m_emitter; };
 
     void act();
 
 private:
-    ParticleEmitter *m_emitter;
+    float m_lifetime;
+    //ParticleEmitter *m_emitter;
 
 };
 

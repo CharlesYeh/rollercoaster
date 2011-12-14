@@ -6,33 +6,26 @@ using namespace std;
 ParticleEmitter::ParticleEmitter(int num_particles)
 {
     m_numparticles = num_particles;
-    m_particles = new Particle[num_particles];
+    m_particles = new Particle[num_particles]; //DELETE THIS?
 
     // init particles
-    for (int i = 0; i < m_numparticles; i++) {
-        Particle &p = m_particles[i];
-
-        p.lifetime = 1.0;
-        p.decay = -.001;
-        p.r = p.g = p.b = .3;
-        //p->vel = Vector3(0.00001,0,0);
-
-        // reset pos and vel?
-        initParticle(p);
-
-        //m_particles[i] = p;
-    }
+  initParticles();
 }
 
-void ParticleEmitter::initParticle(Particle &p)
+void ParticleEmitter::initParticles()
 {
-    p.pos = getPosition();
+    for (int i = 0; i < m_numparticles; i++) {
+        Particle &p = m_particles[i];
+        p.lifetime = 1.0;
+        p.decay = -.00001;
+        p.r = p.g = p.b = .3;
+        p.pos = getPosition();
+        float rx = rand() % 1000 / 1000000.f - .0005;
+        float ry = rand() % 1000 / 1000000.f - .0005;
+        float rz = rand() % 1000 / 1000000.f - .0005;
 
-    float rx = rand() % 1000 / 10000.f - 5000;
-    float ry = rand() % 1000 / 10000.f - 5000;
-    float rz = rand() % 1000 / 10000.f - 5000;
-
-    p.vel = Vector3(rx, ry, rz);
+        p.vel = Vector3(rx, ry, rz);
+    }
 }
 
 void ParticleEmitter::drawParticles()
@@ -55,7 +48,7 @@ void ParticleEmitter::drawParticles()
         float x = p.pos.x;
         float y = p.pos.y;
         float z = p.pos.z;
-        drawParticle(x, y, z, .2);
+        drawParticle(x, y, z, .1);
     }
 
     //glEnable(GL_CULL_FACE);

@@ -29,6 +29,12 @@ GameEngine::~GameEngine()
     {
         delete *iter;
     }
+    vector<ParticleEmitter*>::iterator iter2;
+    for (iter2 = m_emitters->begin(); iter2 != m_emitters->end(); iter2++)
+    {
+        delete *iter2;
+    }
+
 
     delete m_gobjects;
     delete m_emitters;
@@ -117,7 +123,9 @@ void GameEngine::run()
         }
 
         //------------------particles------------------
-        //m_emitter->updateParticles();
+        for (unsigned int i = 0; i < m_emitters->size(); i++) {
+            m_emitters->at(i)->updateParticles();
+        }
 
         //---shaking camera if necessary---
         if (m_shake && m_curNumShakes < MAX_SHAKES) {
@@ -134,16 +142,15 @@ void GameEngine::run()
 }
 
 void GameEngine::spawnProjectile(Vector3 dir) {
-    ParticleEmitter *pe = new ProjectileTrail();
-    m_emitters->push_back(pe);
-
-    Projectile *obj = new Projectile(m_models[ROCKET_MODEL], pe);
+    Projectile *obj = new Projectile(m_models[ROCKET_MODEL]);
 
     obj->setPosition(m_camera->center);
     obj->setVelocity(dir);
     obj->setIsProjectile();
-
     m_gobjects->push_back(obj);
+
+    ParticleEmitter *pe = new ProjectileTrail(obj);
+    m_emitters->push_back(pe);
 }
 
 void GameEngine::stop()

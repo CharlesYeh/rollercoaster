@@ -147,6 +147,11 @@ void GameEngine::spawnProjectile(Vector3 dir) {
 
     Projectile *obj = new Projectile(m_models[ROCKET_MODEL], pe);
 
+    //setting up rotation angle for drawing
+    Vector3 orthVec = dir.cross(Vector3(5,0,0));
+    float angle = -acos(dir.dot(Vector3(1,0,0)) / dir.length()) * 180.0 / 3.14 + 180.0;
+    obj->setRotation(orthVec, angle);
+
     obj->setPosition(m_camera->center);
     obj->setVelocity(dir);
     obj->setIsProjectile();

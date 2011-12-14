@@ -372,8 +372,8 @@ void GLWidget::renderScene() {
         glPushMatrix();
         glColor3f(1, 0, 0);
         glTranslatef(pos.x, pos.y, pos.z);
-        glRotatef(rot.x, 0, 0, 0);
-
+        //glRotatef(rot.x, 0, 0, 0);
+        glRotatef(gobj->getAngleRotation(), rot.x, rot.y, rot.z);
         glCallList(model.idx);
         glPopMatrix();
     }

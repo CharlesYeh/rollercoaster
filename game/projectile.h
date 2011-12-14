@@ -18,7 +18,6 @@ public:
 private:
     float m_lifetime;
     ParticleEmitter *m_emitter;
-
 };
 
 #endif // PROJECTILE_H

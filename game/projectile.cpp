@@ -4,6 +4,7 @@ Projectile::Projectile(Model model, ParticleEmitter* pe) : GameObject(model)
 {
     m_emitter = pe;
     m_lifetime = 1.0;
+
 }
 
 Projectile::~Projectile()

@@ -5,6 +5,7 @@ using namespace std;
 
 ParticleEmitter::ParticleEmitter(int num_particles)
 {
+    m_isAlive = true;
     m_numparticles = num_particles;
     m_particles = new Particle[num_particles]; //DELETE THIS?
 
@@ -32,7 +33,7 @@ void ParticleEmitter::drawParticles()
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-    glDepthMask(false);
+    //glDepthMask(false);
     for (int i = 0; i < m_numparticles; i++) {
         Particle &p = m_particles[i];
         if (p.lifetime <= 0)
@@ -49,10 +50,12 @@ void ParticleEmitter::drawParticles()
     }
 
     //glAccum for particle trails
+    /*
     glAccum(GL_MULT, 0.8);
     glAccum(GL_ACCUM, 0.2);
     glAccum(GL_RETURN, 1);
     glDepthMask(true);
+    */
     glDisable(GL_BLEND);
 }
 

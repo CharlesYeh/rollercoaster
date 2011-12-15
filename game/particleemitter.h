@@ -22,7 +22,11 @@ public:
     virtual void drawParticles();
     virtual void drawParticle(float x, float y, float z, float r);
 
+    bool getIsAlive() {return m_isAlive;}
+    void setIsAlive(bool status) { m_isAlive = status;}
+
 protected:
+    bool m_isAlive;
     int m_numparticles;
     int m_type;
 

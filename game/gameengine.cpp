@@ -1,5 +1,4 @@
 #include "gameengine.h"
-
 using namespace std;
 GameEngine::GameEngine(QObject *parent)
 {
@@ -137,6 +136,9 @@ void GameEngine::run()
             m_shake = false;
         }
 
+        //---cleaning up and removing emitters/objects
+        cleanupObjects();
+
         sleep(FRAME_RATE);
     }
 }
@@ -158,6 +160,27 @@ void GameEngine::spawnProjectile(Vector3 dir) {
     m_gobjects->push_back(obj);
 
 }
+
+void GameEngine::cleanupObjects() {
+    //std::cout << m_gobjects->size() << std::endl;
+    mutex.lock();
+    for (int i = m_gobjects->size()-1; i >= 0; i--) {
+        GameObject *obj = m_gobjects->at(i);
+        if (!obj->getIsAlive()) {
+            delete obj;
+            m_gobjects->erase(m_gobjects->begin()+i);
+        }
+    }
+    for (int i = m_emitters->size()-1; i >= 0; i--) {
+        ParticleEmitter *pe = m_emitters->at(i);
+        if (!pe->getIsAlive()) {
+            delete pe;
+            m_emitters->erase(m_emitters->begin()+i);
+        }
+    }
+    mutex.unlock();
+}
+
 
 void GameEngine::stop()
 {

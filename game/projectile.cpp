@@ -4,7 +4,6 @@ Projectile::Projectile(Model model, ParticleEmitter* pe) : GameObject(model)
 {
     m_emitter = pe;
     m_lifetime = 1.0;
-
 }
 
 Projectile::~Projectile()
@@ -13,7 +12,11 @@ Projectile::~Projectile()
 
 void Projectile::act()
 {
-    m_lifetime -= 0.01;
+    m_lifetime -= 0.000005;
+    if (m_lifetime < 0) {
+       m_isAlive = false;
+       m_emitter->setIsAlive(false);
+    }
     GameObject::act();
     m_emitter->setPosition(getPosition());
 }

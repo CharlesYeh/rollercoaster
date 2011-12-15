@@ -385,6 +385,7 @@ void GLWidget::renderScene() {
 
     vector<GameObject*> *objs = m_gameEngine->getGameObjects();
     vector<GameObject*>::iterator iter;
+    m_gameEngine->mutex.lock();
     for (iter = objs->begin(); iter != objs->end(); iter++)
     {
         GameObject *gobj = (*iter);
@@ -417,8 +418,9 @@ void GLWidget::renderScene() {
         em->drawParticles();
     }
     glDisable(GL_TEXTURE_2D);
-    //glFlush();
-    //swapBuffers();
+    m_gameEngine->mutex.unlock();
+    glFlush();
+    swapBuffers();
 }
 
 /**

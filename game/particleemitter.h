@@ -9,7 +9,7 @@ class ParticleEmitter : public BoundingBox
 public:
     struct Particle {
         bool active;
-        float lifetime;
+        float lifetime;     // lifetime normalized to [0, 1]
         float decay;
         float r, g, b;
         Vector3 pos;

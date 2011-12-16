@@ -1,4 +1,6 @@
 #include "projectiletrail.h"
+#include <iostream>
+using namespace std;
 
 ProjectileTrail::ProjectileTrail(Vector3 initPos, GLuint textureID) : ParticleEmitter(100, textureID)
 {
@@ -10,9 +12,10 @@ void ProjectileTrail::initParticles()
 {
     for (int i = 0; i < m_numparticles; i++) {
         Particle &p = m_particles[i];
-        p.lifetime = rand() % 100 / 400000.f;
-        p.decay = -.000005;
-        p.r = p.g = p.b = .3;
+        p.lifetime = rand() % 1000 / 1000.f;
+        p.decay = - (rand() % 1000) / 1000.f / 10.f;
+
+        p.r = p.g = p.b = 1;
         p.pos = ParticleEmitter::getPosition();
 
         /*float rx = rand() % 1000 / 10000.f - .05;
@@ -34,7 +37,7 @@ void ProjectileTrail::updateParticles()
         if (p.lifetime <= 0) {
             p.active = true;
             p.pos = ParticleEmitter::getPosition();
-            p.lifetime = rand() % 100 / 400000.f;
+            p.lifetime = 1;
         }
     }
 }

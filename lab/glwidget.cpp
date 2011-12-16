@@ -418,8 +418,8 @@ void GLWidget::renderScene() {
     }
     glDisable(GL_TEXTURE_2D);
     m_gameEngine->mutex.unlock();
-    glFlush();
-    swapBuffers();
+    //glFlush();
+    //swapBuffers();
 }
 
 /**

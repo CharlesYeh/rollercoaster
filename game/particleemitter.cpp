@@ -35,9 +35,11 @@ void ParticleEmitter::initParticles()
 
 void ParticleEmitter::drawParticles()
 {
-    //glDepthMask(GL_FALSE);
+    glDepthMask(GL_TRUE);
+
     glBindTexture(GL_TEXTURE_2D, m_textureID);
 
+    glEnable(GL_DEPTH);
     glEnable(GL_BLEND);
     glEnable(GL_TEXTURE_2D);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -46,8 +48,9 @@ void ParticleEmitter::drawParticles()
         Particle &p = m_particles[i];
         if (p.lifetime <= 0 || !p.active)
             continue;
+
         // draw particles
-        glColor3f(p.r, p.g, p.b);
+        glColor4f(p.r, p.g, p.b, p.lifetime);
 
         // DO SOMETHING FOR PARTICLE RADIUSSSSSS##################
 
@@ -57,9 +60,10 @@ void ParticleEmitter::drawParticles()
         drawParticle(x, y, z, .1);
     }
 
+    glDisable(GL_DEPTH);
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
-    //glDepthMask(GL_TRUE);
+    glDepthMask(GL_TRUE);
 }
 
 void ParticleEmitter::drawParticle(float x, float y, float z, float r)

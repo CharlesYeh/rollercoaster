@@ -44,10 +44,11 @@ public:
     bool running();
     QMutex mutex;
 
-    bool m_canFire;
-    Vector3 m_projectileDir;
 private:
     void cleanupObjects();
+
+    bool m_canFire;
+    Vector3 m_projectileDir;
 
     SweepPruner *m_pruner;
 

@@ -33,21 +33,6 @@ void ParticleEmitter::drawParticles()
 {
     //glDepthMask(GL_FALSE);
     glDisable(GL_DEPTH_TEST);
-
-    glPushMatrix();
-    GLfloat matrix[16];
-    glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
-    matrix[0] = 1.0;
-    matrix[1] = 0.0;
-    matrix[2] = 0.0;
-    matrix[3] = 0.0;
-    matrix[4] = 0.0;
-    matrix[5] = 1.0;
-    matrix[6] = 0.0;
-    matrix[7] = 0.0;
-    glLoadMatrixf(matrix);
-
-
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     for (int i = 0; i < m_numparticles; i++) {
@@ -80,7 +65,7 @@ void ParticleEmitter::drawParticles()
 void ParticleEmitter::drawParticle(float x, float y, float z, float r)
 {
     glBegin(GL_QUADS);
-    glColor3f(1, 0, 0);
+    glColor3f(1.0, 0, 0);
     glTexCoord2d(0, 1);
     glVertex3f(x - r, y + r, z);
     glTexCoord2d(0, 0);

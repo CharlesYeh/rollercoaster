@@ -396,7 +396,6 @@ void GLWidget::renderScene() {
         glPushMatrix();
         glColor3f(1, 0, 0);
         glTranslatef(pos.x, pos.y, pos.z);
-        //glRotatef(rot.x, 0, 0, 0);
         glRotatef(gobj->getAngleRotation(), rot.x, rot.y, rot.z);
         glCallList(model.idx);
         glPopMatrix();
@@ -480,8 +479,6 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
         Vector2 mouse(event->x(), event->y());
         Vector3 dir(getMouseRay(mouse, m_camera));
         m_gameEngine->fireProjectile(dir);
-        //m_gameEngine->m_canFire = true;
-        //m_gameEngine->m_projectileDir = dir;
     }
 
     m_prevMousePos.x = event->x();

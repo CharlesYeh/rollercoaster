@@ -79,7 +79,7 @@ void GameEngine::start()
     mount.gameObj = obj;
     mount.t = 0;
 
-    //m_curveMounts->push_back(mount);
+    m_curveMounts->push_back(mount);
 
     m_running = true;
     m_stop = false;
@@ -122,11 +122,6 @@ void GameEngine::run()
                m.gameObj->setPosition(m.curve->cubicSample(m.t));
             }
 
-        }
-
-        //------------------particles------------------
-        for (unsigned int i = 0; i < m_emitters->size(); i++) {
-            //m_emitters->at(i)->updateParticles();
         }
 
         //---shaking camera if necessary---

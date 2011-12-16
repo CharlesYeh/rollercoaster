@@ -4,7 +4,7 @@ GameEngine::GameEngine(QObject *parent)
 {
     m_shake = false;
     m_curNumShakes = 0;
-
+    m_refractPeriod = 0;
     m_gobjects = new vector<GameObject*>();
     m_emitters = new vector<ParticleEmitter*>();
     m_curveMounts = new vector<CurveMount>();
@@ -47,11 +47,11 @@ void GameEngine::start()
     //GameObject *obj = new GameObject("models/xyzrgb_dragon.obj");
     GameObject *obj = new GameObject(m_models["models/xyzrgb_dragon.obj"]);
     obj->getPosition().y -= 1;
-    //m_gobjects->push_back(obj);
+    m_gobjects->push_back(obj);
 
     GameObject *obj2 = new GameObject(m_models["models/xyzrgb_dragon.obj"]);
     obj2->setVelocity(Vector3(.0000002, 0, 0));
-    //m_gobjects->push_back(obj2);
+    m_gobjects->push_back(obj2);
 
     // create main track
     m_curve = new BezierCurve();
@@ -142,14 +142,18 @@ void GameEngine::run()
         //---cleaning up and removing emitters/objects
         cleanupObjects();
 
+        m_refractPeriod -= 0.00001;
         sleep(FRAME_RATE);
     }
 }
 
 void GameEngine::fireProjectile(Vector3 dir) {
-    dir.normalize();
-    dir = dir / 10000.0;
-    spawnProjectile(dir);
+    if (m_refractPeriod < 0) {
+        m_refractPeriod = 1;
+        dir.normalize();
+        dir = dir / 10000.0;
+        spawnProjectile(dir);
+    }
 }
 
 void GameEngine::spawnProjectile(Vector3 dir) {

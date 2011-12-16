@@ -44,9 +44,9 @@ public:
     QMutex mutex;
 
 private:
-
     void cleanupObjects();
 
+    float m_refractPeriod;
     bool m_stop;
     bool m_running;
     std::string ROCKET_MODEL;

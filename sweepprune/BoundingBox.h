@@ -26,6 +26,8 @@ public:
     void setPosition(Vector3 pos);
     void setDimension(float x, float y, float z);
 
+    void drawBoundingBox();
+
 private:
     DimensionPoint m_xstart, m_ystart, m_zstart,
                    m_xend, m_yend, m_zend;

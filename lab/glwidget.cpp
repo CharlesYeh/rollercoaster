@@ -39,6 +39,8 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent),
 
 
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(update()));
+
+    m_showBoxes = m_showCollisions = false;
 }
 
 /**
@@ -82,21 +84,23 @@ void GLWidget::initializeGL()
 
     glDisable(GL_DITHER);
 
-    glDisable(GL_LIGHTING);
-    /*
     //--------------------lighting--------------------
-    glEnable(GL_LIGHTING);
+    /*glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
-    float lightpos[] = {1, 1, 1, 0};
+    float lightpos[] = {1, 1, 1, 1};
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
+    glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE ) ;
+
+    glMaterialf(GL_FRONT, GL_SPECULAR, 1);
+    glMaterialf(GL_FRONT, GL_SHININESS, 1);
+    glEnable(GL_DEPTH_TEST);*/
     //------------------end lighting------------------
-    */
 
     glShadeModel(GL_SMOOTH);
 
-    //glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    //glClear(GL_ACCUM_BUFFER_BIT);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_ACCUM_BUFFER_BIT);
 
     // Load resources, including creating shader programs and framebuffer objects
     initializeResources();
@@ -398,7 +402,11 @@ void GLWidget::renderScene() {
         glTranslatef(pos.x, pos.y, pos.z);
         glRotatef(gobj->getAngleRotation(), rot.x, rot.y, rot.z);
         glCallList(model.idx);
+
         glPopMatrix();
+
+        if (m_showBoxes)
+            gobj->drawBoundingBox();
     }
 
     // Disable culling, depth testing and cube maps
@@ -619,11 +627,19 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
 {
     switch(event->key())
     {
-        case Qt::Key_S:
+    case Qt::Key_S:
+        {
         QImage qi = grabFrameBuffer(false);
         QString filter;
         QString fileName = QFileDialog::getSaveFileName(this, tr("Save Image"), "", tr("PNG Image (*.png)"), &filter);
         qi.save(QFileInfo(fileName).absoluteDir().absolutePath() + "/" + QFileInfo(fileName).baseName() + ".png", "PNG", 100);
+        }
+        break;
+    case Qt::Key_X:
+        m_showBoxes = !m_showBoxes;
+        break;
+    case Qt::Key_C:
+        m_showCollisions = !m_showCollisions;
         break;
     }
 }
@@ -645,11 +661,12 @@ void GLWidget::paintText()
     // QGLWidget's renderText takes xy coordinates, a string, and a font
     renderText(10, 20, "FPS: " + QString::number((int) (m_prevFps)), m_font);
     renderText(10, 35, "S: Save screenshot", m_font);
-    renderText(10, 45, "C: Highlight collided bounding boxes");
+    renderText(10, 50, "X: Show bounding boxes", m_font);
+    renderText(10, 60, "C: Highlight collided bounding boxes", m_font);
 
     glColor3f(1, .8, 0);
     QString str("This your first real fight? Don't worry, you're with the best pilot of the fleet!");
-    QFontMetrics fm(this->font());
+    QFontMetrics fm(m_font);
     int w = fm.width(str);
 
     w = this->width() / 2 - w / 2;

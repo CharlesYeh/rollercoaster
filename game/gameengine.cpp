@@ -152,7 +152,6 @@ void GameEngine::run()
         //std::set<CollisionPair> pairs;
         //m_pruner.sweepAndPrune(pairs);
 
-
         //---cleaning up and removing emitters/objects
         cleanupObjects();
 
@@ -166,7 +165,7 @@ void GameEngine::fireProjectile(Vector3 dir) {
         m_canFire = true;
         m_refractPeriod = 1;
         dir.normalize();
-        dir = dir / 10000.0;
+        dir = dir / 30000.0;
         m_projectileDir = dir;
 
         //NOTE: CANNOT SPAWN PROJECTILE HERE: POTENTIALLY DANGEROUS AND CRASHES
@@ -181,7 +180,7 @@ void GameEngine::fireProjectile(Vector3 dir) {
 }
 
 void GameEngine::spawnProjectile(Vector3 dir) {
-    ParticleEmitter *pe = new ProjectileTrail(m_camera->center, m_textTrail);
+    ParticleEmitter *pe = new ProjectileTrail(m_camera, m_camera->center, m_textTrail);
     m_emitters->push_back(pe);
 
     Projectile *obj = new Projectile(m_models[ROCKET_MODEL], pe);
@@ -196,6 +195,10 @@ void GameEngine::spawnProjectile(Vector3 dir) {
     obj->setIsProjectile();
     m_gobjects->push_back(obj);
 
+
+    // explosion TESTING###########################
+    ParticleEmitter *e = new Explosion(m_camera, m_camera->center, m_textTrail);
+    m_emitters->push_back(e);
 }
 
 void GameEngine::cleanupObjects() {
@@ -215,6 +218,7 @@ void GameEngine::cleanupObjects() {
             m_emitters->erase(m_emitters->begin()+i);
         }
     }
+
     mutex.unlock();
 }
 

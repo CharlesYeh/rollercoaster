@@ -12,6 +12,9 @@ class CollisionPair;
 class SweepPruner
 {
 public:
+    SweepPruner();
+    virtual ~SweepPruner();
+
     void sweepAndPrune(std::set<CollisionPair> &pairs);
     void addObject(BoundingBox *obj);
     void removeObject(BoundingBox *obj);

@@ -12,11 +12,15 @@ Projectile::~Projectile()
 
 void Projectile::act()
 {
-    m_lifetime -= 0.000002;
+    m_lifetime -= 0.0000006;
     if (m_lifetime < 0) {
        m_isAlive = false;
        m_emitter->setIsAlive(false);
     }
+
     GameObject::act();
-    m_emitter->setPosition(getPosition());
+
+
+    Vector3 offsetted = getPosition();
+    m_emitter->setPosition(offsetted);
 }

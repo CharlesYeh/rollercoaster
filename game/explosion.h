@@ -6,7 +6,7 @@
 class Explosion : public ParticleEmitter
 {
 public:
-    Explosion(Vector3 initPos, GLuint textureID);
+    Explosion(OrbitCamera *cam, Vector3 initPos, GLuint textureID);
 
     void updateParticles();
     void initParticles();

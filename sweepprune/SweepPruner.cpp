@@ -5,6 +5,20 @@
 
 using namespace std;
 
+SweepPruner::SweepPruner()
+{
+    m_x = new list<DimensionPoint*>();
+    m_y = new list<DimensionPoint*>();
+    m_z = new list<DimensionPoint*>();
+}
+
+SweepPruner::~SweepPruner()
+{
+    delete m_x;
+    delete m_y;
+    delete m_z;
+}
+
 void SweepPruner::sweepAndPrune(set<CollisionPair> &final_pairs)
 {
     // adjust list sortedness

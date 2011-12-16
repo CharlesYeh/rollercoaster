@@ -10,6 +10,7 @@
 #include "camera.h"
 #include "particleemitter.h"
 #include "projectiletrail.h"
+#include "explosion.h"
 #include <string>
 
 #include <QMutex>

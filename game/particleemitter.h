@@ -3,6 +3,7 @@
 
 #include "sweepprune/BoundingBox.h"
 #include <QtOpenGL>
+#include "support/camera.h"
 
 class ParticleEmitter : public BoundingBox
 {
@@ -16,15 +17,17 @@ public:
         Vector3 vel;
     };
 
-    ParticleEmitter(int num_particles = 300, GLuint textureID = 0);
+    ParticleEmitter(OrbitCamera *cam, int num_particles = 300, GLuint textureID = 0, float rad = .1);
 
     virtual void initParticles();
     virtual void updateParticles();
     virtual void drawParticles();
     virtual void drawParticle(float x, float y, float z, float r);
 
-    bool getIsAlive() {return m_isAlive;}
+    bool getIsAlive() { return m_isAlive; }
     void setIsAlive(bool status) { m_isAlive = status;}
+
+    void setCamera(OrbitCamera *cam) { m_camera = cam; };
 
 protected:
     GLuint m_textureID;
@@ -33,8 +36,11 @@ protected:
     bool m_isAlive;
     int m_numparticles;
     int m_type;
+    float m_radius;
 
     Particle *m_particles;
+
+    OrbitCamera *m_camera;
 };
 
 #endif // PARTICLEEMITTER_H

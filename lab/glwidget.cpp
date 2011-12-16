@@ -447,11 +447,35 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
     //on left click, fire
-    if (event->buttons() & Qt::LeftButton)
-        m_gameEngine->setCanFire();
+    if (event->buttons() & Qt::LeftButton) {
+        Vector2 mouse(event->x(), event->y());
+        Vector3 dir(getMouseRay(mouse, m_camera));
+
+        m_gameEngine->fireProjectile(dir);
+    }
 
     m_prevMousePos.x = event->x();
     m_prevMousePos.y = event->y();
+}
+
+Vector3 GLWidget::getMouseRay(const Vector2 &mouse, const OrbitCamera *camera)
+{
+    int viewport[4];
+    double worldX, worldY, worldZ, modelviewMatrix[16], projectionMatrix[16];
+
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    glGetDoublev(GL_MODELVIEW_MATRIX, modelviewMatrix);
+    glGetDoublev(GL_PROJECTION_MATRIX, projectionMatrix);
+    gluUnProject(mouse.x, viewport[3] - mouse.y - 1, 1,
+                 modelviewMatrix, projectionMatrix, viewport,
+                 &worldX, &worldY, &worldZ);
+
+    Vector3 wpt(worldX, worldY, worldZ);
+    Vector3 peye = camera->center;
+    peye.normalize();
+
+    Vector3 dir(wpt - peye);
+    return dir;
 }
 
 /**

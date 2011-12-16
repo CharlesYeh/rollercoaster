@@ -3,7 +3,6 @@
 using namespace std;
 GameEngine::GameEngine(QObject *parent)
 {
-    m_canFire = false;
     m_shake = false;
     m_curNumShakes = 0;
 
@@ -91,15 +90,17 @@ void GameEngine::run()
             m_running = false;
             return;
         }
-        if (m_canFire)  {
-            Vector3 dir(-Vector3::fromAngles(m_camera->theta, m_camera->phi));
+        /*if (m_canFire)  {
+            //Vector3 dir(-Vector3::fromAngles(m_camera->theta, m_camera->phi));
+            Vector3 dir = ;
             dir = dir / 10000.0;
             spawnProjectile(dir);
             m_canFire = false;
 
             //m_shake = true;
             //m_curNumShakes = 0;
-        }
+        }*/
+
         //--------------------act--------------------
         vector<GameObject*>::iterator iter;
         for (iter = m_gobjects->begin(); iter != m_gobjects->end(); iter++)
@@ -139,6 +140,13 @@ void GameEngine::run()
 
         sleep(FRAME_RATE);
     }
+}
+
+void GameEngine::fireProjectile(Vector3 dir) {
+    dir.normalize();
+    dir = dir / 10000.0;
+
+    spawnProjectile(dir);
 }
 
 void GameEngine::spawnProjectile(Vector3 dir) {

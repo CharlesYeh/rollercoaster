@@ -31,8 +31,8 @@ public:
     void start();
     void run();
     void spawnProjectile(Vector3 dir);
-    void setCamera(OrbitCamera* cam) {m_camera = cam;}
-    void setCanFire() {m_canFire = true;}
+    void setCamera(OrbitCamera* cam) { m_camera = cam; }
+    void fireProjectile(Vector3 dir);
 
     std::vector<GameObject*> *getGameObjects() { return m_gobjects; };
     std::vector<ParticleEmitter*> *getEmitters() { return m_emitters; };
@@ -47,7 +47,6 @@ private:
 
     bool m_shake; //alert to shake camera
     int m_curNumShakes;
-    bool m_canFire;
 
     BezierCurve *m_curve;
     OrbitCamera *m_camera;

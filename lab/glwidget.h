@@ -34,6 +34,8 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
 
+    Vector3 getMouseRay(const Vector2 &mouse, const OrbitCamera *camera);
+
     // Initialization code
     void initializeResources();
     void loadCubeMap();

@@ -55,7 +55,6 @@ protected:
 
 
 private:
-    int m_numTextures; //number of textures (loaded in from loadTexture);
     GLuint m_particleTextureID;
 
     QTimer m_timer;

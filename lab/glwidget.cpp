@@ -37,7 +37,6 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent),
     m_camera->theta = M_PI * 1.5f, m_camera->phi = 0.2f;
     m_camera->fovy = 60.f;
 
-    m_numTextures = 0;
 
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(update()));
 }
@@ -96,8 +95,8 @@ void GLWidget::initializeGL()
 
     glShadeModel(GL_SMOOTH);
 
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear(GL_ACCUM_BUFFER_BIT);
+    //glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    //glClear(GL_ACCUM_BUFFER_BIT);
 
     // Load resources, including creating shader programs and framebuffer objects
     initializeResources();
@@ -190,11 +189,10 @@ GLuint GLWidget::loadTexture(const QString &path) {
    image.load(file.fileName());
    texture = QGLWidget::convertToGLFormat(image);
 
-   m_numTextures++;
-   GLuint id = m_numTextures;
+   GLuint id = 0;
    glGenTextures(1, &id);
    glBindTexture(GL_TEXTURE_2D, id);
-   glTexImage2D(GL_TEXTURE_2D, 0, 3, image.width(), image.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits());
+   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width(), image.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits());
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
@@ -376,6 +374,7 @@ void GLWidget::renderScene() {
     glPushMatrix();
     glTranslatef(1.25f,0.f,0.f);
     glCallList(m_dragon.idx);
+
     glPopMatrix();
     m_shaderPrograms["reflect"]->release();
     */
@@ -414,8 +413,9 @@ void GLWidget::renderScene() {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, m_particleTextureID);
     for (unsigned int i = 0; i < emitters->size(); i++) {
-        ParticleEmitter* em = emitters->at(i);
-        em->drawParticles();
+        //ParticleEmitter* em = emitters->at(i);
+        emitters->at(i)->updateParticles();
+        emitters->at(i)->drawParticles();
     }
     glDisable(GL_TEXTURE_2D);
     m_gameEngine->mutex.unlock();
@@ -480,6 +480,8 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
         Vector2 mouse(event->x(), event->y());
         Vector3 dir(getMouseRay(mouse, m_camera));
         m_gameEngine->fireProjectile(dir);
+        //m_gameEngine->m_canFire = true;
+        //m_gameEngine->m_projectileDir = dir;
     }
 
     m_prevMousePos.x = event->x();

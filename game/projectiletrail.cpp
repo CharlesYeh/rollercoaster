@@ -10,14 +10,14 @@ void ProjectileTrail::initParticles()
 {
     for (int i = 0; i < m_numparticles; i++) {
         Particle &p = m_particles[i];
-        p.lifetime = rand() % 100 / 200.f;
+        p.lifetime = rand() % 100 / 400000.f;
         p.decay = -.00001;
         p.r = p.g = p.b = .3;
         p.pos = ParticleEmitter::getPosition();
 
-        float rx = rand() % 1000 / 10000000.f - .00005;
-        float ry = rand() % 1000 / 10000000.f - .00005;
-        float rz = rand() % 1000 / 10000000.f - .00005;
+        float rx = rand() % 1000 / 10000.f - .05;
+        float ry = rand() % 1000 / 10000.f - .05;
+        float rz = rand() % 1000 / 10000.f - .05;
 
         p.vel = Vector3(rx, ry, rz);
     }
@@ -32,7 +32,7 @@ void ProjectileTrail::updateParticles()
 
         if (p.lifetime <= 0) {
             p.pos = ParticleEmitter::getPosition();
-            p.lifetime = rand() % 100 / 100.f;
+            p.lifetime = rand() % 100 / 400000.f;
         }
     }
 }

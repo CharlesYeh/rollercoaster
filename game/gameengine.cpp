@@ -2,22 +2,19 @@
 using namespace std;
 GameEngine::GameEngine(QObject *parent)
 {
+
+    m_canFire = false;
+
     m_shake = false;
     m_curNumShakes = 0;
     m_refractPeriod = 0;
     m_gobjects = new vector<GameObject*>();
     m_emitters = new vector<ParticleEmitter*>();
     m_curveMounts = new vector<CurveMount>();
+    //m_pruner = new SweepPruner();
 
     m_camera = NULL;
 
-    string objModel = "models/xyzrgb_dragon.obj";
-    m_models.insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str(), 2.0)));
-
-    //------constants--------
-    ROCKET_MODEL = "models/missile/missile.obj";
-
-    m_models.insert(pair<std::string,Model>(ROCKET_MODEL, ResourceLoader::loadObjModel(ROCKET_MODEL.c_str(), 1)));
 }
 
 GameEngine::~GameEngine()
@@ -43,6 +40,14 @@ GameEngine::~GameEngine()
 
 void GameEngine::start()
 {
+    string objModel = "models/xyzrgb_dragon.obj";
+    m_models.insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str(), 2.0)));
+
+    //------constants--------
+    ROCKET_MODEL = "models/missile/missile.obj";
+
+    m_models.insert(pair<std::string,Model>(ROCKET_MODEL, ResourceLoader::loadObjModel(ROCKET_MODEL.c_str(), 1)));
+
 
     //GameObject *obj = new GameObject("models/xyzrgb_dragon.obj");
     GameObject *obj = new GameObject(m_models["models/xyzrgb_dragon.obj"]);
@@ -50,7 +55,7 @@ void GameEngine::start()
     m_gobjects->push_back(obj);
 
     GameObject *obj2 = new GameObject(m_models["models/xyzrgb_dragon.obj"]);
-    obj2->setVelocity(Vector3(.0000002, 0, 0));
+    obj2->setVelocity(Vector3(.000002, 0, 0));
     m_gobjects->push_back(obj2);
 
     // create main track
@@ -89,16 +94,11 @@ void GameEngine::run()
             m_running = false;
             return;
         }
-        /*if (m_canFire)  {
-            //Vector3 dir(-Vector3::fromAngles(m_camera->theta, m_camera->phi));
-            Vector3 dir = ;
-            dir = dir / 10000.0;
-            spawnProjectile(dir);
-            m_canFire = false;
 
-            //m_shake = true;
-            //m_curNumShakes = 0;
-        }*/
+        if (m_canFire)  {
+            spawnProjectile(m_projectileDir);
+            m_canFire = false;
+        }
 
         //--------------------act--------------------
         vector<GameObject*>::iterator iter;
@@ -126,7 +126,7 @@ void GameEngine::run()
 
         //------------------particles------------------
         for (unsigned int i = 0; i < m_emitters->size(); i++) {
-            m_emitters->at(i)->updateParticles();
+            //m_emitters->at(i)->updateParticles();
         }
 
         //---shaking camera if necessary---
@@ -139,6 +139,10 @@ void GameEngine::run()
             m_shake = false;
         }
 
+        //std::set<CollisionPair> pairs;
+        //m_pruner.sweepAndPrune(pairs);
+
+
         //---cleaning up and removing emitters/objects
         cleanupObjects();
 
@@ -149,15 +153,25 @@ void GameEngine::run()
 
 void GameEngine::fireProjectile(Vector3 dir) {
     if (m_refractPeriod < 0) {
+        m_canFire = true;
+        m_refractPeriod = 1;
+        dir.normalize();
+        dir = dir / 10000.0;
+        m_projectileDir = dir;
+
+        //NOTE: CANNOT SPAWN PROJECTILE HERE: POTENTIALLY DANGEROUS AND CRASHES
+
+        /*
         m_refractPeriod = 1;
         dir.normalize();
         dir = dir / 10000.0;
         spawnProjectile(dir);
+        */
     }
 }
 
 void GameEngine::spawnProjectile(Vector3 dir) {
-   ParticleEmitter *pe = new ProjectileTrail(m_camera->center);
+    ParticleEmitter *pe = new ProjectileTrail(m_camera->center);
     m_emitters->push_back(pe);
 
     Projectile *obj = new Projectile(m_models[ROCKET_MODEL], pe);

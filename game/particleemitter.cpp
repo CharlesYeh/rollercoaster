@@ -31,9 +31,25 @@ void ParticleEmitter::initParticles()
 
 void ParticleEmitter::drawParticles()
 {
+    //glDepthMask(GL_FALSE);
+    glDisable(GL_DEPTH_TEST);
+
+    glPushMatrix();
+    GLfloat matrix[16];
+    glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
+    matrix[0] = 1.0;
+    matrix[1] = 0.0;
+    matrix[2] = 0.0;
+    matrix[3] = 0.0;
+    matrix[4] = 0.0;
+    matrix[5] = 1.0;
+    matrix[6] = 0.0;
+    matrix[7] = 0.0;
+    glLoadMatrixf(matrix);
+
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-    //glDepthMask(false);
     for (int i = 0; i < m_numparticles; i++) {
         Particle &p = m_particles[i];
         if (p.lifetime <= 0)
@@ -50,13 +66,15 @@ void ParticleEmitter::drawParticles()
     }
 
     //glAccum for particle trails
-    /*
-    glAccum(GL_MULT, 0.8);
-    glAccum(GL_ACCUM, 0.2);
-    glAccum(GL_RETURN, 1);
-    glDepthMask(true);
-    */
     glDisable(GL_BLEND);
+    glPopMatrix();
+    glEnable(GL_DEPTH_TEST);
+    //glDepthMask(GL_TRUE);
+
+    /*glAccum(GL_MULT, 0.8);
+    glAccum(GL_ACCUM, .2);
+    glAccum(GL_RETURN, 1);*/
+
 }
 
 void ParticleEmitter::drawParticle(float x, float y, float z, float r)

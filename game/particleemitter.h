@@ -26,6 +26,7 @@ public:
     void setIsAlive(bool status) { m_isAlive = status;}
 
 protected:
+    float m_lifetime;
     bool m_isAlive;
     int m_numparticles;
     int m_type;

@@ -13,6 +13,7 @@
 #include <string>
 
 #include <QMutex>
+#include"SweepPruner.h"
 
 struct CurveMount
 {
@@ -43,8 +44,12 @@ public:
     bool running();
     QMutex mutex;
 
+    bool m_canFire;
+    Vector3 m_projectileDir;
 private:
     void cleanupObjects();
+
+    SweepPruner *m_pruner;
 
     float m_refractPeriod;
     bool m_stop;

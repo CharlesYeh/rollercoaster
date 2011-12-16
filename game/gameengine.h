@@ -12,6 +12,8 @@
 #include "projectiletrail.h"
 #include <string>
 
+#include <QMutex>
+
 struct CurveMount
 {
     GameObject *gameObj;
@@ -39,8 +41,12 @@ public:
 
     void stop();
     bool running();
+    QMutex mutex;
 
 private:
+
+    void cleanupObjects();
+
     bool m_stop;
     bool m_running;
     std::string ROCKET_MODEL;

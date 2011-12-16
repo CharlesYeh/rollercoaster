@@ -9,6 +9,7 @@ GameObject::GameObject(Model model)
    setDimension(dims[0], dims[1], dims[2]);
 
    m_isProjectile = false;
+   m_isAlive = true;
 }
 
 GameObject::~GameObject() {

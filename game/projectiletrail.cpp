@@ -1,6 +1,6 @@
 #include "projectiletrail.h"
 
-ProjectileTrail::ProjectileTrail(Vector3 initPos) : ParticleEmitter(200)
+ProjectileTrail::ProjectileTrail(Vector3 initPos) : ParticleEmitter(100)
 {
     ParticleEmitter::setPosition(initPos);
     initParticles();

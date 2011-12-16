@@ -479,7 +479,6 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
     if (event->buttons() & Qt::LeftButton) {
         Vector2 mouse(event->x(), event->y());
         Vector3 dir(getMouseRay(mouse, m_camera));
-
         m_gameEngine->fireProjectile(dir);
     }
 

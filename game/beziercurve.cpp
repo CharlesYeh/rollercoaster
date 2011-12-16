@@ -67,7 +67,7 @@ Vector3 BezierCurve::cubicSample(float t)
 {
     int pt = (int) t;
     if (t < 0 || 4 * pt >= m_points->size()) {
-        return Vector3();
+        return m_points->at(m_points->size()-1); //if at end, just stay at end spot
     }
 
     // every third point is a control point

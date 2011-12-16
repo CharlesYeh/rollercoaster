@@ -115,11 +115,13 @@ void GameEngine::run()
             m.t += .000001;
 
             //first item in m_curveMounts is for the camera.
+
             if (iter2 == m_curveMounts->begin()) {
                m_camera->center = m_curve->cubicSample(m.t);
             } else {
                m.gameObj->setPosition(m.curve->cubicSample(m.t));
             }
+
         }
 
         //------------------particles------------------
@@ -147,7 +149,6 @@ void GameEngine::run()
 void GameEngine::fireProjectile(Vector3 dir) {
     dir.normalize();
     dir = dir / 10000.0;
-
     spawnProjectile(dir);
 }
 

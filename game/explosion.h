@@ -6,10 +6,10 @@
 class Explosion : public ParticleEmitter
 {
 public:
-    Explosion(GLuint textureID);
+    Explosion(Vector3 initPos, GLuint textureID);
 
-    void initParticle(Particle &p);
-    void drawParticle(float x, float y, float z, float r);
+    void updateParticles();
+    void initParticles();
 };
 
 #endif // EXPLOSION_H

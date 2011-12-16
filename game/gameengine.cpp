@@ -15,6 +15,21 @@ GameEngine::GameEngine(QObject *parent)
 
     m_camera = NULL;
 
+    // load textures
+    QImage image, texture;
+    QFile file("textures/particle.jpg");
+    image.load(file.fileName());
+    texture = QGLWidget::convertToGLFormat(image);
+
+    m_textTrail = 0;
+    glGenTextures(1, &m_textTrail);
+    glBindTexture(GL_TEXTURE_2D, m_textTrail);
+    // end load textures
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width(), image.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, image.bits());
 }
 
 GameEngine::~GameEngine()
@@ -166,7 +181,7 @@ void GameEngine::fireProjectile(Vector3 dir) {
 }
 
 void GameEngine::spawnProjectile(Vector3 dir) {
-    ParticleEmitter *pe = new ProjectileTrail(m_camera->center);
+    ParticleEmitter *pe = new ProjectileTrail(m_camera->center, m_textTrail);
     m_emitters->push_back(pe);
 
     Projectile *obj = new Projectile(m_models[ROCKET_MODEL], pe);

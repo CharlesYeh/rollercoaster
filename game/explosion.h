@@ -6,7 +6,7 @@
 class Explosion : public ParticleEmitter
 {
 public:
-    Explosion();
+    Explosion(GLuint textureID);
 
     void initParticle(Particle &p);
     void drawParticle(float x, float y, float z, float r);

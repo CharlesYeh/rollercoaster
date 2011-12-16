@@ -7,7 +7,7 @@
 class ProjectileTrail : public ParticleEmitter
 {
 public:
-    ProjectileTrail(Vector3 initPos);
+    ProjectileTrail(Vector3 initPos, GLuint textureID);
     void updateParticles();
     void initParticles();
 

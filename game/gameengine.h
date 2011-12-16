@@ -47,6 +47,9 @@ public:
 private:
     void cleanupObjects();
 
+    // textures
+    GLuint m_textTrail, m_textExplosion;
+
     bool m_canFire;
     Vector3 m_projectileDir;
 

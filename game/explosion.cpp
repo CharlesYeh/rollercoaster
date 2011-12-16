@@ -1,6 +1,6 @@
 #include "explosion.h"
 
-Explosion::Explosion() : ParticleEmitter()
+Explosion::Explosion(GLuint textureID) : ParticleEmitter(100, textureID)
 {
 }
 

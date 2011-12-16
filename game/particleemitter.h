@@ -8,6 +8,7 @@ class ParticleEmitter : public BoundingBox
 {
 public:
     struct Particle {
+        bool active;
         float lifetime;
         float decay;
         float r, g, b;
@@ -15,7 +16,7 @@ public:
         Vector3 vel;
     };
 
-    ParticleEmitter(int num_particles = 300);
+    ParticleEmitter(int num_particles = 300, GLuint textureID = 0);
 
     virtual void initParticles();
     virtual void updateParticles();
@@ -26,12 +27,13 @@ public:
     void setIsAlive(bool status) { m_isAlive = status;}
 
 protected:
+    GLuint m_textureID;
+
     float m_lifetime;
     bool m_isAlive;
     int m_numparticles;
     int m_type;
 
-    GLuint m_texture;
     Particle *m_particles;
 };
 

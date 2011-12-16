@@ -32,6 +32,7 @@ protected:
     void wheelEvent(QWheelEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
 
     Vector3 getMouseRay(const Vector2 &mouse, const OrbitCamera *camera);
@@ -57,11 +58,13 @@ protected:
 private:
     GLuint m_particleTextureID;
 
+    bool m_mouseDown;
+
     QTimer m_timer;
     QTime m_clock;
     int m_prevTime;
     float m_prevFps, m_fps;
-    Vector2 m_prevMousePos;
+    Vector2 m_currMousePos, m_prevMousePos;
     OrbitCamera *m_camera;
 
     // Resources

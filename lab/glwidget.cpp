@@ -460,12 +460,19 @@ void GLWidget::renderBlur(int width, int height)
 **/
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    Vector2 pos(event->x(), event->y());
+    m_currMousePos.x = event->x();
+    m_currMousePos.y = event->y();
 
     if (event->buttons() & Qt::RightButton)
     {
-        m_camera->mouseMove(pos - m_prevMousePos);
-        m_prevMousePos = pos;
+        m_camera->mouseMove(m_currMousePos - m_prevMousePos);
+        m_prevMousePos = m_currMousePos;
+    }
+
+    //on left click, fire
+    if (event->buttons() & Qt::LeftButton) {
+        Vector3 dir(getMouseRay(m_currMousePos, m_camera));
+        m_gameEngine->fireProjectile(dir);
     }
 }
 
@@ -474,15 +481,22 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
  **/
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
+    m_currMousePos.x = event->x();
+    m_currMousePos.y = event->y();
+
     //on left click, fire
     if (event->buttons() & Qt::LeftButton) {
-        Vector2 mouse(event->x(), event->y());
-        Vector3 dir(getMouseRay(mouse, m_camera));
+        Vector3 dir(getMouseRay(m_currMousePos, m_camera));
         m_gameEngine->fireProjectile(dir);
     }
 
-    m_prevMousePos.x = event->x();
-    m_prevMousePos.y = event->y();
+    m_mouseDown = true;
+    m_prevMousePos = m_currMousePos;
+}
+
+void GLWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    m_mouseDown = false;
 }
 
 Vector3 GLWidget::getMouseRay(const Vector2 &mouse, const OrbitCamera *camera)

@@ -20,6 +20,12 @@ void BoundingBox::setDimension(float x, float y, float z)
     setPosition(m_position);
 }
 
+void BoundingBox::setRotation(Vector3 rotate, float angle)
+{
+    m_rotation = rotate; m_angle = angle;
+
+}
+
 void BoundingBox::setPosition(Vector3 pos)
 {
     m_position = pos;

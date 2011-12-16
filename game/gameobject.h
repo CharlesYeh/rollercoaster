@@ -15,7 +15,6 @@ public:
     Vector3 &getVelocity() { return m_velocity; }
     Vector3 &getRotation() { return m_rotation; }
     float &getAngleRotation() { return m_angle;}
-    void setRotation(Vector3 rotate, float angle) { m_rotation = rotate; m_angle = angle;}
 
     void setVelocity(Vector3 dir) { m_velocity = dir; }
     void setIsProjectile() { m_isProjectile = true;}
@@ -30,8 +29,6 @@ private:
     Model m_model;
     bool m_isProjectile;
 
-    Vector3 m_rotation;
-    float m_angle;
     Vector3 m_velocity;
 };
 

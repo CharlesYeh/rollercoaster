@@ -12,6 +12,7 @@
 #include "projectiletrail.h"
 #include "explosion.h"
 #include <string>
+#include <set>
 
 #include <QMutex>
 #include"SweepPruner.h"
@@ -40,6 +41,7 @@ public:
 
     std::vector<GameObject*> *getGameObjects() { return m_gobjects; };
     std::vector<ParticleEmitter*> *getEmitters() { return m_emitters; };
+    std::set<CollisionPair> *getCollisions() { return m_collisions; };
 
     void stop();
     bool running();
@@ -54,6 +56,7 @@ private:
     bool m_canFire;
     Vector3 m_projectileDir;
 
+    std::set<CollisionPair> *m_collisions;
     SweepPruner *m_pruner;
 
     float m_refractPeriod;

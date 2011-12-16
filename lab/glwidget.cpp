@@ -425,9 +425,17 @@ void GLWidget::renderScene() {
         emitters->at(i)->drawParticles();
     }
     glDisable(GL_TEXTURE_2D);
+
+    if (m_showCollisions) {
+        set<CollisionPair> *cp = m_gameEngine->getCollisions();
+        for (set<CollisionPair>::iterator iter = cp->begin(); iter != cp->end(); iter++) {
+            CollisionPair p = *iter;
+            p.m_obj1->drawBoundingBox();
+            p.m_obj2->drawBoundingBox();
+        }
+    }
+
     m_gameEngine->mutex.unlock();
-    //glFlush();
-    //swapBuffers();
 }
 
 /**

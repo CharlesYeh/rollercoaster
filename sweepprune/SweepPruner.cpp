@@ -21,6 +21,8 @@ SweepPruner::~SweepPruner()
 
 void SweepPruner::sweepAndPrune(set<CollisionPair> &final_pairs)
 {
+    final_pairs.clear();
+
     // adjust list sortedness
     sortList(m_x);
     sortList(m_y);

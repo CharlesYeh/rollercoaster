@@ -33,7 +33,8 @@ HEADERS += lab/glwidget.h \
     game/particleemitter.h \
     game/projectile.h \
     game/explosion.h \
-    game/projectiletrail.h
+    game/projectiletrail.h \
+    game/storyline.h
 SOURCES += lab/glwidget.cpp \
     lib/targa.cpp \
     lib/glm.cpp \
@@ -50,7 +51,8 @@ SOURCES += lab/glwidget.cpp \
     game/particleemitter.cpp \
     game/projectile.cpp \
     game/explosion.cpp \
-    game/projectiletrail.cpp
+    game/projectiletrail.cpp \
+    game/storyline.cpp
 FORMS += mainwindow.ui \
     support/mainwindow.ui
 OTHER_FILES += shaders/refract.vert \

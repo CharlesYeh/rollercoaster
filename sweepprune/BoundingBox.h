@@ -25,6 +25,7 @@ public:
     Vector3 getPosition() { return m_position; };
     void setPosition(Vector3 pos);
     void setDimension(float x, float y, float z);
+    void setRotation(Vector3 rotate, float angle);
 
     void drawBoundingBox();
 
@@ -34,6 +35,9 @@ private:
 
     Vector3 m_position;
     Vector3 m_dimension;
+
+    Vector3 m_rotation;
+    float m_angle;
 };
 
 #endif

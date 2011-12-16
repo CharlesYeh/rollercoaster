@@ -11,7 +11,7 @@ GameEngine::GameEngine(QObject *parent)
     m_gobjects = new vector<GameObject*>();
     m_emitters = new vector<ParticleEmitter*>();
     m_curveMounts = new vector<CurveMount>();
-    //m_pruner = new SweepPruner();
+    m_pruner = new SweepPruner();
 
     m_camera = NULL;
 
@@ -46,6 +46,7 @@ GameEngine::~GameEngine()
     }
 
 
+    delete m_pruner;
     delete m_gobjects;
     delete m_emitters;
     delete m_curveMounts;
@@ -149,8 +150,7 @@ void GameEngine::run()
             m_shake = false;
         }
 
-        //std::set<CollisionPair> pairs;
-        //m_pruner.sweepAndPrune(pairs);
+        //m_pruner->sweepAndPrune(m_collisions);
 
         //---cleaning up and removing emitters/objects
         cleanupObjects();

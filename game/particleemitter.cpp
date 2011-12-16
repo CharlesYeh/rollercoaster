@@ -58,7 +58,8 @@ void ParticleEmitter::drawParticles()
     }
 
     glDisable(GL_BLEND);
-    //glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);
+    //glDepthMask(GL_TRUE);
 }
 
 void ParticleEmitter::drawParticle(float x, float y, float z, float r)

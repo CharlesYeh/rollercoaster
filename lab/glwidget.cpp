@@ -645,4 +645,15 @@ void GLWidget::paintText()
     // QGLWidget's renderText takes xy coordinates, a string, and a font
     renderText(10, 20, "FPS: " + QString::number((int) (m_prevFps)), m_font);
     renderText(10, 35, "S: Save screenshot", m_font);
+    renderText(10, 45, "C: Highlight collided bounding boxes");
+
+    glColor3f(1, .8, 0);
+    QString str("This your first real fight? Don't worry, you're with the best pilot of the fleet!");
+    QFontMetrics fm(this->font());
+    int w = fm.width(str);
+
+    w = this->width() / 2 - w / 2;
+
+    renderText(w, 60, str);
+    glColor3f(1, 1, 1);
 }

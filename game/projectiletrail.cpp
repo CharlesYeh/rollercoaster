@@ -32,6 +32,7 @@ void ProjectileTrail::updateParticles()
         p.lifetime += p.decay;
 
         if (p.lifetime <= 0) {
+            p.active = true;
             p.pos = ParticleEmitter::getPosition();
             p.lifetime = rand() % 100 / 400000.f;
         }

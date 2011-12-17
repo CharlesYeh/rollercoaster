@@ -79,6 +79,9 @@ void GameEngine::start()
     obj2->setVelocity(Vector3(.000002, 0, 0));
     m_gobjects->push_back(obj2);
 
+    m_pruner->addObject(obj);
+    m_pruner->addObject(obj2);
+
     // create main track
     m_curve = m_story.getMainCurve();
 
@@ -166,6 +169,7 @@ void GameEngine::run()
 void GameEngine::fireProjectile(Vector3 dir) {
     if (m_refractPeriod < 0) {
         m_canFire = true;
+
         m_refractPeriod = 1;
         dir.normalize();
         dir = dir / 30000.0;
@@ -202,6 +206,8 @@ void GameEngine::spawnProjectile(Vector3 dir) {
     // explosion TESTING###########################
     ParticleEmitter *e = new Explosion(m_camera, m_camera->center, m_textTrail);
     m_emitters->push_back(e);
+
+    m_pruner->addObject(obj);
 }
 
 void GameEngine::cleanupObjects() {
@@ -212,6 +218,7 @@ void GameEngine::cleanupObjects() {
         if (!obj->getIsAlive()) {
             delete obj;
             m_gobjects->erase(m_gobjects->begin()+i);
+            m_pruner->removeObject(obj);
         }
     }
     for (int i = m_emitters->size()-1; i >= 0; i--) {

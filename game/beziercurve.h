@@ -1,7 +1,7 @@
 #ifndef BEZIERCURVE_H
 #define BEZIERCURVE_H
 
-//#include "math/vector.h"
+#include "math/vector.h"
 #include <vector>
 
 /*

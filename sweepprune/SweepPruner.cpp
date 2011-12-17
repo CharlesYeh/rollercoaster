@@ -3,6 +3,8 @@
 #include <set>
 #include <algorithm>
 
+#include <iostream>
+
 using namespace std;
 
 SweepPruner::SweepPruner()
@@ -17,14 +19,19 @@ SweepPruner::~SweepPruner()
     delete m_x;
     delete m_y;
     delete m_z;
+
+    m_x = m_y = m_z = 0;
 }
 
 void SweepPruner::sweepAndPrune(set<CollisionPair> &final_pairs)
 {
     final_pairs.clear();
 
+    if(m_x == 0)
+        return;
+
     // adjust list sortedness
-    /*sortList(m_x);
+    sortList(m_x);
     sortList(m_y);
     sortList(m_z);
 
@@ -50,7 +57,7 @@ void SweepPruner::sweepAndPrune(set<CollisionPair> &final_pairs)
 
     delete pair_x;
     delete pair_y;
-    delete pair_z;*/
+    delete pair_z;
 }
 
 void SweepPruner::getCollisions(list<DimensionPoint*> *coords, set<CollisionPair> *pairs)
@@ -60,6 +67,7 @@ void SweepPruner::getCollisions(list<DimensionPoint*> *coords, set<CollisionPair
     list<DimensionPoint*>::iterator iterX;
     for (iterX = coords->begin(); iterX != coords->end(); iterX++) {
         DimensionPoint *p = *iterX;
+
         if (p->type == START) {
             // if starts isn't empty, then collision!
             std::set<BoundingBox*>::iterator iterc;
@@ -83,6 +91,9 @@ void SweepPruner::sortList(list<DimensionPoint*> *pt)
     list<DimensionPoint*>::iterator iter;
 
     // start at second index
+    if (pt->size() == 0)
+        return;
+
     iter = pt->begin();
     float prevValue = (*iter)->value;
     iter++;
@@ -93,15 +104,15 @@ void SweepPruner::sortList(list<DimensionPoint*> *pt)
 
         if (prevValue > curValue) {
             // go left to find swap point!!
-            list<DimensionPoint*>::iterator riter = iter;
-
-            riter--;
-            while (riter != pt->begin() && (*riter)->value > curValue) {
-                riter--;
+            list<DimensionPoint*>::iterator riter = pt->begin();
+            while ((*riter)->value < curValue) {
+                riter++;
             }
 
+            list<DimensionPoint*>::iterator diter = iter++;
+
             pt->insert(riter, dp);
-            pt->erase(iter);
+            pt->erase(diter);
         }
 
         prevValue = curValue;
@@ -156,8 +167,9 @@ void SweepPruner::sortedInsert(list<DimensionPoint*> *l, DimensionPoint *p)
     for (iter = l->begin(); iter != l->end(); iter++) {
         DimensionPoint *dp = *iter;
         if (dp->value > val) {
-            l->insert(iter, p);
             break;
         }
     }
+
+    l->insert(iter, p);
 }

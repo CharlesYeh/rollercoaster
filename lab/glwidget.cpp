@@ -163,12 +163,12 @@ void GLWidget::loadCubeMap()
     fileList.append(new QFile("textures/skybox1/a_front5.png"));
     fileList.append(new QFile("textures/skybox1/a_back6.png"));
 /*
-    fileList.append(new QFile("textures/skybox2/b_right1.jpg"));
-    fileList.append(new QFile("textures/skybox2/b_left2.jpg"));
-    fileList.append(new QFile("textures/skybox2/b_top3.jpg"));
-    fileList.append(new QFile("textures/skybox2/b_bottom4.jpg"));
-    fileList.append(new QFile("textures/skybox2/b_front5.jpg"));
-    fileList.append(new QFile("textures/skybox2/b_back6.jpg"));
+    fileList.append(new QFile("textures/skybox2/b_right1.png"));
+    fileList.append(new QFile("textures/skybox2/b_left2.png"));
+    fileList.append(new QFile("textures/skybox2/b_top3.png"));
+    fileList.append(new QFile("textures/skybox2/b_bottom4.png"));
+    fileList.append(new QFile("textures/skybox2/b_front5.png"));
+    fileList.append(new QFile("textures/skybox2/b_back6.png"));
 
     fileList.append(new QFile("textures/astra/posx.jpg"));
     fileList.append(new QFile("textures/astra/negx.jpg"));
@@ -420,9 +420,6 @@ void GLWidget::renderScene() {
         glCallList(model.idx);
 
         glPopMatrix();
-
-        if (m_showBoxes)
-            gobj->drawBoundingBox();
     }
 
     // Disable culling, depth testing and cube maps
@@ -441,7 +438,16 @@ void GLWidget::renderScene() {
     }
     glDisable(GL_TEXTURE_2D);
 
+    if (m_showBoxes) {
+        glColor3f(1, 0, 0);
+        for (iter = objs->begin(); iter != objs->end(); iter++) {
+            GameObject *gobj = (*iter);
+            gobj->drawBoundingBox();
+        }
+    }
+
     if (m_showCollisions) {
+        glColor3f(1, 1, 0);
         set<CollisionPair> *cp = m_gameEngine->getCollisions();
         for (set<CollisionPair>::iterator iter = cp->begin(); iter != cp->end(); iter++) {
             CollisionPair p = *iter;

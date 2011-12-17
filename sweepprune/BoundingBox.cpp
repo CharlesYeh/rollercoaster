@@ -1,6 +1,7 @@
 #include "BoundingBox.h"
 #include <QtOpenGL>
 #include "math/CS123Matrix.h"
+#include "math/CS123Vector.h"
 
 BoundingBox::BoundingBox()
 {
@@ -23,24 +24,25 @@ void BoundingBox::setDimension(float x, float y, float z)
 
 void BoundingBox::setRotation(Vector3 rotate, float angle)
 {
-    Matrix4x4 m = getInvRotMat(pos, rotate, angle);
+    Matrix4x4 m = getInvRotMat(Vector4(m_position.x, m_position.y, m_position.z, 1),
+                               Vector4(rotate.x,rotate.y, rotate.z, 1), angle);
     // get new bounding box;
-    float xs = m_xstart.value;
-    float ys = m_ystart.value;
-    float zs = m_zstart.value;
+    float sx = m_xstart.value;
+    float sy = m_ystart.value;
+    float sz = m_zstart.value;
 
-    float xe = m_xend.value;
-    float ye = m_yend.value;
-    float ze = m_zend.value;
+    float ex = m_xend.value;
+    float ey = m_yend.value;
+    float ez = m_zend.value;
 
-    Vector4 p1(sx, sy, sz);
-    Vector4 p2(ex, sy, sz);
-    Vector4 p3(sx, ey, sz);
-    Vector4 p4(ex, ey, sz);
-    Vector4 p5(sx, sy, ez);
-    Vector4 p6(ex, sy, ez);
-    Vector4 p7(sx, ey, ez);
-    Vector4 p8(ex, ey, ez);
+    Vector4 p1(sx, sy, sz,1 );
+    Vector4 p2(ex, sy, sz,1 );
+    Vector4 p3(sx, ey, sz,1 );
+    Vector4 p4(ex, ey, sz,1 );
+    Vector4 p5(sx, sy, ez,1 );
+    Vector4 p6(ex, sy, ez,1 );
+    Vector4 p7(sx, ey, ez,1 );
+    Vector4 p8(ex, ey, ez,1 );
 
     vector<Vector4> points;
 
@@ -75,9 +77,9 @@ void BoundingBox::setRotation(Vector3 rotate, float angle)
     m_xstart.value = minx;
     m_ystart.value = miny;
     m_zstart.value = minz;
-    m_xstart.value = maxx;
-    m_ystart.value = maxy;
-    m_zstart.value = maxz;
+    m_xend.value = maxx;
+    m_yend.value = maxy;
+    m_zend.value = maxz;
 
     m_rotation = rotate; m_angle = angle;
 }

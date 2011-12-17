@@ -39,7 +39,7 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent),
 
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(update()));
 
-    m_showBoxes = m_showCollisions = false;
+    m_showCollisions = false;
 }
 
 /**
@@ -440,15 +440,13 @@ void GLWidget::renderScene() {
     }
     glDisable(GL_TEXTURE_2D);
 
-    if (m_showBoxes) {
+    if (m_showCollisions) {
         glColor3f(1, 0, 0);
         for (iter = objs->begin(); iter != objs->end(); iter++) {
             GameObject *gobj = (*iter);
             gobj->drawBoundingBox();
         }
-    }
 
-    if (m_showCollisions) {
         glColor3f(1, 1, 0);
         set<CollisionPair> *cp = m_gameEngine->getCollisions();
         for (set<CollisionPair>::iterator iter = cp->begin(); iter != cp->end(); iter++) {
@@ -666,9 +664,6 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
         qi.save(QFileInfo(fileName).absoluteDir().absolutePath() + "/" + QFileInfo(fileName).baseName() + ".png", "PNG", 100);
         }
         break;
-    case Qt::Key_X:
-        m_showBoxes = !m_showBoxes;
-        break;
     case Qt::Key_C:
         m_showCollisions = !m_showCollisions;
         break;
@@ -692,8 +687,7 @@ void GLWidget::paintText()
     // QGLWidget's renderText takes xy coordinates, a string, and a font
     renderText(10, 20, "FPS: " + QString::number((int) (m_prevFps)), m_font);
     renderText(10, 35, "S: Save screenshot", m_font);
-    renderText(10, 50, "X: Show bounding boxes", m_font);
-    renderText(10, 60, "C: Highlight collided bounding boxes", m_font);
+    renderText(10, 50, "C: Highlight collided bounding boxes", m_font);
 
     glColor3f(1, .8, 0);
 
@@ -701,7 +695,7 @@ void GLWidget::paintText()
     QFontMetrics fm(m_font);
     int x = (this->width() - m_gameEngine->getFullStoryWidth(fm)) / 2;
 
-    renderText(x, 80, str);
+    renderText(x, 65, str);
 
     glColor3f(1, 1, 1);
 }

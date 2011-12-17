@@ -2,7 +2,7 @@
 #define CAMERA_H
 
 #include <QMouseEvent>
-#include "vector.h"
+#include "math/CS123Vector.h"
 
 /**
     An orbiting perspective camera specified by a center, two angles, and a zoom factor

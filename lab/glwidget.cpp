@@ -155,15 +155,29 @@ void GLWidget::initializeResources()
  **/
 void GLWidget::loadCubeMap()
 {
-    QList<QFile *> fileList;
+    QList<QFile *> fileList; 
+    fileList.append(new QFile("textures/skybox1/a_right1.png"));
+    fileList.append(new QFile("textures/skybox1/a_left2.png"));
+    fileList.append(new QFile("textures/skybox1/a_top3.png"));
+    fileList.append(new QFile("textures/skybox1/a_bottom4.png"));
+    fileList.append(new QFile("textures/skybox1/a_front5.png"));
+    fileList.append(new QFile("textures/skybox1/a_back6.png"));
+/*
+    fileList.append(new QFile("textures/skybox2/b_right1.jpg"));
+    fileList.append(new QFile("textures/skybox2/b_left2.jpg"));
+    fileList.append(new QFile("textures/skybox2/b_top3.jpg"));
+    fileList.append(new QFile("textures/skybox2/b_bottom4.jpg"));
+    fileList.append(new QFile("textures/skybox2/b_front5.jpg"));
+    fileList.append(new QFile("textures/skybox2/b_back6.jpg"));
+
     fileList.append(new QFile("textures/astra/posx.jpg"));
     fileList.append(new QFile("textures/astra/negx.jpg"));
     fileList.append(new QFile("textures/astra/posy.jpg"));
     fileList.append(new QFile("textures/astra/negy.jpg"));
     fileList.append(new QFile("textures/astra/posz.jpg"));
     fileList.append(new QFile("textures/astra/negz.jpg"));
-
-    /*fileList.append(new QFile("textures/stars/stars_right.jpg"));
+*/
+   /*fileList.append(new QFile("textures/stars/stars_right.jpg"));
     fileList.append(new QFile("textures/stars/stars_left.jpg"));
     fileList.append(new QFile("textures/stars/stars_top.jpg"));
     fileList.append(new QFile("textures/stars/stars_top.jpg"));

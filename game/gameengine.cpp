@@ -78,6 +78,7 @@ void GameEngine::start()
 
     //setting up projectiles + their emitters
     for (int i = 0; i < 5; i++)  {
+
         m_projectiles->push_back(new Projectile((*m_models)[ROCKET_MODEL], new ProjectileTrail(m_camera, m_camera->center,m_textTrail)));
         m_projectiles->at(i)->setIsAlive(false);
         m_projectiles->at(i)->setIsProjectile();

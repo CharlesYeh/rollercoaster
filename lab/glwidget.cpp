@@ -86,6 +86,7 @@ void GLWidget::initializeGL()
     glFrontFace(GL_CCW);
 
     glDisable(GL_DITHER);
+    glDisable(GL_LIGHTING);
 
     //--------------------lighting--------------------
     /*glEnable(GL_LIGHTING);
@@ -100,10 +101,9 @@ void GLWidget::initializeGL()
     glEnable(GL_DEPTH_TEST);*/
     //------------------end lighting------------------
 
-    glShadeModel(GL_SMOOTH);
+    glShadeModel(GL_FLAT);
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear(GL_ACCUM_BUFFER_BIT);
 
     // Load resources, including creating shader programs and framebuffer objects
     initializeResources();
@@ -123,9 +123,6 @@ void GLWidget::initializeResources()
     // by the video card.  But that's a pain to do so we're not going to.
     cout << "--- Loading Resources ---" << endl;
 
-    /*m_dragon = ResourceLoader::loadObjModel("../lab09/models/xyzrgb_dragon.obj");
-    cout << "Loaded dragon..." << endl;*/
-
     m_skybox = ResourceLoader::loadSkybox();
     cout << "Loaded skybox..." << endl;
 
@@ -133,13 +130,12 @@ void GLWidget::initializeResources()
     cout << "Loaded cube map..." << endl;
 
     //-----------------------------LOAD OBJECTS-----------------------------
-    //m_bear = ResourceLoader::loadObjModel("models/xyzrgb_dragon.obj");
 
-    /*createShaderPrograms();
-    cout << "Loaded shader programs..." << endl;*/
+    createShaderPrograms();
+    cout << "Loaded shader programs..." << endl;
 
-    /*createFramebufferObjects(width(), height());
-    cout << "Loaded framebuffer objects..." << endl;*/
+    createFramebufferObjects(width(), height());
+    cout << "Loaded framebuffer objects..." << endl;
 
     cout << " --- Finish Loading Resources ---" << endl;
 
@@ -177,28 +173,6 @@ void GLWidget::loadCubeMap()
     fileList.append(new QFile("textures/astra/posz.jpg"));
     fileList.append(new QFile("textures/astra/negz.jpg"));
 */
-   /*fileList.append(new QFile("textures/stars/stars_right.jpg"));
-    fileList.append(new QFile("textures/stars/stars_left.jpg"));
-    fileList.append(new QFile("textures/stars/stars_top.jpg"));
-    fileList.append(new QFile("textures/stars/stars_top.jpg"));
-    fileList.append(new QFile("textures/stars/stars_front.jpg"));
-    fileList.append(new QFile("textures/stars/stars_back.jpg"));*/
-
-    /*
-    fileList.append(new QFile("textures/stratosphere/stratosphere_right.jpg"));
-    fileList.append(new QFile("textures/stratosphere/stratosphere_left.jpg"));
-    fileList.append(new QFile("textures/stratosphere/stratosphere_top.jpg"));
-    fileList.append(new QFile("textures/stratosphere/stratosphere_top.jpg"));
-    fileList.append(new QFile("textures/stratosphere/stratosphere_front.jpg"));
-    fileList.append(new QFile("textures/stratosphere/stratosphere_back.jpg"));
-    */
-
-    /*fileList.append(new QFile("textures/starfield/starfield_right.jpg"));
-    fileList.append(new QFile("textures/starfield/starfield_left.jpg"));
-    fileList.append(new QFile("textures/starfield/starfield_top.jpg"));
-    fileList.append(new QFile("textures/starfield/starfield_top.jpg"));
-    fileList.append(new QFile("textures/starfield/starfield_front.jpg"));
-    fileList.append(new QFile("textures/starfield/starfield_back.jpg"));*/
 
     m_cubeMap = ResourceLoader::loadCubeMap(fileList);
 }
@@ -226,12 +200,12 @@ GLuint GLWidget::loadTexture(const QString &path) {
 void GLWidget::createShaderPrograms()
 {
     const QGLContext *ctx = context();
-    m_shaderPrograms["reflect"] = ResourceLoader::newShaderProgram(ctx, "../lab09/shaders/reflect.vert",
-                                                                   "../lab09/shaders/reflect.frag");
-    m_shaderPrograms["refract"] = ResourceLoader::newShaderProgram(ctx, "../lab09/shaders/refract.vert",
-                                                                   "../lab09/shaders/refract.frag");
-    m_shaderPrograms["brightpass"] = ResourceLoader::newFragShaderProgram(ctx, "../lab09/shaders/brightpass.frag");
-    m_shaderPrograms["blur"] = ResourceLoader::newFragShaderProgram(ctx, "../lab09/shaders/blur.frag");
+    m_shaderPrograms["reflect"] = ResourceLoader::newShaderProgram(ctx, "shaders/reflect.vert",
+                                                                        "shaders/reflect.frag");
+    m_shaderPrograms["refract"] = ResourceLoader::newShaderProgram(ctx, "shaders/refract.vert",
+                                                                        "shaders/refract.frag");
+    m_shaderPrograms["brightpass"] = ResourceLoader::newFragShaderProgram(ctx, "shaders/brightpass.frag");
+    m_shaderPrograms["blur"] = ResourceLoader::newFragShaderProgram(ctx, "shaders/blur.frag");
 }
 
 /**
@@ -315,13 +289,20 @@ void GLWidget::paintGL()
 
     //-----------------------------RENDER-----------------------------
 
-    /*
-    m_framebufferObjects["fbo_0"]->release();
+    //m_framebufferObjects["fbo_0"]->release();
 
     // Copy the rendered scene into framebuffer 1
-    m_framebufferObjects["fbo_0"]->blitFramebuffer(m_framebufferObjects["fbo_1"],
+    /*m_framebufferObjects["fbo_0"]->blitFramebuffer(m_framebufferObjects["fbo_1"],
                                                    QRect(0, 0, width, height), m_framebufferObjects["fbo_0"],
                                                    QRect(0, 0, width, height), GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+    applyOrthogonalCamera(width, height);
+    glBindTexture(GL_TEXTURE_2D, m_framebufferObjects["fbo_0"]->texture());
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    // Enable alpha blending and render the texture to the screen
+    renderTexturedQuad(width, height, false);
 
     // TODO: Add drawing code here
     applyOrthogonalCamera(width, height);
@@ -335,10 +316,10 @@ void GLWidget::paintGL()
     renderTexturedQuad(width, height, true);
     glBindTexture(GL_TEXTURE_2D, 0);
     m_shaderPrograms["brightpass"]->release();
-    m_framebufferObjects["fbo_2"]->release();*/
+    m_framebufferObjects["fbo_2"]->release();
 
     // TODO: Uncomment this section in step 2 of the lab
-/*
+
     float scales[] = {4.f,8.f,16.f,32.f};
     for (int i = 0; i < 4; ++i)
     {
@@ -359,7 +340,6 @@ void GLWidget::paintGL()
         glBindTexture(GL_TEXTURE_2D, 0);
     }*/
 
-
     paintText();
 }
 
@@ -368,6 +348,7 @@ void GLWidget::paintGL()
 **/
 void GLWidget::renderScene() {
     // Enable depth testing
+    glEnable(GL_DEPTH_TEST);
     glClear(GL_DEPTH_BUFFER_BIT);
 
     // Enable cube maps and draw the skybox
@@ -401,6 +382,9 @@ void GLWidget::renderScene() {
     //-----------------------------RENDER-----------------------------
 
     glShadeModel(GL_SMOOTH);
+    glActiveTexture(GL_TEXTURE0);
+    m_shaderPrograms["reflect"]->bind();
+    m_shaderPrograms["reflect"]->setUniformValue("CubeMap", GL_TEXTURE0);
 
     vector<GameObject*> *objs = m_gameEngine->getGameObjects();
     vector<GameObject*>::iterator iter;
@@ -424,10 +408,14 @@ void GLWidget::renderScene() {
         }
     }
 
+    m_shaderPrograms["reflect"]->release();
+
     // Disable culling, depth testing and cube maps
     glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
     glBindTexture(GL_TEXTURE_CUBE_MAP,0);
     glDisable(GL_TEXTURE_CUBE_MAP);
+
     //-----------------particles-----------------
     std::vector<ParticleEmitter*> *emitters = m_gameEngine->getEmitters();
     glEnable(GL_TEXTURE_2D);

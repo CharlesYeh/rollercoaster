@@ -404,12 +404,12 @@ void GLWidget::renderScene() {
 
     vector<GameObject*> *objs = m_gameEngine->getGameObjects();
     vector<GameObject*>::iterator iter;
-    m_gameEngine->mutex.lock();
+    //m_gameEngine->mutex.lock();
     for (iter = objs->begin(); iter != objs->end(); iter++)
     {
         GameObject *gobj = (*iter);
-        //if (gobj->getIsAlive())
-        //{
+        if (gobj->getIsAlive())
+        {
             Model model = gobj->getModel();
             Vector3 pos = gobj->getPosition();
             Vector3 rot = gobj->getRotation();
@@ -421,7 +421,7 @@ void GLWidget::renderScene() {
             glCallList(model.idx);
 
             glPopMatrix();
-        //}
+        }
     }
 
     // Disable culling, depth testing and cube maps
@@ -434,16 +434,21 @@ void GLWidget::renderScene() {
     glBindTexture(GL_TEXTURE_2D, m_particleTextureID);
 
     for (unsigned int i = 0; i < emitters->size(); i++) {
-        //ParticleEmitter* em = emitters->at(i);
-        emitters->at(i)->updateParticles();
-        emitters->at(i)->drawParticles();
+        ParticleEmitter* em = emitters->at(i);
+        if (em->getIsAlive()) {
+            em->updateParticles();
+            em->drawParticles();
+        }
     }
     glDisable(GL_TEXTURE_2D);
 
+    m_gameEngine->mutex.lock();
     if (m_showCollisions) {
         glColor3f(1, 0, 0);
         for (iter = objs->begin(); iter != objs->end(); iter++) {
             GameObject *gobj = (*iter);
+            if (!gobj->getIsAlive())
+                continue;
             gobj->drawBoundingBox();
         }
 
@@ -451,6 +456,9 @@ void GLWidget::renderScene() {
         set<CollisionPair> *cp = m_gameEngine->getCollisions();
         for (set<CollisionPair>::iterator iter = cp->begin(); iter != cp->end(); iter++) {
             CollisionPair p = *iter;
+            if (!p.m_obj1->getIsAlive() || !p.m_obj2->getIsAlive())
+                continue;
+
             p.m_obj1->drawBoundingBox();
             p.m_obj2->drawBoundingBox();
         }

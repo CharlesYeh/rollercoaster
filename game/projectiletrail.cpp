@@ -5,13 +5,14 @@ using namespace std;
 ProjectileTrail::ProjectileTrail(OrbitCamera *cam, Vector3 initPos, GLuint textureID) : ParticleEmitter(cam, 200, textureID)
 {
     ParticleEmitter::setPosition(initPos);
-    initParticles();
+    //initParticles();
 }
 
 void ProjectileTrail::initParticles()
 {
     for (int i = 0; i < m_numparticles; i++) {
         Particle &p = m_particles[i];
+        p.active = true;
         p.lifetime = rand() % 1000 / 1000.f;
         p.decay = - (rand() % 10000) / 10000.f / 100.f - .02;
 

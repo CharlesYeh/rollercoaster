@@ -14,7 +14,7 @@ ParticleEmitter::ParticleEmitter(OrbitCamera *cam, int num_particles, GLuint tex
     m_particles = new Particle[num_particles]; //DELETE THIS?
 
     // init particles
-    initParticles();
+    //initParticles();
 }
 
 ParticleEmitter::~ParticleEmitter()

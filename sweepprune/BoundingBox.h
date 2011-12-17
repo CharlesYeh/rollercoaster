@@ -30,7 +30,13 @@ public:
     void setDimension(float x, float y, float z);
     void setRotation(Vector3 rotate, float angle);
 
+    void setIsAlive(bool status) { m_isAlive = status;}
+    bool getIsAlive() const {return m_isAlive;}
+
     void drawBoundingBox();
+
+protected:
+    bool m_isAlive;
 
 private:
     DimensionPoint m_xstart, m_ystart, m_zstart,

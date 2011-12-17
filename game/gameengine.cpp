@@ -72,10 +72,14 @@ void GameEngine::start()
     m_models->insert(pair<std::string,Model>(ROCKET_MODEL, ResourceLoader::loadObjModel(ROCKET_MODEL.c_str(), 1)));
 
 
-    for (int i = 0; i < 3; i++)  {
-        m_projectiles->push_back(new Projectile((*m_models)[ROCKET_MODEL]));
+    //setting up projectiles + their emitters
+    for (int i = 0; i < 5; i++)  {
+        m_projectiles->push_back(new Projectile((*m_models)[ROCKET_MODEL], new ProjectileTrail(m_camera, m_camera->center,m_textTrail)));
         m_projectiles->at(i)->setIsAlive(false);
-        //m_gobjects->push_back(m_projectiles->at(i));
+        m_projectiles->at(i)->getEmitter()->setIsAlive(false);
+        m_emitters->push_back(m_projectiles->at(i)->getEmitter());
+        m_gobjects->push_back(m_projectiles->at(i));
+        m_pruner->addObject(m_projectiles->at(i));
     }
 
     GameObject *obj = new GameObject((*m_models)[SHIP_MODEL]);
@@ -128,7 +132,7 @@ void GameEngine::run()
         vector<GameObject*>::iterator iter;
         for (iter = m_gobjects->begin(); iter != m_gobjects->end(); iter++)
         {
-            (*iter)->act();
+                (*iter)->act();
         }
 
         //-------------------mounts-------------------
@@ -136,7 +140,7 @@ void GameEngine::run()
         for (iter2 = m_curveMounts->begin(); iter2 != m_curveMounts->end(); iter2++)
         {
             CurveMount &m = *iter2;
-            m.t += .00001;
+            m.t += .000001;
 
             //first item in m_curveMounts is for the camera.
 
@@ -158,12 +162,15 @@ void GameEngine::run()
             m_shake = false;
         }
 
+        this->mutex.lock();
         m_pruner->sweepAndPrune(*m_collisions);
+        this->mutex.unlock();
+
 
         //---cleaning up and removing emitters/objects
         //cleanupObjects();
 
-        m_refractPeriod -= 0.00005;
+        m_refractPeriod -= 0.0001;
 
         // update story
         if (m_storyIndex > 0)
@@ -183,22 +190,14 @@ void GameEngine::fireProjectile(Vector3 dir) {
         m_projectileDir = dir;
 
         //NOTE: CANNOT SPAWN PROJECTILE HERE: POTENTIALLY DANGEROUS AND CRASHES
-
-        /*
-        m_refractPeriod = 1;
-        dir.normalize();
-        dir = dir / 10000.0;
-        spawnProjectile(dir);
-        */
     }
 }
 
 void GameEngine::spawnProjectile(Vector3 dir) {
-    ParticleEmitter *pe = new ProjectileTrail(m_camera, m_camera->center, m_textTrail);
-    m_emitters->push_back(pe);
     Projectile* obj;
     bool foundProjectile = false;
-    for (int i = 0; i < 3; i ++) {
+
+    for (int i = 0; i < m_projectiles->size(); i ++) {
         if (!m_projectiles->at(i)->getIsAlive()) {
                obj= m_projectiles->at(i);
                foundProjectile = true;
@@ -208,10 +207,12 @@ void GameEngine::spawnProjectile(Vector3 dir) {
     if (!foundProjectile)
         return;
 
-
     obj->setIsAlive(true);
-    obj->setEmitter(pe);
-    //Projectile *obj = new Projectile((*m_models)[ROCKET_MODEL], pe);
+    obj->resetLifetime();
+
+    obj->getEmitter()->setPosition(m_camera->center);
+    obj->getEmitter()->initParticles();
+    obj->getEmitter()->setIsAlive(true);
 
     //setting up rotation angle for drawing
     Vector3 orthVec = dir.cross(Vector3(5,0,0));
@@ -221,18 +222,16 @@ void GameEngine::spawnProjectile(Vector3 dir) {
     obj->setPosition(m_camera->center);
     obj->setVelocity(dir);
     obj->setIsProjectile();
-    m_gobjects->push_back(obj);
-
 
     // explosion TESTING###########################
-    ParticleEmitter *e = new Explosion(m_camera, m_camera->center, m_textTrail);
-    m_emitters->push_back(e);
+    //ParticleEmitter *e = new Explosion(m_camera, m_camera->center, m_textTrail);
+    //m_emitters->push_back(e);
 
-    m_pruner->addObject(obj);
 }
 
 void GameEngine::cleanupObjects() {
     //std::cout << m_gobjects->size() << std::endl;
+
     mutex.lock();
     for (int i = m_gobjects->size()-1; i >= 0; i--) {
         GameObject *obj = m_gobjects->at(i);
@@ -242,6 +241,7 @@ void GameEngine::cleanupObjects() {
             m_pruner->removeObject(obj);
         }
     }
+
     for (int i = m_emitters->size()-1; i >= 0; i--) {
         ParticleEmitter *pe = m_emitters->at(i);
         if (!pe->getIsAlive()) {

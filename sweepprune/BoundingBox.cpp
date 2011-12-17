@@ -42,7 +42,7 @@ void BoundingBox::setPosition(Vector3 pos)
 void BoundingBox::drawBoundingBox()
 {
     glShadeModel(GL_FLAT);
-    glColor3f(1, 1, 1);
+    glColor3f(1, 0, 0);
     glBegin(GL_LINE_STRIP);
     // front face
     glVertex3f(m_xstart.value, m_ystart.value, m_zstart.value);

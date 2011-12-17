@@ -12,7 +12,7 @@ Projectile::~Projectile()
 
 void Projectile::act()
 {
-    m_lifetime -= 0.0000006;
+    m_lifetime -= 0.000001;
     if (m_lifetime < 0) {
        m_isAlive = false;
        m_emitter->setIsAlive(false);

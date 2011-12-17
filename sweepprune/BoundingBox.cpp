@@ -1,7 +1,5 @@
 #include "BoundingBox.h"
 #include <QtOpenGL>
-#include "math/CS123Matrix.h"
-#include "math/CS123Vector.h"
 
 BoundingBox::BoundingBox()
 {
@@ -24,6 +22,7 @@ void BoundingBox::setDimension(float x, float y, float z)
 
 void BoundingBox::setRotation(Vector3 rotate, float angle)
 {
+    /*
     Matrix4x4 m = getInvRotMat(Vector4(m_position.x, m_position.y, m_position.z, 1),
                                Vector4(rotate.x,rotate.y, rotate.z, 1), angle);
     // get new bounding box;
@@ -80,6 +79,7 @@ void BoundingBox::setRotation(Vector3 rotate, float angle)
     m_xend.value = maxx;
     m_yend.value = maxy;
     m_zend.value = maxz;
+    */
 
     m_rotation = rotate; m_angle = angle;
 }

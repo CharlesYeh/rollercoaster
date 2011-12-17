@@ -34,11 +34,7 @@ HEADERS += lab/glwidget.h \
     game/explosion.h \
     game/projectiletrail.h \
     game/storyline.h \
-    math/CS123Matrix.h \
-    math/CS123Algebra.h \
-    math/CS123Common.h \
-    math/vector.h \
-    math/CS123Vector.h
+    math/vector.h
 SOURCES += lab/glwidget.cpp \
     lib/targa.cpp \
     lib/glm.cpp \
@@ -56,10 +52,7 @@ SOURCES += lab/glwidget.cpp \
     game/projectile.cpp \
     game/explosion.cpp \
     game/projectiletrail.cpp \
-    game/storyline.cpp \
-    math/CS123Matrix.inl \
-    math/CS123Matrix.cpp \
-    math/CS123Vector.inl
+    game/storyline.cpp
 FORMS += mainwindow.ui \
     support/mainwindow.ui
 OTHER_FILES += shaders/refract.vert \

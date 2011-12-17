@@ -18,7 +18,6 @@ DEPENDPATH += lab \
 HEADERS += lab/glwidget.h \
     lib/targa.h \
     lib/glm.h \
-    math/vector.h \
     support/resourceloader.h \
     support/mainwindow.h \
     support/camera.h \
@@ -34,7 +33,10 @@ HEADERS += lab/glwidget.h \
     game/projectile.h \
     game/explosion.h \
     game/projectiletrail.h \
-    game/storyline.h
+    game/storyline.h \
+    math/CS123Matrix.h \
+    math/CS123Algebra.h \
+    math/CS123Common.h
 SOURCES += lab/glwidget.cpp \
     lib/targa.cpp \
     lib/glm.cpp \
@@ -52,7 +54,9 @@ SOURCES += lab/glwidget.cpp \
     game/projectile.cpp \
     game/explosion.cpp \
     game/projectiletrail.cpp \
-    game/storyline.cpp
+    game/storyline.cpp \
+    math/CS123Matrix.inl \
+    math/CS123Matrix.cpp
 FORMS += mainwindow.ui \
     support/mainwindow.ui
 OTHER_FILES += shaders/refract.vert \

@@ -25,6 +25,7 @@ public:
     Vector3 getPosition() { return m_position; };
     Vector3 &getRotation() { return m_rotation; }
     float &getAngleRotation() { return m_angle;}
+
     void setPosition(Vector3 pos);
     void setDimension(float x, float y, float z);
     void setRotation(Vector3 rotate, float angle);

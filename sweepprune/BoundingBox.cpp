@@ -1,5 +1,6 @@
 #include "BoundingBox.h"
 #include <QtOpenGL>
+#include "math/CS123Matrix.h"
 
 BoundingBox::BoundingBox()
 {
@@ -22,8 +23,63 @@ void BoundingBox::setDimension(float x, float y, float z)
 
 void BoundingBox::setRotation(Vector3 rotate, float angle)
 {
-    m_rotation = rotate; m_angle = angle;
+    Matrix4x4 m = getInvRotMat(pos, rotate, angle);
+    // get new bounding box;
+    float xs = m_xstart.value;
+    float ys = m_ystart.value;
+    float zs = m_zstart.value;
 
+    float xe = m_xend.value;
+    float ye = m_yend.value;
+    float ze = m_zend.value;
+
+    Vector4 p1(sx, sy, sz);
+    Vector4 p2(ex, sy, sz);
+    Vector4 p3(sx, ey, sz);
+    Vector4 p4(ex, ey, sz);
+    Vector4 p5(sx, sy, ez);
+    Vector4 p6(ex, sy, ez);
+    Vector4 p7(sx, ey, ez);
+    Vector4 p8(ex, ey, ez);
+
+    vector<Vector4> points;
+
+    points.push_back(m * p1);
+    points.push_back(m * p2);
+    points.push_back(m * p3);
+    points.push_back(m * p4);
+    points.push_back(m * p5);
+    points.push_back(m * p6);
+    points.push_back(m * p7);
+    points.push_back(m * p8);
+
+    float minx, miny, minz, maxx, maxy, maxz;
+
+    for (int i = 0; i < points.size(); i++) {
+        Vector4 &p = points[i];
+
+        if (i == 0 || p.x < minx)
+            minx = p.x;
+        if (i == 0 || p.y < miny)
+            miny = p.y;
+        if (i == 0 || p.z < minz)
+            minz = p.z;
+        if (i == 0 || p.x > maxx)
+            maxx = p.x;
+        if (i == 0 || p.y > maxy)
+            maxy = p.y;
+        if (i == 0 || p.z > maxz)
+            maxz = p.z;
+    }
+
+    m_xstart.value = minx;
+    m_ystart.value = miny;
+    m_zstart.value = minz;
+    m_xstart.value = maxx;
+    m_ystart.value = maxy;
+    m_zstart.value = maxz;
+
+    m_rotation = rotate; m_angle = angle;
 }
 
 void BoundingBox::setPosition(Vector3 pos)

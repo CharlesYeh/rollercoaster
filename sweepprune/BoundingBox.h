@@ -37,7 +37,7 @@ private:
                    m_xend, m_yend, m_zend;
 
     Vector3 m_position;
-    Vector3 m_dimension;
+    Vector3 m_dimension, m_base;    // m_base used to approximate rotations
 
     Vector3 m_rotation;
     float m_angle;

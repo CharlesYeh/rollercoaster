@@ -49,6 +49,7 @@ public:
     bool running();
     QMutex mutex;
 
+    int getFullStoryWidth(QFontMetrics &fm);
     QString getStory();
 
 private:
@@ -66,7 +67,7 @@ private:
     float m_refractPeriod;
     bool m_stop;
     bool m_running;
-    std::string ROCKET_MODEL;
+    std::string ROCKET_MODEL, SHIP_MODEL;
 
     bool m_shake; //alert to shake camera
     int m_curNumShakes;

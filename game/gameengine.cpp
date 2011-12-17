@@ -61,21 +61,19 @@ GameEngine::~GameEngine()
 
 void GameEngine::start()
 {
-    string objModel = "models/xyzrgb_dragon.obj";
-    m_models->insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str(), 2.0)));
+    SHIP_MODEL = "models/ship/f.obj";
+    m_models->insert(pair<std::string,Model>(SHIP_MODEL, ResourceLoader::loadObjModel(SHIP_MODEL.c_str(), 2.0)));
 
     //------constants--------
     ROCKET_MODEL = "models/missile/missile.obj";
 
     m_models->insert(pair<std::string,Model>(ROCKET_MODEL, ResourceLoader::loadObjModel(ROCKET_MODEL.c_str(), 1)));
 
-
-    //GameObject *obj = new GameObject("models/xyzrgb_dragon.obj");
-    GameObject *obj = new GameObject((*m_models)["models/xyzrgb_dragon.obj"]);
+    GameObject *obj = new GameObject((*m_models)[SHIP_MODEL]);
     obj->getPosition().y -= 1;
     m_gobjects->push_back(obj);
 
-    GameObject *obj2 = new GameObject((*m_models)["models/xyzrgb_dragon.obj"]);
+    GameObject *obj2 = new GameObject((*m_models)[SHIP_MODEL]);
     obj2->setVelocity(Vector3(.000002, 0, 0));
     m_gobjects->push_back(obj2);
 
@@ -241,6 +239,11 @@ void GameEngine::stop()
 bool GameEngine::running()
 {
     return m_running;
+}
+
+int GameEngine::getFullStoryWidth(QFontMetrics &fm)
+{
+    return fm.width(m_currStory);
 }
 
 QString GameEngine::getStory()

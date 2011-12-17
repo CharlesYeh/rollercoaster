@@ -20,7 +20,6 @@ void Projectile::act()
 
     GameObject::act();
 
-
     Vector3 offsetted = getPosition();
     m_emitter->setPosition(offsetted);
 }

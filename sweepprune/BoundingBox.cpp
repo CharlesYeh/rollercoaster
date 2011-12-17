@@ -1,5 +1,10 @@
 #include "BoundingBox.h"
+
+//#include "<vector>"
 #include <QtOpenGL>
+#include "matrix3x3.h"
+
+using namespace std;
 
 BoundingBox::BoundingBox()
 {
@@ -13,37 +18,36 @@ BoundingBox::BoundingBox()
 
 void BoundingBox::setDimension(float x, float y, float z)
 {
-    m_dimension.x = x / 2;
-    m_dimension.y = y / 2;
-    m_dimension.z = z / 2;
+    m_base.x = m_dimension.x = x / 2;
+    m_base.y = m_dimension.y = y / 2;
+    m_base.z = m_dimension.z = z / 2;
 
     setPosition(m_position);
 }
 
 void BoundingBox::setRotation(Vector3 rotate, float angle)
 {
-    /*
-    Matrix4x4 m = getInvRotMat(Vector4(m_position.x, m_position.y, m_position.z, 1),
-                               Vector4(rotate.x,rotate.y, rotate.z, 1), angle);
+    Matrix3x3 m = getRotMat(rotate, angle);
+
     // get new bounding box;
-    float sx = m_xstart.value;
-    float sy = m_ystart.value;
-    float sz = m_zstart.value;
+    float sx = -m_base.x;
+    float sy = -m_base.y;
+    float sz = -m_base.z;
 
-    float ex = m_xend.value;
-    float ey = m_yend.value;
-    float ez = m_zend.value;
+    float ex = m_base.x;
+    float ey = m_base.y;
+    float ez = m_base.z;
 
-    Vector4 p1(sx, sy, sz,1 );
-    Vector4 p2(ex, sy, sz,1 );
-    Vector4 p3(sx, ey, sz,1 );
-    Vector4 p4(ex, ey, sz,1 );
-    Vector4 p5(sx, sy, ez,1 );
-    Vector4 p6(ex, sy, ez,1 );
-    Vector4 p7(sx, ey, ez,1 );
-    Vector4 p8(ex, ey, ez,1 );
+    Vector3 p1(sx, sy, sz);
+    Vector3 p2(ex, sy, sz);
+    Vector3 p3(sx, ey, sz);
+    Vector3 p4(ex, ey, sz);
+    Vector3 p5(sx, sy, ez);
+    Vector3 p6(ex, sy, ez);
+    Vector3 p7(sx, ey, ez);
+    Vector3 p8(ex, ey, ez);
 
-    vector<Vector4> points;
+    vector<Vector3> points;
 
     points.push_back(m * p1);
     points.push_back(m * p2);
@@ -56,8 +60,8 @@ void BoundingBox::setRotation(Vector3 rotate, float angle)
 
     float minx, miny, minz, maxx, maxy, maxz;
 
-    for (int i = 0; i < points.size(); i++) {
-        Vector4 &p = points[i];
+    for (unsigned int i = 0; i < points.size(); i++) {
+        Vector3 &p = points[i];
 
         if (i == 0 || p.x < minx)
             minx = p.x;
@@ -73,13 +77,12 @@ void BoundingBox::setRotation(Vector3 rotate, float angle)
             maxz = p.z;
     }
 
-    m_xstart.value = minx;
-    m_ystart.value = miny;
-    m_zstart.value = minz;
-    m_xend.value = maxx;
-    m_yend.value = maxy;
-    m_zend.value = maxz;
-    */
+    m_xstart.value = minx + m_position.x;
+    m_ystart.value = miny + m_position.y;
+    m_zstart.value = minz + m_position.z;
+    m_xend.value = maxx + m_position.x;
+    m_yend.value = maxy + m_position.y;
+    m_zend.value = maxz + m_position.z;
 
     m_rotation = rotate; m_angle = angle;
 }

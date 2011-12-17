@@ -8,9 +8,10 @@
 class Projectile : public GameObject
 {
 public:
-    Projectile(Model model, ParticleEmitter* em);
+    Projectile(Model model);
     virtual ~Projectile();
 
+    void setEmitter(ParticleEmitter* em) { m_emitter = em;};
     ParticleEmitter *getEmitter() { return m_emitter; };
 
     void act();

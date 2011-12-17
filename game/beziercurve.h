@@ -25,6 +25,7 @@ public:
 
 
 private:
+    int m_curStart;
     std::vector<Vector3> *m_points;
 };
 

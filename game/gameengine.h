@@ -79,6 +79,8 @@ private:
     OrbitCamera *m_camera;
     CurveMount m_cameraMount;
 
+
+    std::vector<Projectile*> *m_projectiles;
     std::vector<GameObject*> *m_gobjects;
     std::vector<ParticleEmitter*> *m_emitters;
     std::vector<CurveMount> *m_curveMounts;

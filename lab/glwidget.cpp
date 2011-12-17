@@ -408,18 +408,20 @@ void GLWidget::renderScene() {
     for (iter = objs->begin(); iter != objs->end(); iter++)
     {
         GameObject *gobj = (*iter);
+        //if (gobj->getIsAlive())
+        //{
+            Model model = gobj->getModel();
+            Vector3 pos = gobj->getPosition();
+            Vector3 rot = gobj->getRotation();
 
-        Model model = gobj->getModel();
-        Vector3 pos = gobj->getPosition();
-        Vector3 rot = gobj->getRotation();
+            glPushMatrix();
+            glColor3f(1, 0, 0);
+            glTranslatef(pos.x, pos.y, pos.z);
+            glRotatef(gobj->getAngleRotation(), rot.x, rot.y, rot.z);
+            glCallList(model.idx);
 
-        glPushMatrix();
-        glColor3f(1, 0, 0);
-        glTranslatef(pos.x, pos.y, pos.z);
-        glRotatef(gobj->getAngleRotation(), rot.x, rot.y, rot.z);
-        glCallList(model.idx);
-
-        glPopMatrix();
+            glPopMatrix();
+        //}
     }
 
     // Disable culling, depth testing and cube maps

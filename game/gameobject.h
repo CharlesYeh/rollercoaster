@@ -17,6 +17,7 @@ public:
     void setVelocity(Vector3 dir) { m_velocity = dir; }
     void setIsProjectile() { m_isProjectile = true;}
     bool getIsProjectile() { return m_isProjectile; }
+    void setIsAlive(bool status) { m_isAlive = status;}
     bool getIsAlive() { return m_isAlive;}
 
     virtual void act();

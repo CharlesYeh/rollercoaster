@@ -42,9 +42,6 @@ void ParticleEmitter::initParticles()
 
 void ParticleEmitter::drawParticles()
 {
-    glEnable(GL_DEPTH_TEST);
-    //glDepthFunc(GL_LEQUAL);
-    glDepthMask(GL_TRUE);
     glBindTexture(GL_TEXTURE_2D, m_textureID);
 
     glEnable(GL_BLEND);
@@ -67,8 +64,6 @@ void ParticleEmitter::drawParticles()
         drawParticle(x, y, z, m_radius);
        // glClearDepth(1.0);
     }
-    glDisable(GL_DEPTH_TEST);
-    //glDepthMask(GL_FALSE);
 
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);

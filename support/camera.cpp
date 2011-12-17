@@ -2,6 +2,7 @@
 #include <qgl.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "matrix3x3.h"
 
 void OrbitCamera::mouseMove(const Vector2 &delta)
 {
@@ -12,6 +13,12 @@ void OrbitCamera::mouseMove(const Vector2 &delta)
     // Keep theta in [0, 2pi] and phi in [-pi/2, pi/2]
     theta -= floorf(theta / M_2PI) * M_2PI;
     phi = max(0.01f - M_PI / 2, min(M_PI / 2 - 0.01f, phi));
+
+    double rad = theta + M_PI / 2;
+
+    Vector3 ax = Vector3::fromAngles(fmod(rad, 2 * M_PI), 0);
+    Matrix3x3 rot = getRotMat(ax, phi);
+    up = rot * Vector3(0, 1, 0);
 }
 
 void OrbitCamera::mouseWheel(float delta)

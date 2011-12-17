@@ -64,8 +64,8 @@ void BezierCurve::addSmoothHandlePoint(float x, float y, float z)
 Vector3 BezierCurve::cubicSample(float t)
 {
     int pt = (int) t;
-    if (t < 0 || 4 * pt >= m_points->size()) {
-        return m_points->at(m_curStart + 3); //return last control point
+    if (t < 0 || 3 * pt + 3 >= m_points->size()) {
+        return m_points->at(min(m_points->size() - 1, m_curStart + 3)); //return last control point
     }
 
     // every third point is a control point

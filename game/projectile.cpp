@@ -11,12 +11,19 @@ Projectile::~Projectile()
 {
 }
 
+void Projectile::setIsAlive(bool status) {
+    m_isAlive = status;
+    if (!m_isAlive)
+        m_emitter->setIsAlive(status);
+}
+
 void Projectile::act()
 {
-    m_lifetime -= 0.00005;
+    m_lifetime -= 0.0001;
     if (m_lifetime < 0) {
-       m_isAlive = false;
-       m_emitter->setIsAlive(false);
+        setIsAlive(false);
+       //m_isAlive = false;
+       //m_emitter->setIsAlive(false);
     }
 
     GameObject::act();

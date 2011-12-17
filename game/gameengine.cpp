@@ -17,6 +17,7 @@ GameEngine::GameEngine(QObject *parent)
     m_models = new map<string, Model>();
 
     m_projectiles = new vector<Projectile*>();
+    m_explosions = new vector<Explosion*>();
 
     m_camera = NULL;
 
@@ -58,6 +59,9 @@ GameEngine::~GameEngine()
 
     delete m_models;
 
+    delete m_projectiles;
+    delete m_explosions;
+
     //NOTE: NOT DELETING M_CAMERA BECAUSE OWNED BY GLWIDGET
 }
 
@@ -76,18 +80,33 @@ void GameEngine::start()
     for (int i = 0; i < 5; i++)  {
         m_projectiles->push_back(new Projectile((*m_models)[ROCKET_MODEL], new ProjectileTrail(m_camera, m_camera->center,m_textTrail)));
         m_projectiles->at(i)->setIsAlive(false);
+        m_projectiles->at(i)->setIsProjectile();
         m_projectiles->at(i)->getEmitter()->setIsAlive(false);
         m_emitters->push_back(m_projectiles->at(i)->getEmitter());
         m_gobjects->push_back(m_projectiles->at(i));
         m_pruner->addObject(m_projectiles->at(i));
     }
 
+    //setting up explosions
+    for (int i = 0; i < 10; i++) {
+        m_explosions->push_back(new Explosion(m_camera, m_camera->center, m_textTrail));
+        m_explosions->at(i)->setIsAlive(false);
+        m_emitters->push_back(m_explosions->at(i));
+    }
+
+    /*
+    spawnEnemies(50);
+    */
+
     GameObject *obj = new GameObject((*m_models)[SHIP_MODEL]);
-    obj->getPosition().y -= 1;
+    obj->setPosition(Vector3(-5.909494,2.79506,8.79518));
+    obj->setVelocity(Vector3(0,0,0));
     m_gobjects->push_back(obj);
 
+
     GameObject *obj2 = new GameObject((*m_models)[SHIP_MODEL]);
-    obj2->setVelocity(Vector3(.000002, 0, 0));
+    obj2->setPosition(Vector3(-6.20988,2.61975,-43.77));
+    obj2->setVelocity(Vector3(0,0,0));
     m_gobjects->push_back(obj2);
 
     m_pruner->addObject(obj);
@@ -102,12 +121,14 @@ void GameEngine::start()
     m_cameraMount.t = 0;
     m_curveMounts->push_back(m_cameraMount);
 
+    /*
     CurveMount mount;
     mount.curve = m_curve;
     mount.gameObj = obj;
     mount.t = 0;
 
     m_curveMounts->push_back(mount);
+    */
 
     m_running = true;
     m_stop = false;
@@ -162,15 +183,40 @@ void GameEngine::run()
             m_shake = false;
         }
 
+        //handle sweeping and pruning! kill objects that collide, and cause an explosion.
         this->mutex.lock();
         m_pruner->sweepAndPrune(*m_collisions);
         this->mutex.unlock();
+
+        for (set<CollisionPair>::iterator iter = m_collisions->begin(); iter != m_collisions->end(); iter++) {
+            CollisionPair p = *iter;
+
+            if (!(p.m_obj1->getIsProjectile() && p.m_obj2->getIsProjectile()))  {
+                cout << p.m_obj1->getPosition() << endl;
+                cout << p.m_obj2->getPosition() << endl;
+            }
+            if ((p.m_obj1-> getIsAlive() && p.m_obj2->getIsAlive()) && (p.m_obj1->getIsProjectile() || p.m_obj2->getIsProjectile())) {
+                //find an explosion we can use
+                for (int i = 0; i < m_explosions->size(); i++) {
+                    Explosion* exp = m_explosions->at(i);
+                    if (!exp->getIsAlive()) {
+                        exp->setPosition((p.m_obj1->getPosition() + p.m_obj2->getPosition()) / 2);
+                        exp->initParticles();
+                        exp->setIsAlive(true);
+                        break;
+                    }
+                }
+
+                p.m_obj1->setIsAlive(false);
+                p.m_obj2->setIsAlive(false);
+            }
+        }
 
 
         //---cleaning up and removing emitters/objects
         //cleanupObjects();
 
-        m_refractPeriod -= 0.0001;
+        m_refractPeriod -= 0.001;
 
         // update story
         if (m_storyIndex > 0)
@@ -180,13 +226,45 @@ void GameEngine::run()
     }
 }
 
+void GameEngine::spawnEnemies(int numEnemies) {
+    //spawn enemies with random positions and velocities
+    float randX, randY, randZ;
+
+    for (int i = 0; i < numEnemies; i++) {
+        randX = rand() % 1000 / 10.f - 50;
+        randY = rand() % 1000 / 10.f - 50;
+        randZ = rand() % 1000 / 10.f - 50;
+        Vector3 pos = Vector3(randX,randY,randZ);
+        randX = rand() % 10 / 100000.f - 0.00005;
+        randY = rand() % 10 / 100000.f - 0.00005;
+        randZ = rand() % 10 / 100000.f - 0.00005;
+        Vector3 vel = Vector3(randX,randY,randZ);
+
+        GameObject *newObj = new GameObject((*m_models)[SHIP_MODEL]);
+        newObj->setPosition(pos);
+        newObj->setVelocity(vel);
+
+
+       /*
+        Vector3 orthVec = vel.cross(Vector3(0,0,-5));
+        float angle = -acos(vel.dot(Vector3(0,0,-5)) / vel.length()) * 180.0 / 3.14 + 180.0;
+        newObj->setRotation(orthVec, angle);
+        */
+
+
+        m_gobjects->push_back(newObj);
+        m_pruner->addObject(newObj);
+    }
+}
+
+
 void GameEngine::fireProjectile(Vector3 dir) {
     if (m_refractPeriod < 0) {
         m_canFire = true;
 
         m_refractPeriod = 1;
         dir.normalize();
-        dir = dir / 1000.0;
+        dir = dir / 100.0;
         m_projectileDir = dir;
 
         //NOTE: CANNOT SPAWN PROJECTILE HERE: POTENTIALLY DANGEROUS AND CRASHES
@@ -228,31 +306,6 @@ void GameEngine::spawnProjectile(Vector3 dir) {
     //m_emitters->push_back(e);
 
 }
-
-void GameEngine::cleanupObjects() {
-    //std::cout << m_gobjects->size() << std::endl;
-
-    mutex.lock();
-    for (int i = m_gobjects->size()-1; i >= 0; i--) {
-        GameObject *obj = m_gobjects->at(i);
-        if (!obj->getIsAlive()) {
-            delete obj;
-            m_gobjects->erase(m_gobjects->begin()+i);
-            m_pruner->removeObject(obj);
-        }
-    }
-
-    for (int i = m_emitters->size()-1; i >= 0; i--) {
-        ParticleEmitter *pe = m_emitters->at(i);
-        if (!pe->getIsAlive()) {
-            delete pe;
-            m_emitters->erase(m_emitters->begin()+i);
-        }
-    }
-
-    mutex.unlock();
-}
-
 
 void GameEngine::stop()
 {

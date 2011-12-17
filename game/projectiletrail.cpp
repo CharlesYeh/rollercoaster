@@ -12,7 +12,7 @@ void ProjectileTrail::initParticles()
 {
     for (int i = 0; i < m_numparticles; i++) {
         Particle &p = m_particles[i];
-        p.active = true;
+        p.active = false;
         p.lifetime = rand() % 1000 / 1000.f;
         p.decay = - (rand() % 10000) / 10000.f / 100.f - .02;
 

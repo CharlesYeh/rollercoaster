@@ -53,7 +53,7 @@ public:
     QString getStory();
 
 private:
-    void cleanupObjects();
+    void spawnEnemies(int numEnemies);
 
     // textures
     GLuint m_textTrail, m_textExplosion;
@@ -80,6 +80,7 @@ private:
     CurveMount m_cameraMount;
 
 
+    std::vector<Explosion*> *m_explosions;
     std::vector<Projectile*> *m_projectiles;
     std::vector<GameObject*> *m_gobjects;
     std::vector<ParticleEmitter*> *m_emitters;

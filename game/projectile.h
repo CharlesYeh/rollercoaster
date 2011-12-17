@@ -14,6 +14,7 @@ public:
     void setEmitter(ParticleEmitter* em) { m_emitter = em;};
     ParticleEmitter *getEmitter() { return m_emitter; };
     void resetLifetime() {m_lifetime = 1;}
+    void setIsAlive(bool status);
 
     void act();
 

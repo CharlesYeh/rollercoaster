@@ -442,8 +442,8 @@ void GLWidget::renderScene() {
     }
     glDisable(GL_TEXTURE_2D);
 
-    m_gameEngine->mutex.lock();
     if (m_showCollisions) {
+        m_gameEngine->mutex.lock();
         glColor3f(1, 0, 0);
         for (iter = objs->begin(); iter != objs->end(); iter++) {
             GameObject *gobj = (*iter);
@@ -462,9 +462,9 @@ void GLWidget::renderScene() {
             p.m_obj1->drawBoundingBox();
             p.m_obj2->drawBoundingBox();
         }
+        m_gameEngine->mutex.unlock();
     }
 
-    m_gameEngine->mutex.unlock();
 }
 
 /**

@@ -10,6 +10,7 @@ public:
     ProjectileTrail(OrbitCamera *cam, Vector3 initPos, GLuint textureID);
     void updateParticles();
     void initParticles();
+    void setIsAlive(bool status) { m_isAlive = status;}
 
 private:
 

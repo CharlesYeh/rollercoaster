@@ -15,14 +15,11 @@ public:
     Vector3 &getVelocity() { return m_velocity; }
 
     void setVelocity(Vector3 dir) { m_velocity = dir; }
-    void setIsProjectile() { m_isProjectile = true;}
-    bool getIsProjectile() { return m_isProjectile; }
 
     virtual void act();
 
 private:
     Model m_model;
-    bool m_isProjectile;
 
     Vector3 m_velocity;
 };

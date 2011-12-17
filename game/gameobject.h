@@ -13,8 +13,6 @@ public:
 
     Model &getModel() { return m_model; }
     Vector3 &getVelocity() { return m_velocity; }
-    Vector3 &getRotation() { return m_rotation; }
-    float &getAngleRotation() { return m_angle;}
 
     void setVelocity(Vector3 dir) { m_velocity = dir; }
     void setIsProjectile() { m_isProjectile = true;}

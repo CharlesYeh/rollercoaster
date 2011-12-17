@@ -11,7 +11,9 @@ GameEngine::GameEngine(QObject *parent)
     m_gobjects = new vector<GameObject*>();
     m_emitters = new vector<ParticleEmitter*>();
     m_curveMounts = new vector<CurveMount>();
+
     m_pruner = new SweepPruner();
+    m_collisions = new set<CollisionPair>();
 
     m_camera = NULL;
 
@@ -75,20 +77,13 @@ void GameEngine::start()
     m_gobjects->push_back(obj2);
 
     // create main track
-    m_curve = new BezierCurve();
-    m_curve->addSmoothHandlePoint(-2, -1, 0);
-    m_curve->addSmoothHandlePoint(-1, 0, 0);
-    m_curve->addSmoothHandlePoint(0, 1, 0);
-    m_curve->addSmoothHandlePoint(1, 2, 0);
-    m_curve->addSmoothHandlePoint(0, 1, 0);
-    m_curve->addSmoothHandlePoint(1, 2, 0);
+    m_curve = m_story.getMainCurve();
 
     // placing camera on track
-    CurveMount cameraMount;
-    cameraMount.curve = m_curve;
-    cameraMount.gameObj = NULL;
-    cameraMount.t = 0;
-    m_curveMounts->push_back(cameraMount);
+    m_cameraMount.curve = m_curve;
+    m_cameraMount.gameObj = NULL;
+    m_cameraMount.t = 0;
+    m_curveMounts->push_back(m_cameraMount);
 
     CurveMount mount;
     mount.curve = m_curve;
@@ -150,7 +145,7 @@ void GameEngine::run()
             m_shake = false;
         }
 
-        //m_pruner->sweepAndPrune(m_collisions);
+        m_pruner->sweepAndPrune(*m_collisions);
 
         //---cleaning up and removing emitters/objects
         cleanupObjects();
@@ -231,4 +226,9 @@ void GameEngine::stop()
 bool GameEngine::running()
 {
     return m_running;
+}
+
+QString GameEngine::getStory()
+{
+    return m_currStory;
 }

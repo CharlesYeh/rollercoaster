@@ -673,12 +673,13 @@ void GLWidget::paintText()
     renderText(10, 60, "C: Highlight collided bounding boxes", m_font);
 
     glColor3f(1, .8, 0);
-    QString str("This your first real fight? Don't worry, you're with the best pilot of the fleet!");
+
+    QString str = m_gameEngine->getStory();
     QFontMetrics fm(m_font);
     int w = fm.width(str);
+    int x = (this->width() - w) / 2;
 
-    w = this->width() / 2 - w / 2;
+    renderText(x, 60, str);
 
-    renderText(w, 60, str);
     glColor3f(1, 1, 1);
 }

@@ -54,7 +54,6 @@ protected:
     void renderScene();
     void paintText();
 
-
 private:
     GLuint m_particleTextureID;
 

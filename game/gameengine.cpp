@@ -14,6 +14,7 @@ GameEngine::GameEngine(QObject *parent)
 
     m_pruner = new SweepPruner();
     m_collisions = new set<CollisionPair>();
+    m_models = new map<string, Model>();
 
     m_camera = NULL;
 
@@ -47,11 +48,13 @@ GameEngine::~GameEngine()
         delete *iter2;
     }
 
-
     delete m_pruner;
+    delete m_collisions;
     delete m_gobjects;
     delete m_emitters;
     delete m_curveMounts;
+
+    delete m_models;
 
     //NOTE: NOT DELETING M_CAMERA BECAUSE OWNED BY GLWIDGET
 }
@@ -59,20 +62,20 @@ GameEngine::~GameEngine()
 void GameEngine::start()
 {
     string objModel = "models/xyzrgb_dragon.obj";
-    m_models.insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str(), 2.0)));
+    m_models->insert(pair<std::string,Model>(objModel, ResourceLoader::loadObjModel(objModel.c_str(), 2.0)));
 
     //------constants--------
     ROCKET_MODEL = "models/missile/missile.obj";
 
-    m_models.insert(pair<std::string,Model>(ROCKET_MODEL, ResourceLoader::loadObjModel(ROCKET_MODEL.c_str(), 1)));
+    m_models->insert(pair<std::string,Model>(ROCKET_MODEL, ResourceLoader::loadObjModel(ROCKET_MODEL.c_str(), 1)));
 
 
     //GameObject *obj = new GameObject("models/xyzrgb_dragon.obj");
-    GameObject *obj = new GameObject(m_models["models/xyzrgb_dragon.obj"]);
+    GameObject *obj = new GameObject((*m_models)["models/xyzrgb_dragon.obj"]);
     obj->getPosition().y -= 1;
     m_gobjects->push_back(obj);
 
-    GameObject *obj2 = new GameObject(m_models["models/xyzrgb_dragon.obj"]);
+    GameObject *obj2 = new GameObject((*m_models)["models/xyzrgb_dragon.obj"]);
     obj2->setVelocity(Vector3(.000002, 0, 0));
     m_gobjects->push_back(obj2);
 
@@ -151,6 +154,11 @@ void GameEngine::run()
         cleanupObjects();
 
         m_refractPeriod -= 0.00001;
+
+        // update story
+        if (m_storyIndex > 0)
+            m_storyIndex++;
+
         sleep(FRAME_RATE);
     }
 }
@@ -178,7 +186,7 @@ void GameEngine::spawnProjectile(Vector3 dir) {
     ParticleEmitter *pe = new ProjectileTrail(m_camera, m_camera->center, m_textTrail);
     m_emitters->push_back(pe);
 
-    Projectile *obj = new Projectile(m_models[ROCKET_MODEL], pe);
+    Projectile *obj = new Projectile((*m_models)[ROCKET_MODEL], pe);
 
     //setting up rotation angle for drawing
     Vector3 orthVec = dir.cross(Vector3(5,0,0));
@@ -230,5 +238,5 @@ bool GameEngine::running()
 
 QString GameEngine::getStory()
 {
-    return m_currStory;
+    return m_currStory.mid(0, m_storyIndex);
 }

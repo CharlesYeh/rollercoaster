@@ -17,6 +17,11 @@ ParticleEmitter::ParticleEmitter(OrbitCamera *cam, int num_particles, GLuint tex
     initParticles();
 }
 
+ParticleEmitter::~ParticleEmitter()
+{
+    delete m_particles;
+}
+
 void ParticleEmitter::initParticles()
 {
     for (int i = 0; i < m_numparticles; i++) {
@@ -41,10 +46,10 @@ void ParticleEmitter::drawParticles()
 
     glBindTexture(GL_TEXTURE_2D, m_textureID);
 
-    glEnable(GL_DEPTH);
     glEnable(GL_BLEND);
     glEnable(GL_TEXTURE_2D);
-    glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
+    //glEnable(GL_DEPTH_TEST);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
     for (int i = 0; i < m_numparticles; i++) {
         Particle &p = m_particles[i];
@@ -62,14 +67,16 @@ void ParticleEmitter::drawParticles()
         drawParticle(x, y, z, m_radius);
     }
 
-    glDisable(GL_DEPTH);
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
-    glDepthMask(GL_TRUE);
+    //glDisable(GL_DEPTH_TEST);
+    glDepthMask(GL_FALSE);
 }
 
 void ParticleEmitter::drawParticle(float x, float y, float z, float r)
 {
+    r = r / 2;
+
     Vector3 w(-Vector3::fromAngles(m_camera->theta, m_camera->phi));
     Vector3 v = m_camera->up;
     Vector3 u = w.cross(v);
@@ -77,11 +84,11 @@ void ParticleEmitter::drawParticle(float x, float y, float z, float r)
     u.normalize();
     v.normalize();
 
-    Vector3 c(x - r / 2, y - r / 2, z - r / 2);
-    Vector3 c1 = c + r * u;
+    Vector3 c(x, y, z);
+    Vector3 c1 = c + r * u - r * v;
     Vector3 c2 = c + r * u + r * v;
-    Vector3 c3 = c + r * v;
-
+    Vector3 c3 = c - r * u + r * v;
+    c = c - r * u - r * v;
 
     glBegin(GL_QUADS);
     glTexCoord2d(0, 1);

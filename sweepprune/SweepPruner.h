@@ -20,7 +20,7 @@ public:
     void removeObject(BoundingBox *obj);
 
 private:
-    void getCollisions(std::list<DimensionPoint*> *coords, std::set<CollisionPair> &pairs);
+    void getCollisions(std::list<DimensionPoint*> *coords, std::set<CollisionPair> *pairs);
     void sortList(std::list<DimensionPoint*> *pt);
     void sortedInsert(std::list<DimensionPoint*> *l, DimensionPoint *p);
 

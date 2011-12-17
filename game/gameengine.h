@@ -43,6 +43,7 @@ public:
     std::vector<GameObject*> *getGameObjects() { return m_gobjects; };
     std::vector<ParticleEmitter*> *getEmitters() { return m_emitters; };
     std::set<CollisionPair> *getCollisions() { return m_collisions; };
+    std::map<std::string, Model> *getModels() { return m_models; };
 
     void stop();
     bool running();
@@ -80,7 +81,7 @@ private:
     std::vector<GameObject*> *m_gobjects;
     std::vector<ParticleEmitter*> *m_emitters;
     std::vector<CurveMount> *m_curveMounts;
-    std::map<std::string, Model> m_models; //map of models, mapped by filename
+    std::map<std::string, Model> *m_models; //map of models, mapped by filename
 };
 
 #endif // GAMEENGINE_H

@@ -37,7 +37,6 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent),
     m_camera->theta = M_PI * 1.5f, m_camera->phi = 0.2f;
     m_camera->fovy = 60.f;
 
-
     connect(&m_timer, SIGNAL(timeout()), this, SLOT(update()));
 
     m_showBoxes = m_showCollisions = false;
@@ -48,6 +47,20 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent),
  **/
 GLWidget::~GLWidget()
 {
+    //----------------------------CLEAN----------------------------
+    m_gameEngine->stop();
+
+    while (m_gameEngine->running()) {
+        // wait
+    }
+
+    map<string, Model> *models = m_gameEngine->getModels();
+    for (map<string, Model>::iterator iter = models->begin(); iter != models->end(); iter++) {
+        Model &m = iter->second;
+        glmDelete(m.model);
+    }
+
+    delete m_gameEngine;
     delete m_camera;
 
     foreach (QGLShaderProgram *sp, m_shaderPrograms)
@@ -56,18 +69,8 @@ GLWidget::~GLWidget()
         delete fbo;
     glDeleteLists(m_skybox, 1);
     const_cast<QGLContext *>(context())->deleteTexture(m_cubeMap);
-    //glmDelete(m_dragon.model);
-   // glDeleteTextures(1, &m_particleTextureID);
 
-    //----------------------------CLEAN----------------------------
-
-    m_gameEngine->stop();
-
-    while (m_gameEngine->running()) {
-        // wait
-    }
-
-    delete m_gameEngine;
+    glDeleteTextures(1, &m_particleTextureID);
 }
 
 /**
@@ -351,7 +354,6 @@ void GLWidget::paintGL()
 **/
 void GLWidget::renderScene() {
     // Enable depth testing
-    glEnable(GL_DEPTH_TEST);
     glClear(GL_DEPTH_BUFFER_BIT);
 
     // Enable cube maps and draw the skybox
@@ -411,14 +413,13 @@ void GLWidget::renderScene() {
 
     // Disable culling, depth testing and cube maps
     glDisable(GL_CULL_FACE);
-    glDisable(GL_DEPTH_TEST);
     glBindTexture(GL_TEXTURE_CUBE_MAP,0);
     glDisable(GL_TEXTURE_CUBE_MAP);
-
     //-----------------particles-----------------
     std::vector<ParticleEmitter*> *emitters = m_gameEngine->getEmitters();
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, m_particleTextureID);
+
     for (unsigned int i = 0; i < emitters->size(); i++) {
         //ParticleEmitter* em = emitters->at(i);
         emitters->at(i)->updateParticles();

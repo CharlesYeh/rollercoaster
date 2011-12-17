@@ -18,6 +18,7 @@ public:
     };
 
     ParticleEmitter(OrbitCamera *cam, int num_particles = 300, GLuint textureID = 0, float rad = .1);
+    virtual ~ParticleEmitter();
 
     virtual void initParticles();
     virtual void updateParticles();

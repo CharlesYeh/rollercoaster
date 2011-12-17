@@ -24,14 +24,14 @@ void SweepPruner::sweepAndPrune(set<CollisionPair> &final_pairs)
     final_pairs.clear();
 
     // adjust list sortedness
-    sortList(m_x);
+    /*sortList(m_x);
     sortList(m_y);
     sortList(m_z);
 
     // traverse lists
-    set<CollisionPair> pair_x;
-    set<CollisionPair> pair_y;
-    set<CollisionPair> pair_z;
+    set<CollisionPair> *pair_x = new set<CollisionPair>();
+    set<CollisionPair> *pair_y = new set<CollisionPair>();
+    set<CollisionPair> *pair_z = new set<CollisionPair>();
 
     getCollisions(m_x, pair_x);
     getCollisions(m_y, pair_y);
@@ -39,19 +39,23 @@ void SweepPruner::sweepAndPrune(set<CollisionPair> &final_pairs)
     
     // return intersection of all three collision sets
     set<CollisionPair>::iterator iter;
-    for (iter = pair_x.begin(); iter != pair_x.end(); iter++) {
+    for (iter = pair_x->begin(); iter != pair_x->end(); iter++) {
         const CollisionPair &p = *iter;
-	if (pair_y.find(p) == pair_y.end() || pair_z.find(p) == pair_z.end()) {
+        if (pair_y->find(p) == pair_y->end() || pair_z->find(p) == pair_z->end()) {
             continue;
 	}
 	
 	final_pairs.insert(p);
     }
+
+    delete pair_x;
+    delete pair_y;
+    delete pair_z;*/
 }
 
-void SweepPruner::getCollisions(list<DimensionPoint*> *coords, set<CollisionPair> &pairs)
+void SweepPruner::getCollisions(list<DimensionPoint*> *coords, set<CollisionPair> *pairs)
 {
-    set<BoundingBox*> starts;
+    set<BoundingBox*> *starts = new set<BoundingBox*>();
 
     list<DimensionPoint*>::iterator iterX;
     for (iterX = coords->begin(); iterX != coords->end(); iterX++) {
@@ -60,16 +64,18 @@ void SweepPruner::getCollisions(list<DimensionPoint*> *coords, set<CollisionPair
             // if starts isn't empty, then collision!
             std::set<BoundingBox*>::iterator iterc;
 
-            for (iterc = starts.begin(); iterc != starts.end(); iterc++) {
-                pairs.insert(CollisionPair(p->object, *iterc));
+            for (iterc = starts->begin(); iterc != starts->end(); iterc++) {
+                pairs->insert(CollisionPair(p->object, *iterc));
             }
 
-            starts.insert(p->object);
+            starts->insert(p->object);
         }
         else {
-            starts.erase(p->object);
+            starts->erase(p->object);
         }
     }
+
+    delete starts;
 }
 
 void SweepPruner::sortList(list<DimensionPoint*> *pt)

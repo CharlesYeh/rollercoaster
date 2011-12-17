@@ -27,7 +27,7 @@ void BoundingBox::setDimension(float x, float y, float z)
 
 void BoundingBox::setRotation(Vector3 rotate, float angle)
 {
-    Matrix3x3 m = getRotMat(rotate, angle);
+    Matrix3x3 m = getRotMat(rotate, angle * M_PI / 180);
 
     // get new bounding box;
     float sx = -m_base.x;
@@ -77,13 +77,19 @@ void BoundingBox::setRotation(Vector3 rotate, float angle)
             maxz = p.z;
     }
 
-    m_xstart.value = minx + m_position.x;
+    m_dimension.x = (maxx - minx) / 2;
+    m_dimension.y = (maxy - miny) / 2;
+    m_dimension.z = (maxz - minz) / 2;
+
+    /*m_xstart.value = minx + m_position.x;
     m_ystart.value = miny + m_position.y;
     m_zstart.value = minz + m_position.z;
     m_xend.value = maxx + m_position.x;
     m_yend.value = maxy + m_position.y;
-    m_zend.value = maxz + m_position.z;
+    m_zend.value = maxz + m_position.z;*/
+    //cout << "END " << minx << " " << miny << " " << minz << endl;
 
+    setPosition(m_position);
     m_rotation = rotate; m_angle = angle;
 }
 

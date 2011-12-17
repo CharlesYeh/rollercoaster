@@ -58,7 +58,7 @@ private:
     GLuint m_particleTextureID;
 
     bool m_mouseDown;
-    bool m_showBoxes, m_showCollisions;
+    bool m_showCollisions;
 
     QTimer m_timer;
     QTime m_clock;

@@ -12,6 +12,37 @@ Storyline::Storyline()
     m_curve->addSmoothHandlePoint(0, 1, 0);
     m_curve->addSmoothHandlePoint(1, 2, 0);
 
+    m_curve->addSmoothHandlePoint(5, 2, 0);
+    m_curve->addSmoothHandlePoint(7, 2, 0);
+    m_curve->addSmoothHandlePoint(9, 2, 0);
+    m_curve->addSmoothHandlePoint(11, 2, 0);
+    m_curve->addSmoothHandlePoint(11, 2, 0);
+    m_curve->addSmoothHandlePoint(11, 2, 0);
+    m_curve->addSmoothHandlePoint(11, 2, 0);
+    m_curve->addSmoothHandlePoint(-11, 2, 0);
+    m_curve->addSmoothHandlePoint(-11, 2, 0);
+    m_curve->addSmoothHandlePoint(-11, 2, 0);
+    m_curve->addSmoothHandlePoint(0, 50, 0);
+    m_curve->addSmoothHandlePoint(0, 50, 0);
+    m_curve->addSmoothHandlePoint(0, 50, 0);
+    m_curve->addSmoothHandlePoint(0, 50, 0);
+    m_curve->addSmoothHandlePoint(0, 50, 0);
+    m_curve->addSmoothHandlePoint(0, 50, 0);
+    m_curve->addSmoothHandlePoint(0, 50, 0);
+    m_curve->addSmoothHandlePoint(0,0,100);
+    m_curve->addSmoothHandlePoint(0,0,100);
+    m_curve->addSmoothHandlePoint(0,0,100);
+    m_curve->addSmoothHandlePoint(0,0,-80);
+    m_curve->addSmoothHandlePoint(0,0,-80);
+    m_curve->addSmoothHandlePoint(0,0,-80);
+    m_curve->addSmoothHandlePoint(0,0,-80);
+    m_curve->addSmoothHandlePoint(0,0,-80);
+    m_curve->addSmoothHandlePoint(0,0,0);
+    m_curve->addSmoothHandlePoint(0,0,0);
+    m_curve->addSmoothHandlePoint(0,0,0);
+    m_curve->addSmoothHandlePoint(0,0,0);
+    m_curve->addSmoothHandlePoint(0,0,0);
+
     m1 = new QString("This your first flight? Don't worry, you're with the best pilot in the fleet!");
     m2 = new QString("Just don't forget to aim and fire with the mouse button.");
     m3 = new QString("There they are! Go!");

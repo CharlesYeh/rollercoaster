@@ -153,7 +153,7 @@ void GameEngine::run()
         //---cleaning up and removing emitters/objects
         cleanupObjects();
 
-        m_refractPeriod -= 0.00001;
+        m_refractPeriod -= 0.000005;
 
         // update story
         if (m_storyIndex > 0)

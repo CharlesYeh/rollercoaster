@@ -42,13 +42,13 @@ void ParticleEmitter::initParticles()
 
 void ParticleEmitter::drawParticles()
 {
+    glEnable(GL_DEPTH_TEST);
+    //glDepthFunc(GL_LEQUAL);
     glDepthMask(GL_TRUE);
-
     glBindTexture(GL_TEXTURE_2D, m_textureID);
 
     glEnable(GL_BLEND);
     glEnable(GL_TEXTURE_2D);
-    //glEnable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
     for (int i = 0; i < m_numparticles; i++) {
@@ -65,12 +65,13 @@ void ParticleEmitter::drawParticles()
         float y = p.pos.y;
         float z = p.pos.z;
         drawParticle(x, y, z, m_radius);
+       // glClearDepth(1.0);
     }
+    glDisable(GL_DEPTH_TEST);
+    //glDepthMask(GL_FALSE);
 
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
-    //glDisable(GL_DEPTH_TEST);
-    glDepthMask(GL_FALSE);
 }
 
 void ParticleEmitter::drawParticle(float x, float y, float z, float r)

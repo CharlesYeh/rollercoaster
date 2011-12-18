@@ -4,6 +4,7 @@
 #include "particleemitter.h"
 #include "gameobject.h"
 
+//! ProjectileTrail class: Particle emitter for trails of projectiles fired.
 class ProjectileTrail : public ParticleEmitter
 {
 public:

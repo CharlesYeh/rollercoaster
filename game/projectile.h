@@ -5,6 +5,7 @@
 #include "resourceloader.h"
 #include "game/particleemitter.h"
 
+//! Projectile class: represents a projectile that is fired
 class Projectile : public GameObject
 {
 public:

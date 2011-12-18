@@ -5,6 +5,7 @@
 #include "math/vector.h"
 #include "sweepprune/BoundingBox.h"
 
+//! GameObject represents any object in the game (projectile or target)
 class GameObject : public BoundingBox
 {
 public:

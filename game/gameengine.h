@@ -17,6 +17,9 @@
 #include <QMutex>
 #include"SweepPruner.h"
 
+//! GameEngine class. Holds the main loop for game logic plus does most of the work.
+
+//structure for holding game objects as they travel along bezier curves
 struct CurveMount
 {
     GameObject *gameObj;
@@ -56,8 +59,8 @@ public:
     QMutex mutex;
 
 private:
-    void spawnCurveEnemies(int numEnemies);
-    BezierCurve* generateCurve(int numPoints, int sizeCurve);
+    void spawnCurveEnemies(int numEnemies); //! Randomly generates enemies that move along curves
+    BezierCurve* generateCurve(int numPoints, int sizeCurve); //! Randomly generates curves
 
     std::vector<Explosion*> *m_explosions;
     std::vector<Projectile*> *m_projectiles;

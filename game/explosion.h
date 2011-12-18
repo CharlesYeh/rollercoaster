@@ -3,6 +3,7 @@
 
 #include "particleemitter.h"
 
+//! Explosion class: represents an explosion for when a projectile collides with a game object
 class Explosion : public ParticleEmitter
 {
 public:

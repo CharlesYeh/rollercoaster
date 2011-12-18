@@ -5,6 +5,7 @@
 #include <QtOpenGL>
 #include "support/camera.h"
 
+//! ParticleEmitter for particle effects. Used for drawing and updating particles for explosions/projectile trails
 class ParticleEmitter : public BoundingBox
 {
 public:

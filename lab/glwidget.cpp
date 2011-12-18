@@ -433,12 +433,18 @@ void GLWidget::renderScene() {
 
     if (m_showCollisions) {
         m_gameEngine->mutex.lock();
-        glColor3f(1, 0, 0);
         for (iter = objs->begin(); iter != objs->end(); iter++) {
             GameObject *gobj = (*iter);
             if (!gobj->getIsAlive())
                 continue;
+
+            glColor3f(1, 0, 0);
             gobj->drawBoundingBox();
+
+            //if (gobj->getIsProjectile()) {
+            glColor3f(1, 1, 1);
+            gobj->drawRotationPoints();
+            //}
         }
 
         glColor3f(1, 1, 0);

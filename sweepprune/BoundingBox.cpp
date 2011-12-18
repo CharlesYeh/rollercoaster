@@ -58,6 +58,15 @@ void BoundingBox::setRotation(Vector3 rotate, float angle)
     points.push_back(m * p7);
     points.push_back(m * p8);
 
+    m1 = m * p1;
+    m2 = m * p2;
+    m3 = m * p3;
+    m4 = m * p4;
+    m5 = m * p5;
+    m6 = m * p6;
+    m7 = m * p7;
+    m8 = m * p8;
+
     float minx, miny, minz, maxx, maxy, maxz;
 
     for (unsigned int i = 0; i < points.size(); i++) {
@@ -140,4 +149,23 @@ void BoundingBox::drawBoundingBox()
     glVertex3f(m_xstart.value, m_yend.value, m_zend.value);
     glEnd();
     glShadeModel(GL_SMOOTH);
+}
+
+void BoundingBox::drawRotationPoints()
+{
+
+    glShadeModel(GL_FLAT);
+    glBegin(GL_POINTS);
+    glPointSize(3);
+
+    glVertex3fv((m1 + m_position).xyz);
+    glVertex3fv((m2 + m_position).xyz);
+    glVertex3fv((m3 + m_position).xyz);
+    glVertex3fv((m4 + m_position).xyz);
+    glVertex3fv((m5 + m_position).xyz);
+    glVertex3fv((m6 + m_position).xyz);
+    glVertex3fv((m7 + m_position).xyz);
+    glVertex3fv((m8 + m_position).xyz);
+
+    glEnd();
 }

@@ -36,12 +36,15 @@ public:
     void drawBoundingBox();
     void setIsProjectile() { m_isProjectile = true;}
     bool getIsProjectile() { return m_isProjectile; }
+    void drawRotationPoints();
 
 protected:
     bool m_isAlive;
     bool m_isProjectile;
 
 private:
+    Vector3 m1, m2, m3, m4, m5, m6, m7, m8;
+
     DimensionPoint m_xstart, m_ystart, m_zstart,
                    m_xend, m_yend, m_zend;
 

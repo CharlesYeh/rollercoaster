@@ -212,6 +212,7 @@ void GameEngine::run()
 }
 
 void GameEngine::spawnCurveEnemies(int numEnemies) {
+    //just generate numEnemies randomly and places them on curves
     for (int i = 0; i < numEnemies; i++) {
         BezierCurve* curve = generateCurve(100, 140);
         CurveMount mount;
@@ -242,9 +243,8 @@ BezierCurve* GameEngine::generateCurve(int numPoints, int sizeCurve) {
 
 
 void GameEngine::fireProjectile(Vector3 dir) {
-    if (m_refractPeriod < 0) {
-        m_canFire = true;
-
+    if (m_refractPeriod < 0) { //Only allow firing if refractory period is < 0 (to prevent rockets from self colliding)
+        m_canFire = true; //NOTE: we don't actually call spawnProjectile here. just tell the gameengine main loop too (or else weird errors)
         m_refractPeriod = 1;
         dir.normalize();
         dir = dir * PROJECTILE_SPEED;
@@ -253,6 +253,7 @@ void GameEngine::fireProjectile(Vector3 dir) {
 }
 
 void GameEngine::spawnProjectile(Vector3 dir) {
+    //Creates a projectile!
     Projectile* obj;
     bool foundProjectile = false;
 

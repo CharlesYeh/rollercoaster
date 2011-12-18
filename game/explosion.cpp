@@ -3,7 +3,6 @@
 Explosion::Explosion(OrbitCamera *cam, Vector3 initPos, GLuint textureID) : ParticleEmitter(cam, 500, textureID, 1.3)
 {
     ParticleEmitter::setPosition(initPos);
-    //initParticles();
 }
 
 void Explosion::initParticles()

@@ -22,8 +22,6 @@ void Projectile::act()
     m_lifetime -= 0.0001;
     if (m_lifetime < 0) {
         setIsAlive(false);
-       //m_isAlive = false;
-       //m_emitter->setIsAlive(false);
     }
 
     GameObject::act();

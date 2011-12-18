@@ -5,7 +5,6 @@ using namespace std;
 ProjectileTrail::ProjectileTrail(OrbitCamera *cam, Vector3 initPos, GLuint textureID) : ParticleEmitter(cam, 200, textureID, .3)
 {
     ParticleEmitter::setPosition(initPos);
-    //initParticles();
 }
 
 void ProjectileTrail::initParticles()
@@ -18,12 +17,6 @@ void ProjectileTrail::initParticles()
 
         p.r = p.g = p.b = 1;
         p.pos = getPosition();
-
-        /*float rx = rand() % 1000 / 10000.f - .05;
-        float ry = rand() % 1000 / 10000.f - .05;
-        float rz = rand() % 1000 / 10000.f - .05;
-
-        p.vel = Vector3(rx, ry, rz);*/
         p.vel = Vector3();
     }
 }

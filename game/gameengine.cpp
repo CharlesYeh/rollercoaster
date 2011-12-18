@@ -2,24 +2,24 @@
 using namespace std;
 GameEngine::GameEngine(QObject *parent)
 {
+    m_hits          = 0;
+    m_canFire       = false;
 
-    m_canFire = false;
-
-    m_shake = false;
-    m_curNumShakes = 0;
+    m_curNumShakes  = 0;
     m_refractPeriod = 0;
-    m_gobjects = new vector<GameObject*>();
-    m_emitters = new vector<ParticleEmitter*>();
-    m_curveMounts = new vector<CurveMount>();
+    m_shake         = false;
+    m_gobjects      = new vector<GameObject*>();
+    m_emitters      = new vector<ParticleEmitter*>();
+    m_curveMounts   = new vector<CurveMount>();
 
-    m_pruner = new SweepPruner();
-    m_collisions = new set<CollisionPair>();
-    m_models = new map<string, Model>();
+    m_pruner        = new SweepPruner();
+    m_collisions    = new set<CollisionPair>();
+    m_models        = new map<string, Model>();
 
-    m_projectiles = new vector<Projectile*>();
-    m_explosions = new vector<Explosion*>();
+    m_projectiles   = new vector<Projectile*>();
+    m_explosions    = new vector<Explosion*>();
 
-    m_camera = NULL;
+    m_camera        = 0;
 
     // load textures
     QImage image, texture;
@@ -139,6 +139,8 @@ void GameEngine::run()
         if (m_canFire)  {
             spawnProjectile(m_projectileDir);
             m_canFire = false;
+
+            m_fired++;
         }
 
         //--------------------act--------------------
@@ -175,7 +177,9 @@ void GameEngine::run()
         for (set<CollisionPair>::iterator iter = m_collisions->begin(); iter != m_collisions->end(); iter++) {
             CollisionPair p = *iter;
 
+            // collision between live objects!
             if ((p.m_obj1->getIsAlive() && p.m_obj2->getIsAlive()) && (p.m_obj1->getIsProjectile() || p.m_obj2->getIsProjectile())) {
+
                 //find an explosion we can use
                 for (unsigned int i = 0; i < m_explosions->size(); i++) {
                     Explosion* exp = m_explosions->at(i);
@@ -192,6 +196,8 @@ void GameEngine::run()
                         break;
                     }
                 }
+
+                m_hits++;
 
                 p.m_obj1->setIsAlive(false);
                 p.m_obj2->setIsAlive(false);

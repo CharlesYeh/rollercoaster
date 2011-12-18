@@ -10,6 +10,7 @@
 #include <QWheelEvent>
 #include "glm.h"
 #include "game/gameengine.h"
+#include <sstream>
 
 using namespace std;
 
@@ -687,11 +688,32 @@ void GLWidget::paintText()
 
     glColor3f(1, .8, 0);
 
-    QString str = m_gameEngine->getStory();
+    // show score board
+    QFont scoreFont = QFont("Courier New", 24, 2);
+    QFontMetrics fm(scoreFont);
+
+    ostringstream oss;
+    oss << "HITS: " << m_gameEngine->getHits();
+    QString qs = QString(oss.str().c_str());
+
+    int x = (width() - fm.width(qs)) / 2 + 10;
+    renderText(x, 75, qs, scoreFont);
+
+    // show accuracy
+    float acc = 10000 * m_gameEngine->getHits() / max(1, m_gameEngine->getFired()) / 100.f;
+
+    oss.str("");
+    oss << "Accuracy: " << acc << " %";
+    qs = QString(oss.str().c_str());
+
+    x = (width() - QFontMetrics(m_font).width(qs)) / 2;
+    renderText(x, 100, qs);
+
+    /*QString str = m_gameEngine->getStory();
     QFontMetrics fm(m_font);
     int x = (this->width() - m_gameEngine->getFullStoryWidth(fm)) / 2;
 
-    renderText(x, 65, str);
+    renderText(x, 65, str);*/
 
     glColor3f(1, 1, 1);
 }

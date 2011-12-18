@@ -23,12 +23,13 @@ struct CurveMount
     GameObject *gameObj;
     BezierCurve *curve;
     float t;
+    float tChange;
 };
 
 class GameEngine : public QThread
 {
 public:
-    static const int   MAX_SHAKES = 50000;
+    static const int   MAX_SHAKES = 10000;
     static const float FRAME_RATE = 1  / 40.f;
 
     explicit GameEngine(QObject *parent = 0);
@@ -54,6 +55,7 @@ public:
 
 private:
     void spawnEnemies(int numEnemies);
+    void spawnCurveEnemies(int numEnemies);
 
     // textures
     GLuint m_textTrail, m_textExplosion;
@@ -67,7 +69,7 @@ private:
     float m_refractPeriod;
     bool m_stop;
     bool m_running;
-    std::string ROCKET_MODEL, SHIP_MODEL;
+    std::string ROCKET_MODEL, SHIP_MODEL, UFO_MODEL;
 
     bool m_shake; //alert to shake camera
     int m_curNumShakes;

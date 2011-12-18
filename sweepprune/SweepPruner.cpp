@@ -50,9 +50,9 @@ void SweepPruner::sweepAndPrune(set<CollisionPair> &final_pairs)
         const CollisionPair &p = *iter;
         if (pair_y->find(p) == pair_y->end() || pair_z->find(p) == pair_z->end()) {
             continue;
-	}
-	
-	final_pairs.insert(p);
+        }
+
+        final_pairs.insert(p);
     }
 
     delete pair_x;

@@ -55,7 +55,11 @@ GameEngine::~GameEngine()
     delete m_collisions;
     delete m_gobjects;
     delete m_emitters;
-    delete m_curveMounts;
+
+    for (int i = 0; i < m_curveMounts->size(); i++) {
+        delete m_curveMounts->at(i).curve;
+    }
+    delete m_curveMounts; // needs to delete bezier curves!
 
     delete m_models;
 
@@ -67,13 +71,13 @@ GameEngine::~GameEngine()
 
 void GameEngine::start()
 {
+    //------constants--------
     SHIP_MODEL = "models/ship/f.obj";
     m_models->insert(pair<std::string,Model>(SHIP_MODEL, ResourceLoader::loadObjModel(SHIP_MODEL.c_str(), 2.0)));
-
-    //------constants--------
     ROCKET_MODEL = "models/missile/missile.obj";
-
     m_models->insert(pair<std::string,Model>(ROCKET_MODEL, ResourceLoader::loadObjModel(ROCKET_MODEL.c_str(), 1)));
+    UFO_MODEL = "models/sphere.obj";
+    m_models->insert(pair<std::string,Model>(UFO_MODEL, ResourceLoader::loadObjModel(UFO_MODEL.c_str(), 1)));
 
 
     //setting up projectiles + their emitters
@@ -95,23 +99,7 @@ void GameEngine::start()
         m_emitters->push_back(m_explosions->at(i));
     }
 
-    /*
-    spawnEnemies(50);
-    */
-
-    GameObject *obj = new GameObject((*m_models)[SHIP_MODEL]);
-    obj->setPosition(Vector3(-5.909494,2.79506,8.79518));
-    obj->setVelocity(Vector3(0,0,0));
-    m_gobjects->push_back(obj);
-
-
-    GameObject *obj2 = new GameObject((*m_models)[SHIP_MODEL]);
-    obj2->setPosition(Vector3(-6.20988,2.61975,-43.77));
-    obj2->setVelocity(Vector3(0,0,0));
-    m_gobjects->push_back(obj2);
-
-    m_pruner->addObject(obj);
-    m_pruner->addObject(obj2);
+    spawnEnemies(30);
 
     // create main track
     m_curve = m_story.getMainCurve();
@@ -120,8 +108,11 @@ void GameEngine::start()
     m_cameraMount.curve = m_curve;
     m_cameraMount.gameObj = NULL;
     m_cameraMount.t = 0;
+    m_cameraMount.tChange = 0.0005;
     m_curveMounts->push_back(m_cameraMount);
 
+
+    spawnCurveEnemies(20);
     /*
     CurveMount mount;
     mount.curve = m_curve;
@@ -162,7 +153,8 @@ void GameEngine::run()
         for (iter2 = m_curveMounts->begin(); iter2 != m_curveMounts->end(); iter2++)
         {
             CurveMount &m = *iter2;
-            m.t += .000001;
+           // m.t += .00005;
+            m.t += m.tChange;
 
             //first item in m_curveMounts is for the camera.
 
@@ -174,15 +166,6 @@ void GameEngine::run()
 
         }
 
-        //---shaking camera if necessary---
-        if (m_shake && m_curNumShakes < MAX_SHAKES) {
-            float mag = (MAX_SHAKES - m_curNumShakes) / ((float) MAX_SHAKES);
-            m_camera->jitterCamera(mag);
-            m_curNumShakes++;
-        } else {
-            m_curNumShakes = 0;
-            m_shake = false;
-        }
 
         //handle sweeping and pruning! kill objects that collide, and cause an explosion.
         this->mutex.lock();
@@ -192,18 +175,16 @@ void GameEngine::run()
         for (set<CollisionPair>::iterator iter = m_collisions->begin(); iter != m_collisions->end(); iter++) {
             CollisionPair p = *iter;
 
-            if (!(p.m_obj1->getIsProjectile() && p.m_obj2->getIsProjectile()))  {
-                cout << p.m_obj1->getPosition() << endl;
-                cout << p.m_obj2->getPosition() << endl;
-            }
-            if ((p.m_obj1-> getIsAlive() && p.m_obj2->getIsAlive()) && (p.m_obj1->getIsProjectile() || p.m_obj2->getIsProjectile())) {
+            if ((p.m_obj1->getIsAlive() && p.m_obj2->getIsAlive()) && (p.m_obj1->getIsProjectile() || p.m_obj2->getIsProjectile())) {
                 //find an explosion we can use
                 for (int i = 0; i < m_explosions->size(); i++) {
                     Explosion* exp = m_explosions->at(i);
                     if (!exp->getIsAlive()) {
-                        exp->setPosition((p.m_obj1->getPosition() + p.m_obj2->getPosition()) / 2);
+                        exp->setPosition((p.m_obj1->getPosition() + p.m_obj2->getPosition()) / 2.0);
                         exp->initParticles();
                         exp->setIsAlive(true);
+                        //m_shake = true;
+                        //m_curNumShakes = 0;
                         break;
                     }
                 }
@@ -213,6 +194,15 @@ void GameEngine::run()
             }
         }
 
+        //---shaking camera if necessary---
+        if (m_shake && m_curNumShakes < MAX_SHAKES) {
+            float mag = (MAX_SHAKES - m_curNumShakes) / ((float) MAX_SHAKES);
+            m_camera->jitterCamera(mag);
+            m_curNumShakes++;
+        } else {
+            m_curNumShakes = 0;
+            m_shake = false;
+        }
 
         //---cleaning up and removing emitters/objects
         //cleanupObjects();
@@ -236,9 +226,9 @@ void GameEngine::spawnEnemies(int numEnemies) {
         randY = rand() % 1000 / 10.f - 50;
         randZ = rand() % 1000 / 10.f - 50;
         Vector3 pos = Vector3(randX,randY,randZ);
-        randX = rand() % 10 / 100000.f - 0.00005;
-        randY = rand() % 10 / 100000.f - 0.00005;
-        randZ = rand() % 10 / 100000.f - 0.00005;
+        randX = rand() % 10 / 10000.f - 0.0005;
+        randY = rand() % 10 / 10000.f - 0.0005;
+        randZ = rand() % 10 / 10000.f - 0.0005;
         Vector3 vel = Vector3(randX,randY,randZ);
 
         GameObject *newObj = new GameObject((*m_models)[SHIP_MODEL]);
@@ -246,15 +236,37 @@ void GameEngine::spawnEnemies(int numEnemies) {
         newObj->setVelocity(vel);
 
 
-       /*
-        Vector3 orthVec = vel.cross(Vector3(0,0,-5));
-        float angle = -acos(vel.dot(Vector3(0,0,-5)) / vel.length()) * 180.0 / 3.14 + 180.0;
+        Vector3 orthVec = vel.cross(Vector3(0,0,-1));
+        float angle = -acos(vel.dot(Vector3(0,0,-1)) / vel.length()) * 180.0 / 3.14 + 180.0;
         newObj->setRotation(orthVec, angle);
-        */
 
 
         m_gobjects->push_back(newObj);
         m_pruner->addObject(newObj);
+    }
+}
+
+void GameEngine::spawnCurveEnemies(int numEnemies) {
+    for (int i = 0; i < numEnemies; i++) {
+        BezierCurve *curve = new BezierCurve();
+        CurveMount mount;
+
+        float randX, randY, randZ;
+        for (int j=0; j < 100;j++) {
+            randX = rand() % 140 - 70;
+            randY = rand() % 140 - 70;
+            randZ = rand() % 140 - 70;
+            curve->addSmoothHandlePoint(randX,randY,randZ);
+        }
+        mount.curve = curve;
+        mount.gameObj = new GameObject((*m_models)[UFO_MODEL]);
+        mount.t = 0;
+
+        mount.tChange = rand() % 100 / 1000000.f;  //0.00001;
+
+        m_curveMounts->push_back(mount);
+        m_gobjects->push_back(mount.gameObj);
+        m_pruner->addObject(mount.gameObj);
     }
 }
 

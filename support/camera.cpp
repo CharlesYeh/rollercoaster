@@ -44,9 +44,6 @@ void OrbitCamera::jitterCamera(float magnifier) {
     u.normalize();
 
     jitter = randX * u + randY * v;
-    //center.x = magnifier * randX;
-    //center.y = magnifier * randY;
-    //center.z = magnifier * randZ;
 }
 
 void OrbitCamera::setPosition(Vector3 v)

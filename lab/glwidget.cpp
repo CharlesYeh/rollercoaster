@@ -696,7 +696,7 @@ void GLWidget::paintText()
     oss << "HITS: " << m_gameEngine->getHits();
     QString qs = QString(oss.str().c_str());
 
-    int x = (width() - fm.width(qs)) / 2 + 10;
+    int x = (width() - fm.width(qs)) / 2 + 5;
     renderText(x, 75, qs, scoreFont);
 
     // show accuracy
@@ -708,12 +708,6 @@ void GLWidget::paintText()
 
     x = (width() - QFontMetrics(m_font).width(qs)) / 2;
     renderText(x, 100, qs);
-
-    /*QString str = m_gameEngine->getStory();
-    QFontMetrics fm(m_font);
-    int x = (this->width() - m_gameEngine->getFullStoryWidth(fm)) / 2;
-
-    renderText(x, 65, str);*/
 
     glColor3f(1, 1, 1);
 }

@@ -76,8 +76,6 @@ void GameEngine::start()
     m_models->insert(pair<std::string,Model>(SHIP_MODEL, ResourceLoader::loadObjModel(SHIP_MODEL.c_str(), 2.0)));
     ROCKET_MODEL = "models/missile/missile.obj";
     m_models->insert(pair<std::string,Model>(ROCKET_MODEL, ResourceLoader::loadObjModel(ROCKET_MODEL.c_str(), 1)));
-    UFO_MODEL = "models/sphere.obj";
-    m_models->insert(pair<std::string,Model>(UFO_MODEL, ResourceLoader::loadObjModel(UFO_MODEL.c_str(), 1)));
 
 
     //setting up projectiles + their emitters
@@ -99,28 +97,14 @@ void GameEngine::start()
         m_emitters->push_back(m_explosions->at(i));
     }
 
-    spawnEnemies(40);
-
-    // create main track
-    m_curve = m_story.getMainCurve();
-
     // placing camera on track
-    m_cameraMount.curve = m_curve;
+    m_cameraMount.curve = generateCurve(100, 80);
     m_cameraMount.gameObj = NULL;
     m_cameraMount.t = 0;
-    m_cameraMount.tChange = 0.0005;
+    m_cameraMount.tChange = 0.0001;
     m_curveMounts->push_back(m_cameraMount);
 
-
-    spawnCurveEnemies(20);
-    /*
-    CurveMount mount;
-    mount.curve = m_curve;
-    mount.gameObj = obj;
-    mount.t = 0;
-
-    m_curveMounts->push_back(mount);
-    */
+    spawnCurveEnemies(40);
 
     m_running = true;
     m_stop = false;
@@ -155,14 +139,22 @@ void GameEngine::run()
         for (iter2 = m_curveMounts->begin(); iter2 != m_curveMounts->end(); iter2++)
         {
             CurveMount &m = *iter2;
-           // m.t += .00005;
             m.t += m.tChange;
 
             //first item in m_curveMounts is for the camera.
-
             if (iter2 == m_curveMounts->begin()) {
-               m_camera->setPosition(m_curve->cubicSample(m.t));
+               m_camera->setPosition(m.curve->cubicSample(m.t));
             } else {
+               //if a game object, update game objects rotation + position
+               Vector3 oldPos = m.gameObj->getPosition();
+               Vector3 newPos = m.curve->cubicSample(m.t);
+               Vector3 vel = newPos - oldPos;
+               vel.normalize();
+
+               Vector3 orthVec = vel.cross(Vector3(0,0,-1));
+               float angle = -acos(vel.dot(Vector3(0,0,-1)) / vel.length()) * 180.0 / 3.14 + 180.0;
+               m.gameObj->setRotation(orthVec, angle);
+
                m.gameObj->setPosition(m.curve->cubicSample(m.t));
             }
 
@@ -215,56 +207,16 @@ void GameEngine::run()
         }
 
         m_refractPeriod -= 0.001;
-
-        // update story
-        if (m_storyIndex > 0)
-            m_storyIndex++;
-
-        sleep(FRAME_RATE);
-    }
-}
-
-void GameEngine::spawnEnemies(int numEnemies) {
-    //spawn enemies with random positions and velocities
-    float randX, randY, randZ;
-
-    for (int i = 0; i < numEnemies; i++) {
-        randX = rand() % 1000 / 10.f - 50;
-        randY = rand() % 1000 / 10.f - 50;
-        randZ = rand() % 1000 / 10.f - 50;
-        Vector3 pos = Vector3(randX,randY,randZ);
-        randX = rand() % 10 / 10000.f - 0.0005;
-        randY = rand() % 10 / 10000.f - 0.0005;
-        randZ = rand() % 10 / 10000.f - 0.0005;
-        Vector3 vel = Vector3(randX,randY,randZ);
-
-        GameObject *newObj = new GameObject((*m_models)[SHIP_MODEL]);
-        newObj->setPosition(pos);
-        newObj->setVelocity(vel);
-
-        Vector3 orthVec = vel.cross(Vector3(0,0,-1));
-        float angle = -acos(vel.dot(Vector3(0,0,-1)) / vel.length()) * 180.0 / 3.14 + 180.0;
-        newObj->setRotation(orthVec, angle);
-
-        m_gobjects->push_back(newObj);
-        m_pruner->addObject(newObj);
+        //sleep(FRAME_RATE);
     }
 }
 
 void GameEngine::spawnCurveEnemies(int numEnemies) {
     for (int i = 0; i < numEnemies; i++) {
-        BezierCurve *curve = new BezierCurve();
+        BezierCurve* curve = generateCurve(100, 140);
         CurveMount mount;
-
-        float randX, randY, randZ;
-        for (int j=0; j < 100;j++) {
-            randX = rand() % 140 - 70;
-            randY = rand() % 140 - 70;
-            randZ = rand() % 140 - 70;
-            curve->addSmoothHandlePoint(randX,randY,randZ);
-        }
         mount.curve = curve;
-        mount.gameObj = new GameObject((*m_models)[UFO_MODEL]);
+        mount.gameObj = new GameObject((*m_models)[SHIP_MODEL]);
         mount.t = 0;
 
         mount.tChange = rand() % 100 / 1000000.f;  //0.00001;
@@ -273,6 +225,19 @@ void GameEngine::spawnCurveEnemies(int numEnemies) {
         m_gobjects->push_back(mount.gameObj);
         m_pruner->addObject(mount.gameObj);
     }
+}
+
+BezierCurve* GameEngine::generateCurve(int numPoints, int sizeCurve) {
+    BezierCurve *curve = new BezierCurve();
+    float randX, randY, randZ;
+
+    for (int j=0; j < numPoints; j++) {
+        randX = rand() % sizeCurve - (sizeCurve/2.0);
+        randY = rand() % sizeCurve - (sizeCurve/2.0);
+        randZ = rand() % sizeCurve - (sizeCurve/2.0);
+        curve->addSmoothHandlePoint(randX,randY,randZ);
+    }
+    return curve;
 }
 
 
@@ -326,14 +291,4 @@ void GameEngine::stop()
 bool GameEngine::running()
 {
     return m_running;
-}
-
-int GameEngine::getFullStoryWidth(QFontMetrics &fm)
-{
-    return fm.width(m_currStory);
-}
-
-QString GameEngine::getStory()
-{
-    return m_currStory.mid(0, m_storyIndex);
 }

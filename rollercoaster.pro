@@ -33,7 +33,6 @@ HEADERS += lab/glwidget.h \
     game/projectile.h \
     game/explosion.h \
     game/projectiletrail.h \
-    game/storyline.h \
     math/vector.h \
     math/matrix3x3.h \
     sweepprune/paircomparator.h
@@ -54,7 +53,6 @@ SOURCES += lab/glwidget.cpp \
     game/projectile.cpp \
     game/explosion.cpp \
     game/projectiletrail.cpp \
-    game/storyline.cpp \
     math/matrix3x3.inl
 FORMS += mainwindow.ui \
     support/mainwindow.ui

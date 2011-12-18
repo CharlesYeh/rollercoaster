@@ -21,10 +21,11 @@ public:
     void removeObject(BoundingBox *obj);
 
 private:
-    void getCollisions(std::list<DimensionPoint*> *coords, std::set<CollisionPair> *pairs);
     void sortList(std::list<DimensionPoint*> *pt);
+    void getCollisions(std::list<DimensionPoint*> *coords, std::set<CollisionPair> *pairs);
     void sortedInsert(std::list<DimensionPoint*> *l, DimensionPoint *p);
 
+    // lists of bounding box points
     std::list<DimensionPoint*> *m_x;
     std::list<DimensionPoint*> *m_y;
     std::list<DimensionPoint*> *m_z;

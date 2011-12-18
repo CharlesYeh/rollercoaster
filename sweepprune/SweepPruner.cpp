@@ -44,6 +44,7 @@ void SweepPruner::sweepAndPrune(set<CollisionPair> &final_pairs)
     pair_y->clear();
     pair_z->clear();
 
+    // get collisions in each dimension
     getCollisions(m_x, pair_x);
     getCollisions(m_y, pair_y);
     getCollisions(m_z, pair_z);
@@ -67,6 +68,7 @@ void SweepPruner::getCollisions(list<DimensionPoint*> *coords, set<CollisionPair
 {
     set<BoundingBox*> *starts = new set<BoundingBox*>();
 
+    // traverse through bounding box points for this dimension
     list<DimensionPoint*>::iterator iterX;
     float prevValue = (*coords->begin())->value;
     for (iterX = coords->begin(); iterX != coords->end(); iterX++) {
@@ -74,7 +76,7 @@ void SweepPruner::getCollisions(list<DimensionPoint*> *coords, set<CollisionPair
         prevValue = p->value;
 
         if (p->type == START) {
-            // if starts isn't empty, then collision!
+            // if objects haven't ended but another started, then collision!
             std::set<BoundingBox*>::iterator iterc;
 
             for (iterc = starts->begin(); iterc != starts->end(); iterc++) {
@@ -84,6 +86,7 @@ void SweepPruner::getCollisions(list<DimensionPoint*> *coords, set<CollisionPair
             starts->insert(p->object);
         }
         else {
+            // end point on bounding box = object ended
             starts->erase(p->object);
         }
     }
@@ -93,13 +96,12 @@ void SweepPruner::getCollisions(list<DimensionPoint*> *coords, set<CollisionPair
 
 void SweepPruner::sortList(list<DimensionPoint*> *pt)
 {
-    list<DimensionPoint*>::iterator iter;
-
-    // start at second index
+    // do insertion sort, since best case complexity is O(n)
     if (pt->size() == 0)
         return;
 
-    iter = pt->begin();
+    // start at second index
+    list<DimensionPoint*>::iterator iter = pt->begin();
     float prevValue = (*iter)->value;
     iter++;
 
@@ -130,7 +132,7 @@ void SweepPruner::sortList(list<DimensionPoint*> *pt)
 
 void SweepPruner::addObject(BoundingBox *obj)
 {
-    // add object
+    // add all 6 points of bounding box
     DimensionPoint *sx = obj->getDimensionPointXStart();
     DimensionPoint *sy = obj->getDimensionPointYStart();
     DimensionPoint *sz = obj->getDimensionPointZStart();
@@ -150,6 +152,7 @@ void SweepPruner::addObject(BoundingBox *obj)
 
 void SweepPruner::removeObject(BoundingBox *obj)
 {
+    // remove all 6 points of bounding box
     DimensionPoint *sx = obj->getDimensionPointXStart();
     DimensionPoint *sy = obj->getDimensionPointYStart();
     DimensionPoint *sz = obj->getDimensionPointZStart();

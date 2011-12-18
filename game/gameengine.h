@@ -16,7 +16,6 @@
 
 #include <QMutex>
 #include"SweepPruner.h"
-#include "storyline.h"
 
 struct CurveMount
 {
@@ -30,7 +29,7 @@ class GameEngine : public QThread
 {
 public:
     static const float FRAME_RATE = 1  / 40.f;
-    static const int MAX_SHAKES = 800;
+    static const int MAX_SHAKES = 600;
     static const int NUM_ROCKETS = 15;
     static const int NUM_EXPLOSIONS = 20;
     static const float PROJECTILE_SPEED = .03;
@@ -56,12 +55,9 @@ public:
     bool running();
     QMutex mutex;
 
-    int getFullStoryWidth(QFontMetrics &fm);
-    QString getStory();
-
 private:
-    void spawnEnemies(int numEnemies);
     void spawnCurveEnemies(int numEnemies);
+    BezierCurve* generateCurve(int numPoints, int sizeCurve);
 
     std::vector<Explosion*> *m_explosions;
     std::vector<Projectile*> *m_projectiles;
@@ -93,9 +89,6 @@ private:
     bool m_shake; //alert to shake camera
     int m_curNumShakes;
 
-    Storyline m_story;
-    int m_storyIndex;
-    QString m_currStory;
     BezierCurve *m_curve;
     OrbitCamera *m_camera;
     CurveMount m_cameraMount;

@@ -12,7 +12,7 @@ void Explosion::initParticles()
         Particle &p = m_particles[i];
         p.active = true;
         p.lifetime = 1.0;
-        p.decay = (-1 * (rand() % 100 / 1000.f) - .0020);
+        p.decay = (-1 * (rand() % 100 / 1000.f) - .0010);
         
         p.r = 1.0;
         p.g = .25;
@@ -39,7 +39,7 @@ void Explosion::updateParticles()
             continue;
         }
 
-        p.vel = .96 * p.vel;
+        p.vel = .95 * p.vel;
         p.pos += p.vel;
         p.lifetime += p.decay;
 

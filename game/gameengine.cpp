@@ -3,6 +3,7 @@ using namespace std;
 GameEngine::GameEngine(QObject *parent)
 {
     m_hits          = 0;
+    m_fired         = 0;
     m_canFire       = false;
 
     m_curNumShakes  = 0;

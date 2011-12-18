@@ -1,5 +1,7 @@
 Alec Lee / Charles Yeh - CS123 Final Project Rollercoaster
 
+For our project, we created a game a user shoots at targets along a bezier curve. We implemented the following features:
+
 New technical features:
 +Moving camera along Bezier curve
 +Near linear collision detection with Sweep and Prune
@@ -26,6 +28,8 @@ from the SweepPruner.
 Bezier curves are added into a single array. Every 3rd point is a control point.
 Points in between are handle points. Cubic interpolation is used to pick points
 along the curve.
+
+Both the camera of the player and all the ships on the screen are controlled by bezier curves.
 
 ------Particle Effects------
 Particle effects are used both as trails for projectiles and as explosions for collisions.

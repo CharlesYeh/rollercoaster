@@ -661,6 +661,9 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
         qi.save(QFileInfo(fileName).absoluteDir().absolutePath() + "/" + QFileInfo(fileName).baseName() + ".png", "PNG", 100);
         }
         break;
+    case Qt::Key_X:
+        m_gameEngine->toggleRotation();
+        break;
     case Qt::Key_C:
         m_showCollisions = !m_showCollisions;
         break;
@@ -684,6 +687,7 @@ void GLWidget::paintText()
     // QGLWidget's renderText takes xy coordinates, a string, and a font
     renderText(10, 20, "FPS: " + QString::number((int) (m_prevFps)), m_font);
     renderText(10, 35, "S: Save screenshot", m_font);
+    renderText(10, 50, "X: Rotate camera with Bezier curve", m_font);
     renderText(10, 50, "C: Highlight collided bounding boxes", m_font);
 
     glColor3f(1, .8, 0);

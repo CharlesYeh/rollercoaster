@@ -31,10 +31,11 @@ struct CurveMount
 class GameEngine : public QThread
 {
 public:
-    static const float FRAME_RATE = 1  / 40.f;
-    static const int MAX_SHAKES = 600;
-    static const int NUM_ROCKETS = 15;
+    static const float FRAME_RATE   = 1  / 40.f;
+    static const int MAX_SHAKES     = 600;
+    static const int NUM_ROCKETS    = 15;
     static const int NUM_EXPLOSIONS = 20;
+    static const int NUM_ENEMIES    = 70;
     static const float PROJECTILE_SPEED = .03;
 
     explicit GameEngine(QObject *parent = 0);
@@ -54,6 +55,8 @@ public:
     int getHits() { return m_hits; };
     int getFired() { return m_fired; };
 
+    void toggleRotation() { m_turnCamera = !m_turnCamera; };
+
     void stop();
     bool running();
     QMutex mutex;
@@ -71,6 +74,7 @@ private:
 
     // score
     int m_hits, m_fired;
+    bool m_turnCamera;
 
     // textures and models
     GLuint m_textTrail, m_textExplosion;

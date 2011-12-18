@@ -49,4 +49,5 @@ void OrbitCamera::jitterCamera(float magnifier) {
 void OrbitCamera::setPosition(Vector3 v)
 {
     center = v + jitter;
+    realCenter = v;
 }

@@ -1,10 +1,13 @@
 #include "gameengine.h"
+#include "matrix3x3.h"
+
 using namespace std;
 GameEngine::GameEngine(QObject *parent)
 {
     m_hits          = 0;
     m_fired         = 0;
     m_canFire       = false;
+    m_turnCamera    = true;
 
     m_curNumShakes  = 0;
     m_refractPeriod = 0;
@@ -105,7 +108,7 @@ void GameEngine::start()
     m_cameraMount.tChange = 0.0001;
     m_curveMounts->push_back(m_cameraMount);
 
-    spawnCurveEnemies(40);
+    spawnCurveEnemies(NUM_ENEMIES);
 
     m_running = true;
     m_stop = false;
@@ -144,19 +147,40 @@ void GameEngine::run()
 
             //first item in m_curveMounts is for the camera.
             if (iter2 == m_curveMounts->begin()) {
-               m_camera->setPosition(m.curve->cubicSample(m.t));
+                //rotate camera <##>
+                if (m_turnCamera) {
+                    Vector3 oldPos = m_camera->realCenter;
+                    Vector3 newPos = m.curve->cubicSample(m.t);
+
+                    Vector3 vel = oldPos - newPos;
+                    vel.normalize();
+
+                    Vector3 orthVec = vel.cross(Vector3(0,0,-1));
+
+                    float theta = atan2(vel.z, vel.x);
+                    float phi = atan2(vel.y, sqrt(vel.z * vel.z + vel.x * vel.x));
+
+                    Matrix3x3 rot = getRotMat(orthVec, phi);
+
+                    m_camera->theta = theta;
+                    m_camera->phi = phi;
+                    m_camera->up = rot * Vector3(0, 1, 0);
+                }
+                //rotate camera <##>
+
+                m_camera->setPosition(m.curve->cubicSample(m.t));
             } else {
-               //if a game object, update game objects rotation + position
-               Vector3 oldPos = m.gameObj->getPosition();
-               Vector3 newPos = m.curve->cubicSample(m.t);
-               Vector3 vel = newPos - oldPos;
-               vel.normalize();
+                //if a game object, update game objects rotation + position
+                Vector3 oldPos = m.gameObj->getPosition();
+                Vector3 newPos = m.curve->cubicSample(m.t);
+                Vector3 vel = newPos - oldPos;
+                vel.normalize();
 
-               Vector3 orthVec = vel.cross(Vector3(0,0,-1));
-               float angle = -acos(vel.dot(Vector3(0,0,-1)) / vel.length()) * 180.0 / 3.14 + 180.0;
-               m.gameObj->setRotation(orthVec, angle);
+                Vector3 orthVec = vel.cross(Vector3(0,0,-1));
+                float angle = -acos(vel.dot(Vector3(0,0,-1)) / vel.length()) * 180.0 / 3.14 + 180.0;
+                m.gameObj->setRotation(orthVec, angle);
 
-               m.gameObj->setPosition(m.curve->cubicSample(m.t));
+                m.gameObj->setPosition(m.curve->cubicSample(m.t));
             }
 
         }

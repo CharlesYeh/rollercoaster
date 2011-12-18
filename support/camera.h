@@ -13,7 +13,7 @@ struct OrbitCamera
 {
     const static int JITTER_MAGNITUDE = 6;
 
-    Vector3 center, up;
+    Vector3 center, up, realCenter;
     Vector3 jitter;
 
     float theta, phi;

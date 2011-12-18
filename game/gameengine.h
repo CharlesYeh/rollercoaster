@@ -16,7 +16,6 @@
 
 #include <QMutex>
 #include"SweepPruner.h"
-#include "storyline.h"
 
 struct CurveMount
 {
@@ -53,12 +52,9 @@ public:
     bool running();
     QMutex mutex;
 
-    int getFullStoryWidth(QFontMetrics &fm);
-    QString getStory();
-
 private:
-    void spawnEnemies(int numEnemies);
     void spawnCurveEnemies(int numEnemies);
+    BezierCurve* generateCurve(int numPoints, int sizeCurve);
 
     // textures
     GLuint m_textTrail, m_textExplosion;
@@ -77,9 +73,6 @@ private:
     bool m_shake; //alert to shake camera
     int m_curNumShakes;
 
-    Storyline m_story;
-    int m_storyIndex;
-    QString m_currStory;
     BezierCurve *m_curve;
     OrbitCamera *m_camera;
     CurveMount m_cameraMount;

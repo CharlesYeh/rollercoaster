@@ -687,11 +687,7 @@ void GLWidget::paintText()
 
     glColor3f(1, .8, 0);
 
-    QString str = m_gameEngine->getStory();
     QFontMetrics fm(m_font);
-    int x = (this->width() - m_gameEngine->getFullStoryWidth(fm)) / 2;
-
-    renderText(x, 65, str);
 
     glColor3f(1, 1, 1);
 }

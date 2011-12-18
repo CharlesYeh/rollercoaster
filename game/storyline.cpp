@@ -7,6 +7,7 @@ Storyline::Storyline()
 
     m_curve->addSmoothHandlePoint(-0, -1, 10);
     m_curve->addSmoothHandlePoint(-2, -1, 0);
+    /*
     m_curve->addSmoothHandlePoint(-1, 0, 0);
     m_curve->addSmoothHandlePoint(0, 1, 0);
     m_curve->addSmoothHandlePoint(1, 2, 0);
@@ -42,6 +43,7 @@ Storyline::Storyline()
     m_curve->addSmoothHandlePoint(25,0,25);
     m_curve->addSmoothHandlePoint(25,0,25);
     m_curve->addSmoothHandlePoint(25,0,25);
+    */
 
     m1 = new QString("This your first flight? Don't worry, you're with the best pilot in the fleet!");
     m2 = new QString("Just don't forget to aim and fire with the mouse button.");

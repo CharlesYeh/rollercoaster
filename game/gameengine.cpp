@@ -76,8 +76,6 @@ void GameEngine::start()
     m_models->insert(pair<std::string,Model>(SHIP_MODEL, ResourceLoader::loadObjModel(SHIP_MODEL.c_str(), 2.0)));
     ROCKET_MODEL = "models/missile/missile.obj";
     m_models->insert(pair<std::string,Model>(ROCKET_MODEL, ResourceLoader::loadObjModel(ROCKET_MODEL.c_str(), 1)));
-    UFO_MODEL = "models/sphere.obj";
-    m_models->insert(pair<std::string,Model>(UFO_MODEL, ResourceLoader::loadObjModel(UFO_MODEL.c_str(), 1)));
 
 
     //setting up projectiles + their emitters
@@ -99,7 +97,7 @@ void GameEngine::start()
         m_emitters->push_back(m_explosions->at(i));
     }
 
-    spawnEnemies(40);
+    //spawnEnemies(40);
 
     // create main track
     m_curve = m_story.getMainCurve();
@@ -112,7 +110,7 @@ void GameEngine::start()
     m_curveMounts->push_back(m_cameraMount);
 
 
-    spawnCurveEnemies(20);
+    spawnCurveEnemies(30);
     /*
     CurveMount mount;
     mount.curve = m_curve;
@@ -161,6 +159,15 @@ void GameEngine::run()
             if (iter2 == m_curveMounts->begin()) {
                m_camera->center = m_curve->cubicSample(m.t);
             } else {
+               Vector3 oldPos = m.gameObj->getPosition();
+               Vector3 newPos = m.curve->cubicSample(m.t);
+               Vector3 vel = newPos - oldPos;
+               vel.normalize();
+
+               Vector3 orthVec = vel.cross(Vector3(0,0,-1));
+               float angle = -acos(vel.dot(Vector3(0,0,-1)) / vel.length()) * 180.0 / 3.14 + 180.0;
+               m.gameObj->setRotation(orthVec, angle);
+
                m.gameObj->setPosition(m.curve->cubicSample(m.t));
             }
 
@@ -257,7 +264,7 @@ void GameEngine::spawnCurveEnemies(int numEnemies) {
             curve->addSmoothHandlePoint(randX,randY,randZ);
         }
         mount.curve = curve;
-        mount.gameObj = new GameObject((*m_models)[UFO_MODEL]);
+        mount.gameObj = new GameObject((*m_models)[SHIP_MODEL]);
         mount.t = 0;
 
         mount.tChange = rand() % 100 / 1000000.f;  //0.00001;

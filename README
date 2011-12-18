@@ -1,10 +1,40 @@
+Alec Lee / Charles Yeh - CS123 Final Project Rollercoaster
+
 New technical features:
 +Moving camera along Bezier curve
-+Collision detection with Sweep and Prune
-+Spotlights?
++Near linear collision detection with Sweep and Prune
 
 Old technical features:
--Particle effects from explosions?
--Simple antialiasing (blurring edges)
-(What are pulse shaders?)
--Texture mapping
+-Particle effects from explosions/projectiles
+-Skybox
+-Projection onto 2d film plane
+-Shaders
+
+----Collision Detection----
+Collision is done in near linear complexity by taking advantage of temporal cohesion.
+The SweepPruner class takes and removes objects. Calling "sweepAndPrune" causes an
+insertion sort on bounding box points. Collisions in all 3 dimensions are intersected
+together and returned.
+
+For rotation, the bounding box of the original rotated bounding box is taken.
+While this is not as accurate, the point of sweep and prune originally was to be fast.
+Although we do not do this, more complex collision detection may be run on the output
+from the SweepPruner.
+
+--------Bezier Curve--------
+Bezier curves are added into a single array. Every 3rd point is a control point.
+Points in between are handle points. Cubic interpolation is used to pick points
+along the curve.
+
+------Particle Effects------
+Particle effects are used both as trails for projectiles and as explosions for collisions.
+Particles are also billboarded (to always face the camera).
+
+-----------Design-----------
+Our project is broken up into 3 major parts: the game engine, sweep and prune code, and
+drawing code. There are 2 threads, one handling logic and one handling graphics.
+
+Objects are initialized all at once, and hidden until use. This prevents concurrency issues
+with addition and removal from lists, and also provides speed boosts from reduction
+of memory management.
+

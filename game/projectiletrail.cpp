@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-ProjectileTrail::ProjectileTrail(OrbitCamera *cam, Vector3 initPos, GLuint textureID) : ParticleEmitter(cam, 200, textureID)
+ProjectileTrail::ProjectileTrail(OrbitCamera *cam, Vector3 initPos, GLuint textureID) : ParticleEmitter(cam, 200, textureID, .3)
 {
     ParticleEmitter::setPosition(initPos);
     //initParticles();

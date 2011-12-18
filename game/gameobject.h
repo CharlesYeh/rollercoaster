@@ -20,7 +20,6 @@ public:
 
 private:
     Model m_model;
-
     Vector3 m_velocity;
 };
 

@@ -1,6 +1,6 @@
 #include "explosion.h"
 
-Explosion::Explosion(OrbitCamera *cam, Vector3 initPos, GLuint textureID) : ParticleEmitter(cam, 500, textureID, .8)
+Explosion::Explosion(OrbitCamera *cam, Vector3 initPos, GLuint textureID) : ParticleEmitter(cam, 500, textureID, 1.3)
 {
     ParticleEmitter::setPosition(initPos);
     //initParticles();
@@ -12,7 +12,7 @@ void Explosion::initParticles()
         Particle &p = m_particles[i];
         p.active = true;
         p.lifetime = 1.0;
-        p.decay = (-1 * (rand() % 100 / 1000.f) - .01);
+        p.decay = (-1 * (rand() % 100 / 1000.f) - .004);
         
         p.r = 1.0;
         p.g = .3;

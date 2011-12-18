@@ -35,7 +35,8 @@ HEADERS += lab/glwidget.h \
     game/projectiletrail.h \
     game/storyline.h \
     math/vector.h \
-    math/matrix3x3.h
+    math/matrix3x3.h \
+    sweepprune/paircomparator.h
 SOURCES += lab/glwidget.cpp \
     lib/targa.cpp \
     lib/glm.cpp \

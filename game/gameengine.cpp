@@ -95,23 +95,21 @@ void GameEngine::start()
         m_emitters->push_back(m_explosions->at(i));
     }
 
-    /*
-    spawnEnemies(50);
-    */
-
+    spawnEnemies(100);
+/*
     GameObject *obj = new GameObject((*m_models)[SHIP_MODEL]);
     obj->setPosition(Vector3(-5.909494,2.79506,8.79518));
     obj->setVelocity(Vector3(0,0,0));
     m_gobjects->push_back(obj);
+    m_pruner->addObject(obj);
 
 
     GameObject *obj2 = new GameObject((*m_models)[SHIP_MODEL]);
     obj2->setPosition(Vector3(-6.20988,2.61975,-43.77));
     obj2->setVelocity(Vector3(0,0,0));
     m_gobjects->push_back(obj2);
-
-    m_pruner->addObject(obj);
     m_pruner->addObject(obj2);
+*/
 
     // create main track
     m_curve = m_story.getMainCurve();
@@ -192,13 +190,13 @@ void GameEngine::run()
         for (set<CollisionPair>::iterator iter = m_collisions->begin(); iter != m_collisions->end(); iter++) {
             CollisionPair p = *iter;
 
-            if (!(p.m_obj1->getIsProjectile() && p.m_obj2->getIsProjectile()))  {
+            /*if (!(p.m_obj1->getIsProjectile() && p.m_obj2->getIsProjectile()))  {
                 cout << p.m_obj1->getPosition() << endl;
                 cout << p.m_obj2->getPosition() << endl;
-            }
+            }*/
             if ((p.m_obj1-> getIsAlive() && p.m_obj2->getIsAlive()) && (p.m_obj1->getIsProjectile() || p.m_obj2->getIsProjectile())) {
                 //find an explosion we can use
-                for (int i = 0; i < m_explosions->size(); i++) {
+                for (unsigned int i = 0; i < m_explosions->size(); i++) {
                     Explosion* exp = m_explosions->at(i);
                     if (!exp->getIsAlive()) {
                         exp->setPosition((p.m_obj1->getPosition() + p.m_obj2->getPosition()) / 2);
@@ -236,22 +234,18 @@ void GameEngine::spawnEnemies(int numEnemies) {
         randY = rand() % 1000 / 10.f - 50;
         randZ = rand() % 1000 / 10.f - 50;
         Vector3 pos = Vector3(randX,randY,randZ);
-        randX = rand() % 10 / 100000.f - 0.00005;
-        randY = rand() % 10 / 100000.f - 0.00005;
-        randZ = rand() % 10 / 100000.f - 0.00005;
+        randX = rand() % 10 / 10000.f - 0.0005;
+        randY = rand() % 10 / 10000.f - 0.0005;
+        randZ = rand() % 10 / 10000.f - 0.0005;
         Vector3 vel = Vector3(randX,randY,randZ);
 
         GameObject *newObj = new GameObject((*m_models)[SHIP_MODEL]);
         newObj->setPosition(pos);
         newObj->setVelocity(vel);
 
-
-       /*
-        Vector3 orthVec = vel.cross(Vector3(0,0,-5));
-        float angle = -acos(vel.dot(Vector3(0,0,-5)) / vel.length()) * 180.0 / 3.14 + 180.0;
+        Vector3 orthVec = vel.cross(Vector3(0,0,-1));
+        float angle = -acos(vel.dot(Vector3(0,0,-1)) / vel.length()) * 180.0 / 3.14 + 180.0;
         newObj->setRotation(orthVec, angle);
-        */
-
 
         m_gobjects->push_back(newObj);
         m_pruner->addObject(newObj);
@@ -276,7 +270,7 @@ void GameEngine::spawnProjectile(Vector3 dir) {
     Projectile* obj;
     bool foundProjectile = false;
 
-    for (int i = 0; i < m_projectiles->size(); i ++) {
+    for (unsigned int i = 0; i < m_projectiles->size(); i ++) {
         if (!m_projectiles->at(i)->getIsAlive()) {
                obj= m_projectiles->at(i);
                foundProjectile = true;

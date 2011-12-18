@@ -6,6 +6,7 @@
 #include "BoundingBox.h"
 #include "CollisionPair.h"
 #include "dimensionpoint.h"
+#include "paircomparator.h"
 
 class CollisionPair;
 

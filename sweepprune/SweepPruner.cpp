@@ -40,6 +40,10 @@ void SweepPruner::sweepAndPrune(set<CollisionPair> &final_pairs)
     set<CollisionPair> *pair_y = new set<CollisionPair>();
     set<CollisionPair> *pair_z = new set<CollisionPair>();
 
+    pair_x->clear();
+    pair_y->clear();
+    pair_z->clear();
+
     getCollisions(m_x, pair_x);
     getCollisions(m_y, pair_y);
     getCollisions(m_z, pair_z);
@@ -48,11 +52,10 @@ void SweepPruner::sweepAndPrune(set<CollisionPair> &final_pairs)
     set<CollisionPair>::iterator iter;
     for (iter = pair_x->begin(); iter != pair_x->end(); iter++) {
         const CollisionPair &p = *iter;
-        if (pair_y->find(p) == pair_y->end() || pair_z->find(p) == pair_z->end()) {
-            continue;
-	}
-	
-	final_pairs.insert(p);
+
+        if (pair_y->find(p) != pair_y->end() && pair_z->find(p) != pair_z->end()) {
+            final_pairs.insert(p);
+        }
     }
 
     delete pair_x;
@@ -65,8 +68,10 @@ void SweepPruner::getCollisions(list<DimensionPoint*> *coords, set<CollisionPair
     set<BoundingBox*> *starts = new set<BoundingBox*>();
 
     list<DimensionPoint*>::iterator iterX;
+    float prevValue = (*coords->begin())->value;
     for (iterX = coords->begin(); iterX != coords->end(); iterX++) {
         DimensionPoint *p = *iterX;
+        prevValue = p->value;
 
         if (p->type == START) {
             // if starts isn't empty, then collision!
@@ -105,6 +110,7 @@ void SweepPruner::sortList(list<DimensionPoint*> *pt)
         if (prevValue > curValue) {
             // go left to find swap point!!
             list<DimensionPoint*>::iterator riter = pt->begin();
+
             while ((*riter)->value < curValue) {
                 riter++;
             }
@@ -113,11 +119,13 @@ void SweepPruner::sortList(list<DimensionPoint*> *pt)
 
             pt->insert(riter, dp);
             pt->erase(diter);
+            iter--;
         }
-
-        prevValue = curValue;
+        else
+                prevValue = curValue;
         iter++;
     }
+
 }
 
 void SweepPruner::addObject(BoundingBox *obj)

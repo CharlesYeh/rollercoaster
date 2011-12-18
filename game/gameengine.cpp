@@ -8,6 +8,7 @@ GameEngine::GameEngine(QObject *parent)
     m_fired         = 0;
     m_canFire       = false;
     m_turnCamera    = true;
+    m_hitpause      = false;
 
     m_curNumShakes  = 0;
     m_refractPeriod = 0;
@@ -189,7 +190,6 @@ void GameEngine::run()
         //handle sweeping and pruning! kill objects that collide, and cause an explosion.
         this->mutex.lock();
         m_pruner->sweepAndPrune(*m_collisions);
-        this->mutex.unlock();
 
         for (set<CollisionPair>::iterator iter = m_collisions->begin(); iter != m_collisions->end(); iter++) {
             CollisionPair p = *iter;
@@ -215,11 +215,15 @@ void GameEngine::run()
                 }
 
                 m_hits++;
+                if (m_hitpause) {
+                    QThread::sleep(1);
+                }
 
                 p.m_obj1->setIsAlive(false);
                 p.m_obj2->setIsAlive(false);
             }
         }
+        this->mutex.unlock();
 
         //---shaking camera if necessary---
         if (m_shake && m_curNumShakes < MAX_SHAKES) {

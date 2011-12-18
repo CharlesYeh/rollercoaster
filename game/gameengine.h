@@ -56,6 +56,7 @@ public:
     int getFired() { return m_fired; };
 
     void toggleRotation() { m_turnCamera = !m_turnCamera; };
+    void togglePause() { m_hitpause = !m_hitpause; };
 
     void stop();
     bool running();
@@ -74,7 +75,7 @@ private:
 
     // score
     int m_hits, m_fired;
-    bool m_turnCamera;
+    bool m_turnCamera, m_hitpause;
 
     // textures and models
     GLuint m_textTrail, m_textExplosion;

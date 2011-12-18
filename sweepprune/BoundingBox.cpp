@@ -115,6 +115,12 @@ void BoundingBox::setPosition(Vector3 pos)
     m_zend.value = pos.z + m_dimension.z;
 }
 
+bool BoundingBox::collidesWith(BoundingBox &box) {
+    return (box.m_position.x - box.m_dimension.x < m_position.x + m_dimension.x && box.m_position.x + box.m_dimension.x > m_position.x - m_dimension.x) &&
+           (box.m_position.y - box.m_dimension.y < m_position.y + m_dimension.y && box.m_position.y + box.m_dimension.y > m_position.y - m_dimension.y) &&
+           (box.m_position.z - box.m_dimension.z < m_position.z + m_dimension.z && box.m_position.z + box.m_dimension.z > m_position.z - m_dimension.z);
+}
+
 void BoundingBox::drawBoundingBox()
 {
     glShadeModel(GL_FLAT);

@@ -454,8 +454,11 @@ void GLWidget::renderScene() {
             if (!p.m_obj1->getIsAlive() || !p.m_obj2->getIsAlive())
                 continue;
 
-            p.m_obj1->drawBoundingBox();
-            p.m_obj2->drawBoundingBox();
+            //if (p.m_obj1->getIsProjectile() || !p.m_obj2->getIsProjectile()) {
+            if (p.m_obj1->collidesWith(*p.m_obj2)) {
+                p.m_obj1->drawBoundingBox();
+                p.m_obj2->drawBoundingBox();
+            }
         }
         m_gameEngine->mutex.unlock();
     }
@@ -673,6 +676,9 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     case Qt::Key_C:
         m_showCollisions = !m_showCollisions;
         break;
+    case Qt::Key_V:
+        m_gameEngine->togglePause();
+        break;
     }
 }
 
@@ -694,7 +700,8 @@ void GLWidget::paintText()
     renderText(10, 20, "FPS: " + QString::number((int) (m_prevFps)), m_font);
     renderText(10, 35, "S: Save screenshot", m_font);
     renderText(10, 50, "X: Rotate camera with Bezier curve", m_font);
-    renderText(10, 50, "C: Highlight collided bounding boxes", m_font);
+    renderText(10, 65, "C: Highlight collided bounding boxes", m_font);
+    //renderText(10, 70, "V: Pause before collisions", m_font);
 
     glColor3f(1, .8, 0);
 
@@ -707,7 +714,7 @@ void GLWidget::paintText()
     QString qs = QString(oss.str().c_str());
 
     int x = (width() - fm.width(qs)) / 2 + 5;
-    renderText(x, 75, qs, scoreFont);
+    renderText(x, 100, qs, scoreFont);
 
     // show accuracy
     float acc = 10000 * m_gameEngine->getHits() / max(1, m_gameEngine->getFired()) / 100.f;
@@ -717,7 +724,7 @@ void GLWidget::paintText()
     qs = QString(oss.str().c_str());
 
     x = (width() - QFontMetrics(m_font).width(qs)) / 2;
-    renderText(x, 100, qs);
+    renderText(x, 125, qs);
 
     glColor3f(1, 1, 1);
 }

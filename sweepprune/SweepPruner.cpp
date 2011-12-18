@@ -73,6 +73,10 @@ void SweepPruner::getCollisions(list<DimensionPoint*> *coords, set<CollisionPair
     float prevValue = (*coords->begin())->value;
     for (iterX = coords->begin(); iterX != coords->end(); iterX++) {
         DimensionPoint *p = *iterX;
+
+        if (p->value < prevValue)
+            cout << " ASDF" << endl;
+
         prevValue = p->value;
 
         if (p->type == START) {

@@ -37,6 +37,10 @@ public:
     void setIsProjectile() { m_isProjectile = true;}
     bool getIsProjectile() { return m_isProjectile; }
     void drawRotationPoints();
+    bool collidesWith(BoundingBox &box);
+
+    Vector3 m_dimension;
+    Vector3 m_position;
 
 protected:
     bool m_isAlive;
@@ -48,8 +52,7 @@ private:
     DimensionPoint m_xstart, m_ystart, m_zstart,
                    m_xend, m_yend, m_zend;
 
-    Vector3 m_position;
-    Vector3 m_dimension, m_base;    // m_base used to approximate rotations
+    Vector3 m_base;    // m_base used to approximate rotations
 
     Vector3 m_rotation;
     float m_angle;

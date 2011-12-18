@@ -29,10 +29,11 @@ struct CurveMount
 class GameEngine : public QThread
 {
 public:
-    static const int   MAX_SHAKES = 10000;
     static const float FRAME_RATE = 1  / 40.f;
+    static const int MAX_SHAKES = 800;
     static const int NUM_ROCKETS = 15;
     static const int NUM_EXPLOSIONS = 20;
+    static const float PROJECTILE_SPEED = .02;
 
     explicit GameEngine(QObject *parent = 0);
     virtual ~GameEngine();

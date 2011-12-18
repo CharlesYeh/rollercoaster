@@ -11,10 +11,16 @@
 **/
 struct OrbitCamera
 {
+    const static int JITTER_MAGNITUDE = 3;
+
     Vector3 center, up;
+    Vector3 jitter;
+
     float theta, phi;
     float fovy;
     float zoom;
+
+    void setPosition(Vector3 v);
 
     void mouseMove(const Vector2 &delta);
     void mouseWheel(float delta);

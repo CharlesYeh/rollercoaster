@@ -56,7 +56,7 @@ GameEngine::~GameEngine()
     delete m_gobjects;
     delete m_emitters;
 
-    for (int i = 0; i < m_curveMounts->size(); i++) {
+    for (unsigned int i = 0; i < m_curveMounts->size(); i++) {
         delete m_curveMounts->at(i).curve;
     }
     delete m_curveMounts; // needs to delete bezier curves!
@@ -157,7 +157,7 @@ void GameEngine::run()
             //first item in m_curveMounts is for the camera.
 
             if (iter2 == m_curveMounts->begin()) {
-               m_camera->center = m_curve->cubicSample(m.t);
+               m_camera->setPosition(m_curve->cubicSample(m.t));
             } else {
                Vector3 oldPos = m.gameObj->getPosition();
                Vector3 newPos = m.curve->cubicSample(m.t);
@@ -190,8 +190,12 @@ void GameEngine::run()
                         exp->setPosition((p.m_obj1->getPosition() + p.m_obj2->getPosition()) / 2.0);
                         exp->initParticles();
                         exp->setIsAlive(true);
-                        //m_shake = true;
-                        //m_curNumShakes = 0;
+
+                        Vector3 dist = exp->getPosition() - m_camera->center;
+                        float d = dist.length();
+                        m_shake = true;
+
+                        m_curNumShakes = d;
                         break;
                     }
                 }
@@ -210,9 +214,6 @@ void GameEngine::run()
             m_curNumShakes = 0;
             m_shake = false;
         }
-
-        //---cleaning up and removing emitters/objects
-        //cleanupObjects();
 
         m_refractPeriod -= 0.001;
 
@@ -282,10 +283,8 @@ void GameEngine::fireProjectile(Vector3 dir) {
 
         m_refractPeriod = 1;
         dir.normalize();
-        dir = dir / 100.0;
+        dir = dir * PROJECTILE_SPEED;
         m_projectileDir = dir;
-
-        //NOTE: CANNOT SPAWN PROJECTILE HERE: POTENTIALLY DANGEROUS AND CRASHES
     }
 }
 
@@ -318,11 +317,6 @@ void GameEngine::spawnProjectile(Vector3 dir) {
     obj->setPosition(m_camera->center);
     obj->setVelocity(dir);
     obj->setIsProjectile();
-
-    // explosion TESTING###########################
-    //ParticleEmitter *e = new Explosion(m_camera, m_camera->center, m_textTrail);
-    //m_emitters->push_back(e);
-
 }
 
 void GameEngine::stop()

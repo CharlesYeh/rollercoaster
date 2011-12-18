@@ -10,6 +10,7 @@ Old technical features:
 -Projection onto 2d film plane
 -Shaders
 
+
 ----Collision Detection----
 Collision is done in near linear complexity by taking advantage of temporal cohesion.
 The SweepPruner class takes and removes objects. Calling "sweepAndPrune" causes an
@@ -37,4 +38,6 @@ drawing code. There are 2 threads, one handling logic and one handling graphics.
 Objects are initialized all at once, and hidden until use. This prevents concurrency issues
 with addition and removal from lists, and also provides speed boosts from reduction
 of memory management.
+
+Some constants are hard-coded in GameEngine.h and OrbitCamera.h
 

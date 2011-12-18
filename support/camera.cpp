@@ -28,15 +28,28 @@ void OrbitCamera::mouseWheel(float delta)
 
 void OrbitCamera::jitterCamera(float magnifier) {
     //mildly perturbs the camera's position
-    float ROUNDER = 1000;
-    int JITTER_STR = .35 * ROUNDER;
+    float ROUNDER = 1000.f;
+    int JITTER_STR = JITTER_MAGNITUDE * ROUNDER;
 
-    float randX, randY, randZ;
-    randX = (rand() % JITTER_STR - JITTER_STR/2) / ROUNDER;
-    randY = (rand() % JITTER_STR - JITTER_STR/2) / ROUNDER;
-    randZ = (rand() % JITTER_STR - JITTER_STR/2) / ROUNDER;
-    center.x = magnifier * randX;
-    center.y = magnifier * randY;
-    center.z = magnifier * randZ;
+    float randX, randY;
+    randX = magnifier * (rand() % JITTER_STR - JITTER_STR/2) / ROUNDER;
+    randY = magnifier * (rand() % JITTER_STR - JITTER_STR/2) / ROUNDER;
 
+    Vector3 w(-Vector3::fromAngles(theta, phi));
+
+    Vector3 v = up;
+    v.normalize();
+
+    Vector3 u = w.cross(v);
+    u.normalize();
+
+    jitter = randX * u + randY * v;
+    //center.x = magnifier * randX;
+    //center.y = magnifier * randY;
+    //center.z = magnifier * randZ;
+}
+
+void OrbitCamera::setPosition(Vector3 v)
+{
+    center = v + jitter;
 }

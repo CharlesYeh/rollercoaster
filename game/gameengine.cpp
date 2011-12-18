@@ -156,12 +156,15 @@ void GameEngine::run()
                     Vector3 vel = oldPos - newPos;
                     vel.normalize();
 
-                    Vector3 orthVec = vel.cross(Vector3(0,0,-1));
+                    //Vector3 orthVec = vel.cross(Vector3(0,0,-1));
 
                     float theta = atan2(vel.z, vel.x);
                     float phi = atan2(vel.y, sqrt(vel.z * vel.z + vel.x * vel.x));
 
-                    Matrix3x3 rot = getRotMat(orthVec, phi);
+                    // set up vector
+                    double rad = theta + M_PI / 2;
+                    Vector3 ax = Vector3::fromAngles(fmod(rad, 2 * M_PI), 0);
+                    Matrix3x3 rot = getRotMat(ax, phi);
 
                     m_camera->theta = theta;
                     m_camera->phi = phi;
@@ -235,7 +238,7 @@ void GameEngine::run()
             m_shake = false;
         }
 
-        m_refractPeriod -= 0.001;
+        m_refractPeriod -= REFRACT_SPEED;
         //sleep(FRAME_RATE);
     }
 }

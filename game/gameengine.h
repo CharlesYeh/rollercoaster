@@ -32,11 +32,12 @@ class GameEngine : public QThread
 {
 public:
     static const float FRAME_RATE   = 1  / 40.f;
-    static const int MAX_SHAKES     = 600;
-    static const int NUM_ROCKETS    = 15;
+    static const int MAX_SHAKES     = 400;
+    static const int NUM_ROCKETS    = 20;
     static const int NUM_EXPLOSIONS = 20;
-    static const int NUM_ENEMIES    = 70;
+    static const int NUM_ENEMIES    = 100;
     static const float PROJECTILE_SPEED = .03;
+    static const float REFRACT_SPEED = 0.0025;
 
     explicit GameEngine(QObject *parent = 0);
     virtual ~GameEngine();
